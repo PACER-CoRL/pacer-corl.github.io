@@ -1,0 +1,9 @@
+.superpowers/
+.DS_Store
+__pycache__/
+*.pyc
+node_modules/
+_dev/shots/
+_dev/raw/
+.pytest_cache/
+_dev/data/src/

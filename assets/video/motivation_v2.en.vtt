@@ -1,0 +1,75 @@
+WEBVTT
+
+00:00:01.000 --> 00:00:02.920
+Imagine how you learn in school.
+
+00:00:02.960 --> 00:00:05.800
+One teacher gives the same
+demonstration to everyone.
+
+00:00:05.900 --> 00:00:09.740
+During the lesson, different students
+may all look like they fully understand.
+
+00:00:10.000 --> 00:00:14.100
+However, the actual performance can
+only be tested beyond the lecture.
+
+00:00:14.100 --> 00:00:18.540
+Let's pick student A, give a real exam
+on the same task and watch the rollouts.
+
+00:00:20.800 --> 00:00:23.320
+How can we improve
+student A's performance?
+
+00:00:23.400 --> 00:00:24.920
+Give more demonstrations?
+
+00:00:24.940 --> 00:00:26.360
+Tell only yes or no.
+
+00:00:26.360 --> 00:00:28.540
+Or give an overall reward score.
+
+00:00:28.700 --> 00:00:32.460
+But a score without step info
+might confuse the student.
+
+00:00:32.800 --> 00:00:36.160
+The reward may work after
+tuning between A and teacher.
+
+00:00:36.200 --> 00:00:39.700
+But when using the same method
+for B or C, it may not work.
+
+00:00:39.900 --> 00:00:43.380
+In school, teachers do not set
+rewards differently for everyone.
+
+00:00:43.420 --> 00:00:45.400
+They set a standard trial evaluation.
+
+00:00:46.000 --> 00:00:48.660
+Now consider the same idea in robotics.
+
+00:00:48.660 --> 00:00:53.020
+Each VLA model is a different student to
+learn from the teacher's demonstrations.
+
+00:00:53.160 --> 00:00:56.520
+We should also evaluate its
+performance through multiple trials.
+
+00:00:56.900 --> 00:01:01.400
+Inspired by human education, we are
+considering the same for robotic learning.
+
+00:01:01.520 --> 00:01:04.900
+Learn from useful rollouts and
+corrections and avoid bad behaviors
+
+00:01:04.900 --> 00:01:08.080
+while preserving each model's
+learning and behavior.
