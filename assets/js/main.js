@@ -1,6 +1,6 @@
 /* PACER project page — renders the data-driven parts of index.html from
    window.PACER (assets/js/data.js) and wires the page behaviour:
-   sticky nav, scroll reveal, lazy videos, copy buttons, Fig. 2 steps, KaTeX.
+   top bar links, scroll reveal, lazy videos, copy buttons, Fig. 2 steps, KaTeX.
 
    Classic script (no ES modules, no fetch) so the page works from file://.
    Every number on the page is rendered from window.PACER via [data-bind].
@@ -111,6 +111,28 @@
     });
   }
 
+  /* -------------------------------------------------------- link states */
+
+  // A link is live when the data gives it a URL; otherwise it is the "soon" placeholder:
+  // visibly disabled, announced as unavailable, with no href (so it is never a dead link).
+  // The hero buttons and the top bar both go through here, so they cannot disagree.
+  // Idempotent: the top bar ships as static markup, in the placeholder state for Paper.
+  function setLink(a, href, name, soonClass) {
+    var tag = $("." + soonClass, a);
+    if (href) {
+      a.setAttribute("href", href);
+      if (/^https?:/.test(href)) a.setAttribute("rel", "noopener");
+      ["role", "aria-disabled", "aria-label"].forEach(function (k) { a.removeAttribute(k); });
+      if (tag) tag.remove();
+      return;
+    }
+    a.removeAttribute("href");
+    a.setAttribute("role", "link");
+    a.setAttribute("aria-disabled", "true");
+    a.setAttribute("aria-label", name + ", coming soon");
+    if (!tag) a.appendChild(h("span", { class: soonClass, text: "soon" }));
+  }
+
   /* --------------------------------------------------------------- hero */
 
   function renderMasthead() {
@@ -154,15 +176,7 @@
     buttons.forEach(function (b) {
       var a = h("a", { class: "btn" + (b.primary ? " btn--primary" : ""), "data-link": b.key },
         [icon(b.icon), h("span", { text: b.text })]);
-      if (b.href) {
-        a.setAttribute("href", b.href);
-        if (/^https?:/.test(b.href)) a.setAttribute("rel", "noopener");
-      } else {
-        // Placeholder until the camera-ready version: visibly disabled, says "soon".
-        a.setAttribute("role", "link");
-        a.setAttribute("aria-disabled", "true");
-        a.appendChild(h("span", { class: "btn__soon", text: "soon" }));
-      }
+      setLink(a, b.href, b.text, "btn__soon");   // no URL yet (Paper, arXiv, BibTeX): the "soon" placeholder
       row.appendChild(a);
     });
 
@@ -432,38 +446,21 @@
 
   /* ---------------------------------------------------------------- nav */
 
-  function initNav() {
-    var nav = $("#topnav");
-    var hero = $("#hero");
-    var list = $(".topnav__links", nav);
-    var links = $$(".topnav__links a", nav);
-    if (!hasIO) { nav.classList.add("is-visible"); return; }
-
-    new IntersectionObserver(function (entries) {
-      var e = entries[0];
-      nav.classList.toggle("is-visible", !e.isIntersecting && e.boundingClientRect.top < 0);
-    }).observe(hero);
-
-    var byId = {};
-    links.forEach(function (a) { byId[a.getAttribute("href").slice(1)] = a; });
-    var spy = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        var active = byId[e.target.id];
-        links.forEach(function (a) {
-          var on = a === active;
-          a.classList.toggle("is-active", on);
-          if (on) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
-        });
-        if (active && list.scrollWidth > list.clientWidth) {
-          list.scrollLeft = Math.max(0, active.offsetLeft - 24);
-        }
-      });
-    }, { rootMargin: "-40% 0px -55% 0px" });
-    Object.keys(byId).forEach(function (id) {
-      var s = doc.getElementById(id);
-      if (s) spy.observe(s);
-    });
+  // The top bar is static markup (visible from the first paint, nothing to show or hide on scroll).
+  // Here it only takes its two data-driven items from the same links the hero buttons use:
+  // Paper is a link once site.links.paper is set, and Code opens the repository in a new tab.
+  function renderNav() {
+    var L = D.site.links;
+    var paper = $("#topnav [data-nav='paper']");
+    var code = $("#topnav [data-nav='code']");
+    setLink(paper, L.paper, "Paper", "topnav__soon");
+    setLink(code, L.code, "Code", "topnav__soon");
+    // Without JS (or without a repository URL) Code is the in-page #code link: the
+    // external-link mark and "(opens in a new tab)" show only once it really opens one.
+    if (L.code) {
+      code.setAttribute("target", "_blank");
+      code.classList.add("is-external");
+    }
   }
 
   /* ------------------------------------------------------------- reveal */
@@ -490,59 +487,12 @@
     observeReveal(doc);
   }
 
-  /* ------------------------------------------- Fig. 2 step highlighting */
+  /* ------------------------------------------- Fig. 2 and its five steps */
 
+  // The animated figure, its controls, its scroll cue and the step buttons live in
+  // fig2.js (window.PACERFig2, loaded before this script).
   function initSteps() {
-    var fig = $("#method .fig2");
-    var hl = $(".fig2__hl", fig);
-    var frame = $(".fig2__frame", fig);
-    var scroller = $(".fig2__scroll", fig);
-    var width = +$("img", frame).getAttribute("width");
-    var steps = $$("#method .step");
-    var pinned = null;
-
-    function show(step) {
-      if (!step) { fig.classList.remove("is-active"); steps.forEach(function (s) { s.classList.remove("is-preview"); }); return; }
-      var x0 = +step.getAttribute("data-x0") / width;
-      var x1 = +step.getAttribute("data-x1") / width;
-      var fresh = !fig.classList.contains("is-active");
-      if (fresh) hl.style.transition = "opacity .25s ease";   // appear in place, don't slide in
-      hl.style.left = (x0 * 100) + "%";
-      hl.style.width = ((x1 - x0) * 100) + "%";
-      if (fresh) { void hl.offsetWidth; hl.style.transition = ""; }
-      fig.classList.add("is-active");
-      steps.forEach(function (s) { s.classList.toggle("is-preview", s === step); });
-    }
-
-    function reveal(step) {
-      if (scroller.scrollWidth <= scroller.clientWidth) return;
-      var x0 = +step.getAttribute("data-x0") / width * frame.offsetWidth;
-      scroller.scrollTo({ left: Math.max(0, x0 - 24), behavior: reduceMotion ? "auto" : "smooth" });
-    }
-
-    // Scroll cue (CSS): .is-scrollable while the figure is wider than its box, .is-end at the right edge.
-    function cue() {
-      var max = scroller.scrollWidth - scroller.clientWidth;
-      fig.classList.toggle("is-scrollable", max > 1);
-      fig.classList.toggle("is-end", max > 1 && scroller.scrollLeft >= max - 2);
-    }
-    cue();
-    scroller.addEventListener("scroll", cue, { passive: true });
-    if ("ResizeObserver" in window) new ResizeObserver(cue).observe(scroller);
-    else window.addEventListener("resize", cue);
-
-    steps.forEach(function (s) {
-      s.setAttribute("aria-controls", "fig2-frame");
-      s.addEventListener("click", function () {
-        pinned = pinned === s ? null : s;
-        steps.forEach(function (o) { o.setAttribute("aria-pressed", String(o === pinned)); });
-        show(pinned);
-        if (pinned) reveal(pinned);
-      });
-      s.addEventListener("mouseenter", function () { show(s); });
-      s.addEventListener("mouseleave", function () { show(pinned); });
-    });
-    frame.id = "fig2-frame";
+    if (window.PACERFig2) window.PACERFig2.mount($("#method .fig2"), $$("#method .step"), { reduceMotion: reduceMotion });
   }
 
   /* -------------------------------------------------------------- KaTeX */
@@ -608,7 +558,7 @@
     safely("bind", function () { bind(doc); });
     safely("copyButtons", function () { copyButtons(doc); });
     safely("lazyVideos", function () { lazyVideos(doc); });
-    safely("initNav", initNav);
+    safely("renderNav", renderNav);
     safely("initSteps", initSteps);
     safely("initMath", initMath);
     root.setAttribute("data-ready", "1");

@@ -34,6 +34,8 @@
   <!-- Classic scripts only (no modules, no fetch) so the page works from file://. -->
   <script id="katex-js" async src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script defer src="assets/js/data.js"></script>
+  <script defer src="assets/js/fig1.js"></script>
+  <script defer src="assets/js/fig2.js"></script>
   <script defer src="assets/js/main.js"></script>
   <script defer src="assets/js/charts.js"></script>
   <script defer src="assets/js/explainer.js"></script>
@@ -49,23 +51,21 @@
     <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-ext" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   </svg>
 
   <a class="skip" href="#main">Skip to content</a>
 
-  <nav class="topnav" id="topnav" aria-label="Sections">
+  <!-- Top bar: one quiet row, sticky from the first paint (static markup, no scroll logic).
+       main.js reads window.PACER.site.links to set Paper and Code, the same data as the hero buttons. -->
+  <nav class="topnav" id="topnav" aria-label="Primary">
     <div class="wrap topnav__inner">
-      <a class="topnav__brand" href="#hero" data-bind="site.short"></a>
+      <a class="topnav__brand" href="#hero" data-bind="site.short">PACER</a>
       <ul class="topnav__links">
-        <li><a href="#video">Motivation</a></li>
-        <li><a href="#idea">Idea</a></li>
-        <li><a href="#method">Method</a></li>
-        <li><a href="#explainer">Explainer</a></li>
-        <li><a href="#results">Results</a></li>
-        <li><a href="#demos">Videos</a></li>
-        <li><a href="#code">Code</a></li>
-        <li><a href="#bibtex">Cite</a></li>
+        <li><a class="topnav__link" data-nav="paper" role="link" aria-disabled="true" aria-label="Paper, coming soon">Paper <span class="topnav__soon">soon</span></a></li>
+        <li><a class="topnav__link" data-nav="code" href="#code">Code <svg class="icon topnav__ext" aria-hidden="true" focusable="false"><use href="#i-ext"/></svg><span class="visually-hidden topnav__newtab">(opens in a new tab)</span></a></li>
+        <li><a class="topnav__link" data-nav="results" href="#results">Results</a></li>
       </ul>
     </div>
   </nav>
@@ -175,15 +175,64 @@
           </div>
         </header>
 
-        <figure class="traces reveal" aria-labelledby="traces-cap">
+        <figure class="traces fig1 reveal" aria-labelledby="traces-cap">
+          <!-- Fig. 1 rebuilt from the paper (_dev/tools/extract_fig1.py): its clean photos, and its annotations as SVG in PDF points. -->
           <ol class="traces__grid">
-            <li class="trace"><img src="assets/img/fig1_A.webp" width="819" height="1542" loading="lazy" decoding="async" alt="A. Success trace: the gripper reaches the grasp point on the CPU fan and on the GPU bracket (green boxes)."></li>
-            <li class="trace"><img src="assets/img/fig1_B.webp" width="819" height="1542" loading="lazy" decoding="async" alt="B. Near-grasp trace: the gripper stops just short of the targets (orange arrows)."></li>
-            <li class="trace"><img src="assets/img/fig1_C.webp" width="819" height="1542" loading="lazy" decoding="async" alt="C. Wrong-location trace: the gripper settles beside the target (orange arrows)."></li>
-            <li class="trace"><img src="assets/img/fig1_D.webp" width="819" height="1542" loading="lazy" decoding="async" alt="D. Failure trace: the gripper ends far from the target region (red circles)."></li>
+            <li><button class="fig1-panel" type="button" data-trace="A" aria-pressed="false" aria-controls="fig1-role" aria-labelledby="fig1-t-A" aria-describedby="fig1-p-A1 fig1-p-A2">
+              <span class="fig1-panel__title" id="fig1-t-A">A. Success Trace</span>
+              <span class="fig1-panel__frame">
+                <span class="fig1-photo"><img id="fig1-p-A1" src="assets/img/fig1_A1.webp" width="299" height="299" loading="lazy" decoding="async" alt="A. Success trace, CPU fan: the gripper reaches the grasp point (green box).">
+                  <svg class="fig1-ov" viewBox="14.772 35.277 71.994 71.995" aria-hidden="true" focusable="false"><path class="fig1-stroke" data-draw="A1" d="M43.93 50.036H58.329V65.875H43.93Z" pathLength="1" fill="none" stroke="#00FF00" stroke-width="0.72"/></svg></span>
+                <span class="fig1-photo"><img id="fig1-p-A2" src="assets/img/fig1_A2.webp" width="299" height="299" loading="lazy" decoding="async" alt="A. Success trace, GPU bracket: the gripper reaches the grasp point (green box).">
+                  <svg class="fig1-ov" viewBox="14.772 114.471 71.994 71.995" aria-hidden="true" focusable="false"><path class="fig1-stroke" data-draw="A2" d="M36.73 122.03H51.129V137.869H36.73Z" pathLength="1" fill="none" stroke="#00FF00" stroke-width="0.72"/></svg></span>
+              </span>
+            </button></li>
+            <li><button class="fig1-panel" type="button" data-trace="B" aria-pressed="false" aria-controls="fig1-role" aria-labelledby="fig1-t-B" aria-describedby="fig1-p-B1 fig1-p-B2">
+              <span class="fig1-panel__title" id="fig1-t-B">B. Near Grasp Trace</span>
+              <span class="fig1-panel__frame">
+                <span class="fig1-photo"><img id="fig1-p-B1" src="assets/img/fig1_B1.webp" width="299" height="299" loading="lazy" decoding="async" alt="B. Near-grasp trace, CPU fan: the gripper stops just short of the target (orange arrow).">
+                  <svg class="fig1-ov" viewBox="115.564 35.277 71.995 71.995" aria-hidden="true" focusable="false"><path class="fig1-stroke" data-draw="B1" d="M166.32 60.835L156.507 60.835" pathLength="1" fill="none" stroke="#D79B00" stroke-width="0.72"/><path class="fig1-pop" data-draw="B1-head" d="M152.728 60.835L157.767 58.315L156.507 60.835L157.767 63.355Z" fill="#D79B00" stroke="#D79B00" stroke-width="0.72"/></svg></span>
+                <span class="fig1-photo"><img id="fig1-p-B2" src="assets/img/fig1_B2.webp" width="299" height="299" loading="lazy" decoding="async" alt="B. Near-grasp trace, GPU bracket: the gripper stops just short of the target (orange arrow).">
+                  <svg class="fig1-ov" viewBox="115.564 114.471 71.995 71.995" aria-hidden="true" focusable="false"><path class="fig1-stroke" data-draw="B2" d="M130.323 143.629L140.618 138.481" pathLength="1" fill="none" stroke="#D79B00" stroke-width="0.72"/><path class="fig1-pop" data-draw="B2-head" d="M144.002 136.79L140.618 141.296L140.618 138.481L138.365 136.79Z" fill="#D79B00" stroke="#D79B00" stroke-width="0.72"/></svg></span>
+              </span>
+            </button></li>
+            <li><button class="fig1-panel" type="button" data-trace="C" aria-pressed="false" aria-controls="fig1-role" aria-labelledby="fig1-t-C" aria-describedby="fig1-p-C1 fig1-p-C2">
+              <span class="fig1-panel__title" id="fig1-t-C">C. Wrong Location Trace</span>
+              <span class="fig1-panel__frame">
+                <span class="fig1-photo"><img id="fig1-p-C1" src="assets/img/fig1_C1.webp" width="299" height="299" loading="lazy" decoding="async" alt="C. Wrong-location trace, CPU fan: the gripper settles beside the target (orange arrow).">
+                  <svg class="fig1-ov" viewBox="216.356 35.277 71.994 71.995" aria-hidden="true" focusable="false"><path class="fig1-stroke" data-draw="C1" d="M267.113 60.835L257.3 60.835" pathLength="1" fill="none" stroke="#D79B00" stroke-width="0.72"/><path class="fig1-pop" data-draw="C1-head" d="M253.52 60.835L258.559 58.315L257.3 60.835L258.559 63.355Z" fill="#D79B00" stroke="#D79B00" stroke-width="0.72"/></svg></span>
+                <span class="fig1-photo"><img id="fig1-p-C2" src="assets/img/fig1_C2.webp" width="299" height="299" loading="lazy" decoding="async" alt="C. Wrong-location trace, GPU bracket: the gripper settles beside the target (orange arrow).">
+                  <svg class="fig1-ov" viewBox="216.356 114.471 71.994 71.995" aria-hidden="true" focusable="false"><path class="fig1-stroke" data-draw="C2" d="M259.913 143.629L249.618 138.481" pathLength="1" fill="none" stroke="#D79B00" stroke-width="0.72"/><path class="fig1-pop" data-draw="C2-head" d="M246.234 136.79L251.871 136.79L249.618 138.481L249.618 141.296Z" fill="#D79B00" stroke="#D79B00" stroke-width="0.72"/></svg></span>
+              </span>
+            </button></li>
+            <li><button class="fig1-panel" type="button" data-trace="D" aria-pressed="false" aria-controls="fig1-role" aria-labelledby="fig1-t-D" aria-describedby="fig1-p-D1 fig1-p-D2">
+              <span class="fig1-panel__title" id="fig1-t-D">D. Failure Trace</span>
+              <span class="fig1-panel__frame">
+                <span class="fig1-photo"><img id="fig1-p-D1" src="assets/img/fig1_D1.webp" width="299" height="299" loading="lazy" decoding="async" alt="D. Failure trace, CPU fan: the gripper ends far from the target region (red circle).">
+                  <svg class="fig1-ov" viewBox="317.149 35.277 71.995 71.995" aria-hidden="true" focusable="false"><path class="fig1-stroke" data-draw="D1" d="M396.701 71.634A14.398 14.398 0 1 1 367.905 71.634A14.398 14.398 0 1 1 396.701 71.634Z" pathLength="1" fill="none" stroke="#FF0000" stroke-width="0.72"/></svg></span>
+                <span class="fig1-photo"><img id="fig1-p-D2" src="assets/img/fig1_D2.webp" width="299" height="299" loading="lazy" decoding="async" alt="D. Failure trace, GPU bracket: the gripper ends far from the target region (red circle).">
+                  <svg class="fig1-ov" viewBox="317.149 114.471 71.995 71.995" aria-hidden="true" focusable="false"><path class="fig1-stroke" data-draw="D2" d="M346.306 158.028A14.398 14.398 0 1 1 317.51 158.028A14.398 14.398 0 1 1 346.306 158.028Z" pathLength="1" fill="none" stroke="#FF0000" stroke-width="0.72"/></svg></span>
+              </span>
+            </button></li>
           </ol>
-          <div class="traces__corr" aria-hidden="true">
-            <span class="corr__up"></span><span class="corr__drop corr__drop--b"></span><span class="corr__drop corr__drop--c"></span><span class="corr__drop corr__drop--d"></span><span class="corr__line"></span>
+          <button class="fig1-e" type="button" data-trace="E" aria-pressed="false" aria-controls="fig1-role" aria-label="E. Human Corrections">
+            <span class="traces__corr"><svg class="fig1-bracket" viewBox="7.932 194.025 388.77 22.319" aria-hidden="true" focusable="false"><path class="fig1-stroke" data-draw="E-down" d="M353.506 194.025L353.506 215.624" pathLength="1" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-stroke" data-draw="E-along" d="M353.506 215.624L44.736 215.624" pathLength="1" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-stroke" data-draw="E-up" d="M44.736 215.624L44.736 198.532" pathLength="1" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-stroke" data-draw="E-drop" data-from="B" d="M151.705 194.025L151.921 215.624" pathLength="1" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-stroke" data-draw="E-drop" data-from="C" d="M252.498 194.025L252.714 215.624" pathLength="1" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-pop" data-draw="E-head" d="M44.736 193.672L47.976 200.152L44.736 198.532L41.496 200.152Z" fill="#000000" stroke="#000000" stroke-width="0.72"/><image class="fig1-pop" data-draw="E-icon" href="assets/img/fig1_operator.webp" x="151.561" y="193.665" width="21.598" height="21.598"/><text class="fig1-pop fig1-bracket__label" data-draw="E-icon" x="172.204" y="207.344">E. Human Corrections</text></svg></span>
+            <span class="fig1-legend">
+              <svg class="fig1-legend__mark" viewBox="0 0 64 32" aria-hidden="true" focusable="false"><g class="fig1-pop" data-draw="E-icon"><text x="5" y="8">A</text><text x="23" y="8">B</text><text x="41" y="8">C</text><text x="59" y="8">D</text></g><path class="fig1-stroke" data-draw="E-down" d="M59 12V29" pathLength="1"/><path class="fig1-stroke" data-draw="E-along" d="M59 29H5" pathLength="1"/><path class="fig1-stroke" data-draw="E-up" d="M5 29V17" pathLength="1"/><path class="fig1-stroke" data-draw="E-drop" d="M23 12V29" pathLength="1"/><path class="fig1-stroke" data-draw="E-drop" d="M41 12V29" pathLength="1"/><path class="fig1-pop" data-draw="E-head" d="M5 11L8.2 17.4L5 15.8L1.8 17.4Z"/></svg>
+              <img class="fig1-pop" data-draw="E-icon" src="assets/img/fig1_operator.webp" width="89" height="89" alt="" loading="lazy" decoding="async">
+              <span class="fig1-pop" data-draw="E-icon">E. Human Corrections</span>
+            </span>
+          </button>
+          <div class="fig1-bar">
+            <p class="fig1-role" id="fig1-role" aria-live="polite">
+              <span class="fig1-role__hint" hidden>Select a trace to see how PACER treats it.</span>
+              <span class="fig1-role__line" data-for="A" hidden><span class="token token--ok">A</span><span class="fig1-role__text">Autonomous success, weighted by process evidence.</span></span>
+              <span class="fig1-role__line" data-for="B" hidden><span class="token token--near">B</span><span class="fig1-role__text">Near miss (partial): weighted by process evidence; partial progress still counts.</span></span>
+              <span class="fig1-role__line" data-for="C" hidden><span class="token token--fail">C</span><span class="fig1-role__text">Wrong location: a failure label; gated, kept for audit with zero weight.</span></span>
+              <span class="fig1-role__line" data-for="D" hidden><span class="token token--fail">D</span><span class="fig1-role__text">Failure: gated, kept for audit with zero weight.</span></span>
+              <span class="fig1-role__line" data-for="E" hidden><span class="token token--corr">E</span><span class="fig1-role__text">Human correction from the failure state; weighted, with a protocol floor.</span></span>
+            </p>
+            <button class="fig1-replay" type="button" aria-label="Replay the figure&rsquo;s annotations" hidden><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3M4.5 4.5v4h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Replay</span></button>
           </div>
           <figcaption class="traces__cap" id="traces-cap"><span class="token token--corr">E</span><span><strong>Human corrections.</strong> From the state where B, C or D went wrong, an operator steers the arm to the target; the recovery joins the training pool.</span></figcaption>
         </figure>
@@ -253,35 +302,317 @@
         <figure class="fig2 reveal">
           <div class="fig2__view">
           <div class="fig2__scroll" tabindex="0" role="region" aria-label="Fig. 2, the PACER pipeline (scrolls sideways on narrow screens)">
-            <div class="fig2__frame">
-              <img src="assets/img/fig2.webp" width="2880" height="872" loading="lazy" decoding="async" alt="PACER pipeline: experimental setup; processes and results (human correction, success, near, offset and wrong-region traces); outcome gate; action chunks; process evidence (progress, proximity, terminal, stop, operator); evidence to weight (coefficients, evidence score, score-to-weight transform); VLA training with a weighted native loss and a validation score.">
-              <span class="fig2__hl" aria-hidden="true"></span>
+            <div class="fig2__frame" id="fig2-frame">
+              <!-- fig2:svg (generated by _dev/tools/extract_fig2.py from the paper's figure PDF; edit the tool, not this block) -->
+              <svg class="fig2__svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 526.08 159.12" width="526.08" height="159.12" role="img" aria-labelledby="fig2-title" aria-describedby="fig2-desc">
+                <title id="fig2-title">Fig. 2: the PACER pipeline</title>
+                <desc id="fig2-desc">PACER pipeline: experimental setup; processes and results (human correction, success, near, offset and wrong-region traces); outcome gate; action chunks; process evidence (progress, proximity, terminal, stop, operator); evidence to weight (coefficients, evidence score, score-to-weight transform); VLA training with a weighted native loss and a validation score.</desc>
+                <g class="f2-base">
+                  <g class="f2-col" data-col="setup">
+                    <image class="f2-photo" href="assets/img/fig2_setup.webp" x="0.01" y="0.36" width="136.79" height="136.79" preserveAspectRatio="none"/>
+                    <image class="f2-photo" href="assets/img/fig2_inset.webp" x="64.35" y="0.36" width="72.45" height="57.59" preserveAspectRatio="none"/>
+                    <g class="f2-traces">
+                      <path d="M44.33 61.33C44.89 59.63 45.48 58.24 46.09 57.16L47.35 57.86C46.78 58.86 46.23 60.17 45.69 61.78L44.33 61.33M49.89 54.15C51.21 54.17 52.53 55.14 53.85 57.05L52.66 57.86C51.63 56.36 50.7 55.6 49.87 55.59L49.89 54.15M55.94 60.86C56.47 62 57.01 63.3 57.56 64.76L56.21 65.26C55.68 63.84 55.15 62.58 54.64 61.46L55.94 60.86M59.04 69.02C59.45 70.27 59.86 71.6 60.27 73.01L58.89 73.42C58.48 72.02 58.07 70.7 57.67 69.47L59.04 69.02M61.51 77.4C61.85 78.67 62.2 80 62.55 81.38L61.15 81.73C60.81 80.36 60.46 79.04 60.12 77.78L61.51 77.4M63.61 85.67L64.16 88.01L62.76 88.34L62.21 86L63.61 85.67Z" fill="#D79B00"/>
+                      <path d="M64.44 92.38L60.33 87.43L63.46 88.18L65.94 86.12L64.44 92.38Z" fill="#D79B00"/>
+                      <path d="M43.93 72.35C43.93 73.88 43.96 75.34 44.02 76.74L42.58 76.81C42.52 75.38 42.49 73.9 42.49 72.35L43.93 72.35M44.32 81C44.46 82.47 44.65 83.86 44.88 85.16L43.46 85.41C43.23 84.07 43.03 82.65 42.89 81.15L44.32 81M45.81 89.31C46.23 90.77 46.72 92.08 47.27 93.25L45.97 93.87C45.38 92.63 44.87 91.24 44.43 89.71L45.81 89.31M49.08 96.89L50.99 100.7L49.7 101.34L47.79 97.53L49.08 96.89M53.04 104.79L54.85 108.42L53.56 109.06L51.75 105.43L53.04 104.79M56.85 112.42L58.74 116.2L57.45 116.84L55.56 113.07L56.85 112.42M60.65 120.02L62.69 124.1L61.41 124.75L59.36 120.66L60.65 120.02Z" fill="#B85450"/>
+                      <path d="M64.09 128.51L58.93 124.64L62.16 124.64L64.09 122.07L64.09 128.51Z" fill="#B85450"/>
+                      <path d="M35.91 15.12L57.44 15.12" fill="none" stroke="#9673A6" stroke-width="2.16"/>
+                      <path d="M62.3 15.12L55.82 18.36L57.44 15.12L55.82 11.88L62.3 15.12Z" fill="#9673A6"/>
+                      <path d="M51.31 50.04C52.86 50.04 54.35 50.16 55.77 50.4L55.52 51.82C54.19 51.59 52.78 51.48 51.31 51.48L51.31 50.04M60.07 51.59C61.46 52.14 62.77 52.84 64 53.68L63.19 54.87C62.05 54.09 60.83 53.44 59.54 52.93L60.07 51.59M67.38 56.55C68.37 57.59 69.29 58.75 70.13 60.02L68.93 60.82C68.13 59.61 67.27 58.52 66.34 57.55L67.38 56.55M72.3 63.89C72.91 65.17 73.47 66.53 73.97 67.98L72.61 68.45C72.12 67.05 71.59 65.74 71 64.51L72.3 63.89M75.22 72.11C75.57 73.48 75.89 74.92 76.17 76.42L74.76 76.68C74.48 75.22 74.17 73.81 73.82 72.47L75.22 72.11M76.85 80.69C76.95 81.43 77.04 82.18 77.12 82.94L75.69 83.09C75.61 82.34 75.52 81.6 75.42 80.88L76.85 80.69Z" fill="#82B366"/>
+                      <path d="M76.87 87.31L73.39 81.9L76.41 83.02L79.11 81.27L76.87 87.31Z" fill="#82B366"/>
+                      <path d="M51.85 48.96C53.39 48.96 54.87 49.05 56.31 49.25L56.11 50.68C54.74 50.49 53.32 50.4 51.85 50.4L51.85 48.96M60.63 50.19C62.05 50.62 63.42 51.16 64.73 51.82L64.08 53.11C62.85 52.49 61.56 51.97 60.21 51.57L60.63 50.19M68.51 54.17C69.67 55.03 70.77 56.01 71.81 57.09L70.77 58.09C69.79 57.06 68.74 56.14 67.65 55.32L68.51 54.17M74.62 60.46C75.46 61.62 76.26 62.86 77.01 64.2L75.75 64.9C75.03 63.62 74.27 62.42 73.46 61.3L74.62 60.46M78.95 68.1C79.52 69.38 80.05 70.73 80.55 72.15L79.19 72.62C78.71 71.25 78.19 69.93 77.63 68.68L78.95 68.1M81.88 76.36C82.26 77.7 82.61 79.08 82.93 80.52L81.52 80.83C81.21 79.42 80.86 78.06 80.49 76.75L81.88 76.36M83.8 84.85C83.86 85.18 83.92 85.5 83.97 85.83L82.55 86.07C82.5 85.74 82.44 85.42 82.38 85.11L83.8 84.85Z" fill="#D6B656"/>
+                      <path d="M83.98 90.21L80.18 85L83.26 85.95L85.86 84.05L83.98 90.21Z" fill="#D6B656"/>
+                      <path d="M65.17 130.31C93.97 125.51 98.8 113.09 79.68 93.06" fill="none" stroke="#6C8EBF" stroke-width="0.72"/>
+                      <path d="M78.68 92.01L80.2 92.55L79.16 93.56L78.68 92.01Z" fill="#6C8EBF" stroke="#6C8EBF" stroke-width="0.72"/>
+                      <path d="M65.17 94.31L75.22 91.94" fill="none" stroke="#6C8EBF" stroke-width="0.72"/>
+                      <path d="M76.62 91.62L75.38 92.65L75.06 91.24L76.62 91.62Z" fill="#6C8EBF" stroke="#6C8EBF" stroke-width="0.72"/>
+                      <path d="M84.61 92.15L80.68 91.17" fill="none" stroke="#6C8EBF" stroke-width="0.72"/>
+                      <path d="M79.62 90.91L81.2 90.56L80.68 91.17L80.85 91.96L79.62 90.91Z" fill="#6C8EBF"/>
+                    </g>
+                    <text class="f2-cap" x="68.41" y="150.83" font-size="7.4" text-anchor="middle">Experimental Setup</text>
+                  </g>
+                  <g class="f2-col" data-col="processes">
+                    <rect class="f2-frame" x="144.36" y="0.72" width="79.19" height="136.79" fill="#F5F5F5" stroke="#666666" stroke-width="0.72" stroke-dasharray="2.16 2.16"/>
+                    <line class="f2-sep" x1="144.36" y1="87.11" x2="230.75" y2="87.11" stroke="#B85450" stroke-width="0.72"/>
+                    <g class="f2-arrow" data-trace="corr" data-fate="pass">
+                      <line x1="151.56" y1="11.35" x2="175.77" y2="11.35" stroke="#6C8EBF" stroke-width="0.72"/>
+                      <path d="M179.55 11.35L174.51 13.87L175.77 11.35L174.51 8.83Z" fill="#6C8EBF"/>
+                    </g>
+                    <g class="f2-arrow" data-trace="success" data-fate="pass">
+                      <line x1="151.56" y1="40.15" x2="175.77" y2="40.15" stroke="#82B366" stroke-width="0.72" stroke-dasharray="2.16 2.16"/>
+                      <path d="M179.55 40.15L174.51 42.67L175.77 40.15L174.51 37.63Z" fill="#82B366"/>
+                    </g>
+                    <g class="f2-arrow" data-trace="near" data-fate="pass">
+                      <line x1="151.56" y1="68.95" x2="175.77" y2="68.95" stroke="#D6B656" stroke-width="0.72" stroke-dasharray="2.16 2.16"/>
+                      <path d="M179.55 68.95L174.51 71.47L175.77 68.95L174.51 66.43Z" fill="#D6B656"/>
+                    </g>
+                    <g class="f2-arrow" data-trace="offsets" data-fate="audit">
+                      <line x1="151.56" y1="97.75" x2="175.77" y2="97.75" stroke="#D79B00" stroke-width="0.72" stroke-dasharray="2.16 2.16"/>
+                      <path d="M179.55 97.75L174.51 100.27L175.77 97.75L174.51 95.23Z" fill="#D79B00"/>
+                    </g>
+                    <g class="f2-arrow" data-trace="wrong" data-fate="audit">
+                      <line x1="151.56" y1="126.54" x2="175.77" y2="126.54" stroke="#B85450" stroke-width="0.72" stroke-dasharray="2.16 2.16"/>
+                      <path d="M179.55 126.54L174.51 129.06L175.77 126.54L174.51 124.02Z" fill="#B85450"/>
+                    </g>
+                    <text class="f2-cap" x="183.59" y="150.83" font-size="7.4" text-anchor="middle">Processes and Results</text>
+                  </g>
+                  <g class="f2-col" data-col="gate">
+                    <rect class="f2-cell" x="230.75" y="0.72" width="28.8" height="86.39" fill="#D5E8D4" stroke="#82B366" stroke-width="0.72" stroke-dasharray="2.16 2.16" data-cell="pass"/>
+                    <rect class="f2-flash" data-flash="pass" x="230.75" y="0.72" width="28.8" height="86.39" fill="#82B366" opacity="0"/>
+                    <rect class="f2-cell" x="230.75" y="87.11" width="28.8" height="50.4" fill="#F8CECC" stroke="#B85450" stroke-width="0.72" stroke-dasharray="2.16 2.16" data-cell="audit"/>
+                    <rect class="f2-flash" data-flash="audit" x="230.75" y="87.11" width="28.8" height="50.4" fill="#B85450" opacity="0"/>
+                    <circle class="f2-rest" data-trace="offsets" cx="245.15" cy="97.75" r="2.4" fill="#D79B00" stroke="#FFFFFF" stroke-width="0.7"/>
+                    <circle class="f2-rest" data-trace="wrong" cx="245.15" cy="126.54" r="2.4" fill="#B85450" stroke="#FFFFFF" stroke-width="0.7"/>
+                    <text class="f2-cap" x="244.79" y="145.79" font-size="7.4" text-anchor="middle">Outcome</text>
+                    <text class="f2-cap" x="244.79" y="156.59" font-size="7.4" text-anchor="middle">Gate</text>
+                  </g>
+                  <g class="f2-col" data-col="chunk">
+                    <rect class="f2-frame" x="268.19" y="0.72" width="43.2" height="136.79" fill="#F5F5F5" stroke="#666666" stroke-width="0.72" stroke-dasharray="2.16 2.16"/>
+                    <g class="f2-hist" data-trace="corr">
+                      <rect class="f2-bar" x="271.79" y="25.56" width="7.2" height="12.96" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="0.72" data-bar="0"/>
+                      <rect class="f2-bar" x="278.99" y="32.76" width="7.2" height="5.76" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="0.72" data-bar="1"/>
+                      <rect class="f2-bar" x="286.19" y="18.36" width="7.2" height="20.16" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="0.72" data-bar="2"/>
+                      <rect class="f2-bar" x="293.39" y="31.32" width="7.2" height="7.2" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="0.72" data-bar="3"/>
+                      <rect class="f2-bar" x="300.59" y="32.76" width="7.2" height="5.76" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="0.72" data-bar="4"/>
+                    </g>
+                    <g class="f2-hist" data-trace="success">
+                      <rect class="f2-bar" x="271.79" y="72.35" width="7.2" height="2.16" fill="#D5E8D4" stroke="#82B366" stroke-width="0.72" data-bar="0"/>
+                      <rect class="f2-bar" x="278.99" y="50.76" width="7.2" height="23.76" fill="#D5E8D4" stroke="#82B366" stroke-width="0.72" data-bar="1"/>
+                      <rect class="f2-bar" x="286.19" y="65.15" width="7.2" height="9.36" fill="#D5E8D4" stroke="#82B366" stroke-width="0.72" data-bar="2"/>
+                      <rect class="f2-bar" x="293.39" y="67.31" width="7.2" height="7.2" fill="#D5E8D4" stroke="#82B366" stroke-width="0.72" data-bar="3"/>
+                      <rect class="f2-bar" x="300.59" y="57.95" width="7.2" height="16.56" fill="#D5E8D4" stroke="#82B366" stroke-width="0.72" data-bar="4"/>
+                    </g>
+                    <g class="f2-hist" data-trace="near">
+                      <rect class="f2-bar" x="271.79" y="101.15" width="7.2" height="7.92" fill="#FFF2CC" stroke="#D6B656" stroke-width="0.72" data-bar="0"/>
+                      <rect class="f2-bar" x="278.99" y="103.31" width="7.2" height="5.76" fill="#FFF2CC" stroke="#D6B656" stroke-width="0.72" data-bar="1"/>
+                      <rect class="f2-bar" x="286.19" y="93.95" width="7.2" height="15.12" fill="#FFF2CC" stroke="#D6B656" stroke-width="0.72" data-bar="2"/>
+                      <rect class="f2-bar" x="293.39" y="86.75" width="7.2" height="22.32" fill="#FFF2CC" stroke="#D6B656" stroke-width="0.72" data-bar="3"/>
+                      <rect class="f2-bar" x="300.59" y="103.31" width="7.2" height="5.76" fill="#FFF2CC" stroke="#D6B656" stroke-width="0.72" data-bar="4"/>
+                    </g>
+                    <text class="f2-cap" x="289.42" y="145.79" font-size="7.4" text-anchor="middle">Action</text>
+                    <text class="f2-cap" x="289.42" y="156.59" font-size="7.4" text-anchor="middle">Chunk</text>
+                  </g>
+                  <g class="f2-col" data-col="evidence">
+                    <rect class="f2-frame" x="318.95" y="0.72" width="46.8" height="136.79" fill="#F5F5F5" stroke="#666666" stroke-width="0.72" stroke-dasharray="2.16 2.16"/>
+                    <g class="f2-chip" data-chip="0">
+                      <rect x="324.34" y="4.32" width="36" height="18" rx="2.7" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="0.72"/>
+                      <text class="f2-label" x="341.98" y="16.2" font-size="7.4" text-anchor="middle">Progress</text>
+                    </g>
+                    <g class="f2-chip" data-chip="1">
+                      <rect x="324.34" y="32.76" width="36" height="18" rx="2.7" fill="#F8CECC" stroke="#B85450" stroke-width="0.72"/>
+                      <text class="f2-label" x="341.99" y="44.28" font-size="7.4" text-anchor="middle">Proximity</text>
+                    </g>
+                    <g class="f2-chip" data-chip="2">
+                      <rect x="324.34" y="60.11" width="36" height="18" rx="2.7" fill="#FFF2CC" stroke="#D6B656" stroke-width="0.72"/>
+                      <text class="f2-label" x="341.98" y="71.63" font-size="7.4" text-anchor="middle">Terminal</text>
+                    </g>
+                    <g class="f2-chip" data-chip="3">
+                      <rect x="324.34" y="87.11" width="36" height="18" rx="2.7" fill="#E1D5E7" stroke="#9673A6" stroke-width="0.72"/>
+                      <text class="f2-label" x="341.97" y="98.99" font-size="7.4" text-anchor="middle">Stop</text>
+                    </g>
+                    <g class="f2-chip" data-chip="4">
+                      <rect x="324.34" y="115.91" width="36" height="18" rx="2.7" fill="#FFE6CC" stroke="#D79B00" stroke-width="0.72"/>
+                      <text class="f2-label" x="341.98" y="127.79" font-size="7.4" text-anchor="middle">Operator</text>
+                    </g>
+                    <text class="f2-cap" x="340.53" y="145.79" font-size="7.4" text-anchor="middle">Process</text>
+                    <text class="f2-cap" x="340.54" y="156.59" font-size="7.4" text-anchor="middle">Evidence</text>
+                  </g>
+                  <g class="f2-col" data-col="weight">
+                    <rect class="f2-frame" x="374.74" y="0.72" width="71.99" height="136.79" fill="#F5F5F5" stroke="#666666" stroke-width="0.72" stroke-dasharray="2.16 2.16"/>
+                    <g class="f2-box" data-box="eta">
+                      <rect x="381.94" y="8.46" width="57.59" height="25.56" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="0.72"/>
+                      <text class="f2-label" x="410.36" y="19.08" font-size="7.4" text-anchor="middle">Evidence</text>
+                      <text class="f2-label" x="410.37" y="29.88" font-size="7.4" text-anchor="middle">Coefficient</text>
+                      <text class="f2-math f2-math--bold" x="385.36" y="20.88" font-size="7.92">η</text>
+                    </g>
+                    <g class="f2-box" data-box="score">
+                      <rect x="381.94" y="54" width="57.59" height="25.56" fill="#F8CECC" stroke="#B85450" stroke-width="0.72"/>
+                      <text class="f2-label" x="410.38" y="64.43" font-size="7.4" text-anchor="middle">Evidence</text>
+                      <text class="f2-label" x="410.37" y="75.23" font-size="7.4" text-anchor="middle">Score</text>
+                      <text class="f2-math f2-math--bold" x="383.56" y="68.95" font-size="8.45">s<tspan font-size="5.91" dy="1.61">η</tspan></text>
+                    </g>
+                    <g class="f2-box" data-box="transform">
+                      <rect x="381.94" y="99.17" width="57.59" height="25.56" fill="#FFE6CC" stroke="#D79B00" stroke-width="0.72"/>
+                      <text class="f2-label" x="410.37" y="109.79" font-size="7.4" text-anchor="middle">Score to Weight</text>
+                      <text class="f2-label" x="410.37" y="120.59" font-size="7.4" text-anchor="middle">Transform</text>
+                    </g>
+                    <g class="f2-warrow" data-warrow="0">
+                      <line x1="410.74" y1="33.84" x2="410.74" y2="49.41" stroke="#000000" stroke-width="0.72"/>
+                      <path class="f2-warrow__head" d="M410.74 53.19L408.22 48.15L410.74 49.41L413.26 48.15Z" fill="#000000"/>
+                    </g>
+                    <g class="f2-warrow" data-warrow="1">
+                      <line x1="410.67" y1="79.55" x2="410.67" y2="94.4" stroke="#000000" stroke-width="0.72"/>
+                      <path class="f2-warrow__head" d="M410.67 98.18L408.15 93.15L410.67 94.4L413.19 93.15Z" fill="#000000"/>
+                    </g>
+                    <g class="f2-gauge">
+                      <line class="f2-gauge__track" x1="388.14" y1="130.72" x2="426.33" y2="130.72" stroke="#666666" stroke-width="0.5"/>
+                      <path class="f2-gauge__ticks" d="M388.14 129.12V132.32M426.33 129.12V132.32" stroke="#666666" stroke-width="0.5" fill="none"/>
+                      <rect class="f2-gauge__fill" x="388.14" y="129.62" width="23.68" height="2.2" fill="#5B6370" data-w="23.68"/>
+                      <text class="f2-gauge__lab" x="386.54" y="132.47" font-size="5.2" text-anchor="end">0</text>
+                      <text class="f2-gauge__lab f2-math" x="427.93" y="132.47" font-size="5.6">w<tspan class="f2-up" font-size="4" dy="1.1">max</tspan></text>
+                    </g>
+                    <text class="f2-cap" x="410.37" y="145.79" font-size="7.4" text-anchor="middle">Evidence to</text>
+                    <text class="f2-cap" x="410.37" y="156.59" font-size="7.4" text-anchor="middle">Weight</text>
+                  </g>
+                  <g class="f2-col" data-col="training">
+                    <rect class="f2-frame" x="453.93" y="0.72" width="71.99" height="136.79" fill="#F5F5F5" stroke="#666666" stroke-width="0.72" stroke-dasharray="2.16 2.16"/>
+                    <rect class="f2-ripple" x="461.13" y="8.46" width="57.59" height="25.56" fill="none" stroke="#6C8EBF" stroke-width="0.9" opacity="0"/>
+                    <g class="f2-box" data-box="loss">
+                      <rect x="461.13" y="8.46" width="57.59" height="25.56" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="0.72"/>
+                      <text class="f2-label" x="489.57" y="19.08" font-size="7.4" text-anchor="middle">Weighted</text>
+                      <text class="f2-label" x="489.57" y="29.88" font-size="7.4" text-anchor="middle">Native Loss</text>
+                    </g>
+                    <g class="f2-box" data-box="val">
+                      <rect x="457.53" y="96.74" width="64.79" height="18.81" fill="#E1D5E7" stroke="#9673A6" stroke-width="0.72"/>
+                      <text class="f2-label" x="489.57" y="108.35" font-size="7.4" text-anchor="middle">Validation Score</text>
+                    </g>
+                    <g class="f2-net">
+                      <g class="f2-edges" stroke="#000000" stroke-width="0.84" stroke-linecap="round">
+                        <path class="f2-edge" data-edge="0" d="M472.4 55.15L488.56 48.99"/>
+                        <path class="f2-edge" data-edge="1" d="M472.4 55.15L488.73 60.59"/>
+                        <path class="f2-edge" data-edge="2" d="M472.4 55.15L488.56 72.32"/>
+                        <path class="f2-edge" data-edge="3" d="M472.4 55.15L472.4 77.42"/>
+                        <path class="f2-edge" data-edge="4" d="M472.4 77.42L488.73 60.59"/>
+                        <path class="f2-edge" data-edge="5" d="M472.4 77.42L488.56 72.32"/>
+                        <path class="f2-edge" data-edge="6" d="M472.4 77.42L488.56 83.84"/>
+                        <path class="f2-edge" data-edge="7" d="M488.56 48.99L488.73 60.59"/>
+                        <path class="f2-edge" data-edge="8" d="M488.56 48.99L506.74 66.41"/>
+                        <path class="f2-edge" data-edge="9" d="M488.56 72.32L506.74 66.41"/>
+                        <path class="f2-edge" data-edge="10" d="M488.56 83.84L495.12 77.55M496.34 76.38L496.34 76.38M497.56 75.21L506.74 66.41"/>
+                        <path class="f2-edge" data-edge="11" d="M488.56 72.32L488.56 83.84"/>
+                        <path class="f2-edge" data-edge="12" d="M488.73 60.59L506.74 66.41"/>
+                      </g>
+                      <g class="f2-nodes">
+                        <g class="f2-node" data-node="0">
+                          <circle cx="472.4" cy="55.15" r="2.76" fill="#72C2E9"/>
+                          <path d="M473.04 52.03A3.18 3.18 0 1 1 469.78 53.35M471.16 52.22A3.18 3.18 0 0 1 471.16 52.22" fill="none" stroke="#000000" stroke-width="0.84" stroke-linecap="round"/>
+                        </g>
+                        <g class="f2-node" data-node="1">
+                          <circle cx="472.4" cy="77.42" r="2.76" fill="#72C2E9"/>
+                          <path d="M469.22 77.42A3.18 3.18 0 1 1 475.58 77.42A3.18 3.18 0 1 1 469.22 77.42Z" fill="none" stroke="#000000" stroke-width="0.84" stroke-linecap="round"/>
+                        </g>
+                        <g class="f2-node" data-node="2">
+                          <circle cx="488.56" cy="48.99" r="2.76" fill="#FC5D3D"/>
+                          <path d="M485.38 48.99A3.18 3.18 0 1 1 491.74 48.99A3.18 3.18 0 1 1 485.38 48.99Z" fill="none" stroke="#000000" stroke-width="0.84" stroke-linecap="round"/>
+                        </g>
+                        <g class="f2-node" data-node="3">
+                          <circle cx="488.73" cy="60.59" r="2.76" fill="#F0C020"/>
+                          <path d="M491.9 60.29A3.18 3.18 0 1 1 489.84 57.61M491.24 58.63A3.18 3.18 0 0 1 491.24 58.63" fill="none" stroke="#000000" stroke-width="0.84" stroke-linecap="round"/>
+                        </g>
+                        <g class="f2-node" data-node="4">
+                          <circle cx="488.56" cy="72.32" r="2.76" fill="#FC5D3D"/>
+                          <path d="M485.38 72.32A3.18 3.18 0 1 1 491.74 72.32A3.18 3.18 0 1 1 485.38 72.32Z" fill="none" stroke="#000000" stroke-width="0.84" stroke-linecap="round"/>
+                        </g>
+                        <g class="f2-node" data-node="5">
+                          <circle cx="488.56" cy="83.84" r="2.76" fill="#F0C020"/>
+                          <path d="M485.38 83.84A3.18 3.18 0 1 1 491.74 83.84A3.18 3.18 0 1 1 485.38 83.84Z" fill="none" stroke="#000000" stroke-width="0.84" stroke-linecap="round"/>
+                        </g>
+                        <g class="f2-node" data-node="6">
+                          <circle cx="506.74" cy="66.41" r="2.76" fill="#72C2E9"/>
+                          <path d="M503.56 66.41A3.18 3.18 0 1 1 509.92 66.41A3.18 3.18 0 1 1 503.56 66.41Z" fill="none" stroke="#000000" stroke-width="0.84" stroke-linecap="round"/>
+                        </g>
+                      </g>
+                    </g>
+                    <g class="f2-jval"><text class="f2-math" x="477.85" y="122.82" font-size="8.52">J<tspan class="f2-up" font-size="5.96" dy="1.38">val</tspan><tspan class="f2-up" dy="-1.38">(</tspan>η<tspan class="f2-up">)</tspan></text></g>
+                    <text class="f2-cap" x="489.56" y="145.79" font-size="7.4" text-anchor="middle">VLA</text>
+                    <text class="f2-cap" x="489.57" y="156.59" font-size="7.4" text-anchor="middle">Training</text>
+                  </g>
+                </g>
+                <g class="f2-shade" aria-hidden="true">
+                  <path class="f2-wash" d="" fill="#FBF8F2" fill-rule="evenodd" opacity="0"/>
+                </g>
+                <g class="f2-flow" aria-hidden="true">
+                  <g class="f2-routes" fill="none" stroke="none">
+                    <path class="f2-route" data-trace="corr" data-leg="collect" d="M79.68 93.06C112.03 93.06 126.4 11.35 151.56 11.35H179.55"/>
+                    <path class="f2-route" data-trace="corr" data-leg="gate" d="M179.55 11.35H263.87"/>
+                    <path class="f2-route" data-trace="success" data-leg="collect" d="M76.87 87.31C110.48 87.31 125.42 40.15 151.56 40.15H179.55"/>
+                    <path class="f2-route" data-trace="success" data-leg="gate" d="M179.55 40.15H263.87"/>
+                    <path class="f2-route" data-trace="near" data-leg="collect" d="M83.98 90.21C114.39 90.21 127.91 68.95 151.56 68.95H179.55"/>
+                    <path class="f2-route" data-trace="near" data-leg="gate" d="M179.55 68.95H263.87"/>
+                    <path class="f2-route" data-trace="offsets" data-leg="collect" d="M64.44 92.38C103.64 92.38 121.07 97.75 151.56 97.75H179.55"/>
+                    <path class="f2-route" data-trace="offsets" data-leg="gate" d="M179.55 97.75H245.15"/>
+                    <path class="f2-route" data-trace="wrong" data-leg="collect" d="M64.09 128.51C103.45 128.51 120.95 126.54 151.56 126.54H179.55"/>
+                    <path class="f2-route" data-trace="wrong" data-leg="gate" d="M179.55 126.54H245.15"/>
+                  </g>
+                  <line class="f2-read" x1="275.39" y1="16.36" x2="275.39" y2="110.57" stroke="#B08A4A" stroke-width="0.9" stroke-linecap="round" opacity="0" data-from="275.39" data-to="304.19"/>
+                  <rect class="f2-chunk" data-trace="corr" data-bar="0" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="corr" data-bar="1" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="corr" data-bar="2" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="corr" data-bar="3" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="corr" data-bar="4" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-bar="0" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-bar="1" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-bar="2" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-bar="3" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-bar="4" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-bar="0" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-bar="1" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-bar="2" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-bar="3" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-bar="4" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#D6B656" opacity="0"/>
+                  <circle class="f2-token" data-trace="corr" data-fate="pass" cx="263.87" cy="11.35" r="2.4" fill="#6C8EBF" stroke="#FFFFFF" stroke-width="0.7" opacity="0"/>
+                  <circle class="f2-token" data-trace="success" data-fate="pass" cx="263.87" cy="40.15" r="2.4" fill="#82B366" stroke="#FFFFFF" stroke-width="0.7" opacity="0"/>
+                  <circle class="f2-token" data-trace="near" data-fate="pass" cx="263.87" cy="68.95" r="2.4" fill="#D6B656" stroke="#FFFFFF" stroke-width="0.7" opacity="0"/>
+                  <circle class="f2-token" data-trace="offsets" data-fate="audit" cx="245.15" cy="97.75" r="2.4" fill="#D79B00" stroke="#FFFFFF" stroke-width="0.7" opacity="0"/>
+                  <circle class="f2-token" data-trace="wrong" data-fate="audit" cx="245.15" cy="126.54" r="2.4" fill="#B85450" stroke="#FFFFFF" stroke-width="0.7" opacity="0"/>
+                </g>
+                <g class="f2-over">
+                  <g data-col="processes">
+                    <text class="f2-label" x="201.59" y="9" font-size="7.4" text-anchor="middle" stroke="#F5F5F5" stroke-width="1.8" stroke-linejoin="round" paint-order="stroke">Human</text>
+                    <text class="f2-label" x="201.59" y="19.8" font-size="7.4" text-anchor="middle" stroke="#F5F5F5" stroke-width="1.8" stroke-linejoin="round" paint-order="stroke">Correction</text>
+                    <text class="f2-label" x="201.59" y="37.8" font-size="7.4" text-anchor="middle" stroke="#F5F5F5" stroke-width="1.8" stroke-linejoin="round" paint-order="stroke">Success</text>
+                    <text class="f2-label" x="201.59" y="48.6" font-size="7.4" text-anchor="middle" stroke="#F5F5F5" stroke-width="1.8" stroke-linejoin="round" paint-order="stroke">Trace</text>
+                    <text class="f2-label" x="201.59" y="66.59" font-size="7.4" text-anchor="middle" stroke="#F5F5F5" stroke-width="1.8" stroke-linejoin="round" paint-order="stroke">Near</text>
+                    <text class="f2-label" x="201.59" y="77.39" font-size="7.4" text-anchor="middle" stroke="#F5F5F5" stroke-width="1.8" stroke-linejoin="round" paint-order="stroke">Trace</text>
+                    <text class="f2-label" x="201.59" y="100.43" font-size="7.4" text-anchor="middle" stroke="#F5F5F5" stroke-width="1.8" stroke-linejoin="round" paint-order="stroke">Offsets</text>
+                    <text class="f2-label" x="201.58" y="124.19" font-size="7.4" text-anchor="middle" stroke="#F5F5F5" stroke-width="1.8" stroke-linejoin="round" paint-order="stroke">Wrong</text>
+                    <text class="f2-label" x="201.59" y="134.99" font-size="7.4" text-anchor="middle" stroke="#F5F5F5" stroke-width="1.8" stroke-linejoin="round" paint-order="stroke">Region</text>
+                  </g>
+                  <g data-col="gate">
+                    <text class="f2-label" x="244.78" y="45.72" font-size="7.4" text-anchor="middle" stroke="#D5E8D4" stroke-width="1.8" stroke-linejoin="round" paint-order="stroke">Gate</text>
+                    <text class="f2-label" x="244.78" y="55.79" font-size="7.4" text-anchor="middle" stroke="#D5E8D4" stroke-width="1.8" stroke-linejoin="round" paint-order="stroke">Pass</text>
+                    <text class="f2-label" x="244.78" y="66.59" font-size="7.4" text-anchor="middle" stroke="#D5E8D4" stroke-width="1.8" stroke-linejoin="round" paint-order="stroke">with</text>
+                    <text class="f2-label" x="244.79" y="76.67" font-size="7.4" text-anchor="middle" stroke="#D5E8D4" stroke-width="1.8" stroke-linejoin="round" paint-order="stroke">Factors</text>
+                    <text class="f2-label" x="244.79" y="114.83" font-size="7.4" text-anchor="middle" stroke="#F8CECC" stroke-width="1.8" stroke-linejoin="round" paint-order="stroke">Audit</text>
+                    <text class="f2-math" x="240.99" y="35.86" font-size="10.6" stroke="#D5E8D4" stroke-width="1.8" stroke-linejoin="round" paint-order="stroke">G<tspan font-size="7.42" dy="1.39">i</tspan></text>
+                  </g>
+                </g>
+                <g class="f2-focus" aria-hidden="true">
+                  <rect class="f2-hl" x="0" y="0" width="0" height="0" rx="3" fill="none" stroke="#B08A4A" stroke-width="2" vector-effect="non-scaling-stroke" opacity="0"/>
+                </g>
+              </svg>
+              <!-- /fig2:svg -->
             </div>
           </div>
           <span class="fig2__fade" aria-hidden="true"></span>
           <span class="fig2__hint" aria-hidden="true">scroll <svg class="icon"><use href="#i-arrow"/></svg></span>
           </div>
+          <!-- Animation controls (fig2.js shows them unless the reader prefers reduced motion). -->
+          <div class="fig2__controls" hidden>
+            <button class="fig2__btn" type="button" data-fig2="toggle" aria-controls="fig2-frame"><svg class="icon icon--pause" aria-hidden="true"><use href="#i-pause"/></svg><svg class="icon icon--play" aria-hidden="true"><use href="#i-play"/></svg><span class="fig2__btn-text">Pause</span></button>
+            <button class="fig2__btn" type="button" data-fig2="replay" aria-controls="fig2-frame"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3M4.5 4.5v4h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="fig2__btn-text">Replay</span></button>
+          </div>
           <figcaption class="fig2__cap">PACER turns autonomous rollouts, operator corrections and supplementary clean demonstrations into a weighted native-loss training signal: it gates invalid imitation and reweights eligible traces with process evidence (colours as in the paper&rsquo;s figure).</figcaption>
         </figure>
 
         <ol class="steps reveal">
-          <li><button class="step" type="button" aria-pressed="false" data-x0="0" data-x1="1230">
+          <li><button class="step" type="button" aria-pressed="false" data-step="collect">
             <span class="step__title">Collect &amp; label</span>
             <span class="step__text">Roll out the supervised policy. Operators label each outcome from a closed vocabulary and record a correction when a rollout goes wrong. Where the policy does not yet succeed, the same cycle also records a complete clean demonstration.</span>
           </button></li>
-          <li><button class="step" type="button" aria-pressed="false" data-x0="1254" data-x1="1430">
+          <li><button class="step" type="button" aria-pressed="false" data-step="gate">
             <span class="step__title">Gate</span>
             <span class="step__text">Outcome and safety labels decide eligibility only. Failure and excluded rows stay for audit but never receive imitation weight.</span>
           </button></li>
-          <li><button class="step" type="button" aria-pressed="false" data-x0="1460" data-x1="2010">
+          <li><button class="step" type="button" aria-pressed="false" data-step="evidence">
             <span class="step__title">Process evidence</span>
             <span class="step__text">Each action chunk is read for progress, proximity, terminal entry, stop and handoff, and the operator&rsquo;s label.</span>
           </button></li>
-          <li><button class="step" type="button" aria-pressed="false" data-x0="2044" data-x1="2452">
+          <li><button class="step" type="button" aria-pressed="false" data-step="weight">
             <span class="step__title">Bounded weight</span>
             <span class="step__text">Evidence becomes a score, is centered within its stratum and mapped to a weight between zero and <var>w</var><sub>max</sub>.</span>
           </button></li>
-          <li><button class="step" type="button" aria-pressed="false" data-x0="2477" data-x1="2880">
+          <li><button class="step" type="button" aria-pressed="false" data-step="train">
             <span class="step__title">Train &amp; select</span>
             <span class="step__text">Each of <span data-bind="candidates.length"></span> predeclared configurations trains a fresh adapter on the weighted native loss; the best validation score <var>J</var><sub>val</sub> picks one.</span>
           </button></li>

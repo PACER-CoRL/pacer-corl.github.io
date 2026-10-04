@@ -25,7 +25,7 @@
   --rust: #B3553E;            /* failure / gated out */
   --rust-ink: #A24B36;        /* rust as text: 5.1:1 on paper (the fill is 4.3:1) */
   --gray: #9B968C;            /* excluded */
-  --fig1-bg: #DBE8FD;         /* backdrop baked into the Fig. 1 trace crops */
+  --fig1-bg: #DAE8FC;         /* Fig. 1 backdrop, the paper's figure fill */
 
   --serif: "Lora", Georgia, "Times New Roman", serif;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -44,7 +44,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 72px;
+  scroll-padding-top: var(--nav-h);   /* also keeps a focused element out from under the sticky bar */
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -95,38 +95,47 @@ p { margin: 0; }
 
 /* ------------------------------------------------------------------ nav -- */
 
+/* One quiet bar, in the flow and sticky from the first paint: the wordmark on the left,
+   Paper, Code and Results on the right. 48 px keeps the first screen's robot card high. */
+:root { --nav-h: 48px; }
+
 .topnav {
-  position: fixed; inset: 0 0 auto 0; z-index: 50;
-  background: rgba(244, 240, 232, .9);
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(244, 240, 232, .92);
   -webkit-backdrop-filter: saturate(1.3) blur(12px);
   backdrop-filter: saturate(1.3) blur(12px);
   border-bottom: 1px solid var(--sand);
-  transform: translateY(-100%);
-  visibility: hidden;
-  transition: transform .35s var(--ease), visibility 0s linear .35s;
+  --brass-ink: #7A5C25;       /* brass dark enough for small text: 4.7:1 on the tag, 5.5:1 on paper */
 }
-.topnav.is-visible {
-  transform: none;
-  visibility: visible;
-  transition: transform .35s var(--ease), visibility 0s;
-}
-.topnav__inner { display: flex; align-items: center; gap: 28px; height: 56px; }
+.topnav__inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: var(--nav-h); }
 .topnav__brand {
+  display: flex; align-items: center; align-self: stretch; flex: none;
+  margin-left: -8px; padding: 0 8px;       /* a full-height target; the wordmark still lines up with the content edge */
   font: 600 20px/1 var(--serif); letter-spacing: .02em;
-  color: var(--board); text-decoration: none; flex: none;
+  color: var(--board); text-decoration: none;
 }
-.topnav__links {
-  display: flex; gap: 2px; list-style: none; margin: 0 0 0 auto; padding: 0;
-  overflow-x: auto; scrollbar-width: none; min-width: 0;
-}
-.topnav__links::-webkit-scrollbar { display: none; }
-.topnav__links a {
-  display: block; padding: 8px 10px; border-radius: 6px;
-  font: 500 14px/1 var(--sans); color: var(--muted);
+.topnav__links { display: flex; align-self: stretch; gap: 2px; list-style: none; margin: 0 -10px 0 0; padding: 0; }   /* full bar height; the last label lines up with the content edge */
+.topnav__links li { display: flex; }
+.topnav__link {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 0 10px;
+  font: 500 14px/1 var(--sans); color: var(--ink);
   text-decoration: none; white-space: nowrap;
+  transition: color .2s, box-shadow .2s;
 }
-.topnav__links a:hover { color: var(--ink); }
-.topnav__links a.is-active { color: var(--board); box-shadow: inset 0 -2px 0 var(--brass); border-radius: 0; }
+/* The brass underline sits on the bar's bottom edge. */
+.topnav__link[href]:hover { box-shadow: inset 0 -2px 0 var(--brass); }
+.topnav a:focus-visible { outline: 2px solid var(--board); outline-offset: -3px; border-radius: 4px; }
+.topnav__ext { width: 11px; height: 11px; margin-top: -3px; color: var(--muted); }
+.topnav__link:not(.is-external) .topnav__ext, .topnav__link:not(.is-external) .topnav__newtab { display: none; }
+.topnav__link[href]:hover .topnav__ext { color: var(--brass-ink); }
+/* The placeholder: muted, a "soon" tag, no hover. It has no href, so it is not a tab stop. */
+.topnav__link[aria-disabled="true"] { color: var(--muted); cursor: not-allowed; }
+.topnav__soon {
+  padding: 3px 6px 2px; border-radius: 4px;
+  background: rgba(176, 138, 74, .16); color: var(--brass-ink);
+  font: 600 10px/1 var(--sans); letter-spacing: .12em; text-transform: uppercase;
+}
 
 /* ----------------------------------------------------------------- hero -- */
 
@@ -134,7 +143,7 @@ p { margin: 0; }
   position: relative;
   container-type: inline-size;
   color: var(--cream);
-  padding-top: clamp(28px, 3.4vw, 48px);
+  padding-top: clamp(20px, 2vw, 30px);   /* the top bar sits above it; keeps the robot card high on the first screen */
 }
 .hero__band {
   /* The board ends 44% of the way down the 16:9 loop card (card height =
@@ -326,6 +335,7 @@ p { margin: 0; }
 
 main { counter-reset: sec; }
 .section { padding-top: var(--section-gap); counter-increment: sec; }
+main > section[id] { scroll-margin-top: 16px; }   /* with the html scroll-padding: a jump to #results lands below the bar */
 .section__head {
   display: grid; grid-template-columns: var(--rail) minmax(0, 1fr);
   gap: 18px var(--rail-gap);
@@ -364,48 +374,132 @@ h2 {
 .abstract p::first-line { font-weight: 500; }
 
 /* ------------------------------------------------------------ Fig. 1 ---- */
+/* The paper's Fig. 1, rebuilt from its PDF (_dev/tools/extract_fig1.py -> fig1_geometry.json):
+   the eight clean photos, the annotations as inline SVG whose viewBox is each photo's rect in
+   PDF points, and the panels sized in PDF points too. Each panel button is a size container
+   86.394 pt wide, so inside it 1 pt = var(--u). Colours are the PDF's (draw.io green, yellow,
+   red; the annotations' pure green, orange #D79B00 and pure red). fig1.js draws the
+   annotations once when the figure scrolls into view; without it they are simply there. */
 
 .traces {
-  --g: clamp(8px, 1.6vw, 22px);
   margin: 0;
-  padding: clamp(12px, 2vw, 26px) clamp(12px, 2vw, 26px) clamp(16px, 2vw, 22px);
+  padding: clamp(14px, 2.2vw, 30px) clamp(12px, 2vw, 26px) clamp(16px, 2vw, 22px);
   background: var(--fig1-bg);
   border: 1px dashed #9CB3D9;
   border-radius: var(--radius);
 }
 .traces__grid {
   list-style: none; margin: 0; padding: 0;
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--g);
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: end;
+  column-gap: calc(100% * 14.398 / 388.77);     /* the PDF's panel gap over its 388.77 pt row */
 }
-.trace img { width: 100%; height: auto; }
+.fig1-panel, .fig1-e {
+  display: block; width: 100%; margin: 0; padding: 0; border: 0;
+  background: none; color: inherit; font: inherit; text-align: center; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity .3s ease;
+}
+.fig1-panel {
+  container-type: inline-size;
+  --u: calc(100cqw / 86.394);
+}
+.fig1-panel[data-trace="A"] { --fig1-fill: #D5E8D4; --fig1-stroke: #82B366; }
+.fig1-panel[data-trace="B"],
+.fig1-panel[data-trace="C"] { --fig1-fill: #FFF2CC; --fig1-stroke: #D6B656; }
+.fig1-panel[data-trace="D"] { --fig1-fill: #F8CECC; --fig1-stroke: #B85450; }
+.fig1-panel__title {
+  display: flex; justify-content: center; white-space: nowrap;
+  margin-bottom: calc(5.6 * var(--u));
+  font: 600 calc(8.639 * var(--u))/1.2 var(--serif);
+  letter-spacing: -.005em;
+  color: var(--ink);
+}
+/* The frame's outer edge is the PDF path; the photos sit 6.84 pt in. Its 0.72 pt stroke is an
+   inset ring: a border would snap to whole pixels (1.97 px -> 1 px at 1440). */
+.fig1-panel__frame {
+  --ring: inset 0 0 0 calc(.72 * var(--u)) var(--fig1-stroke);
+  display: block;
+  padding: calc(6.84 * var(--u)) calc(7.56 * var(--u)) calc(7.56 * var(--u)) calc(6.84 * var(--u));
+  border-radius: calc(12.959 * var(--u));
+  background: var(--fig1-fill);
+  box-shadow: var(--ring);
+  transition: box-shadow .3s ease;
+}
+.fig1-photo { display: block; position: relative; }
+.fig1-photo + .fig1-photo { margin-top: calc(7.199 * var(--u)); }
+.fig1-photo img { width: 100%; height: auto; }
+.fig1-ov {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  overflow: visible; pointer-events: none;
+}
 
-/* E: corrections from B, C, D return to the target (blue = human correction) */
-.traces__corr {
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--g);
-  height: 40px; margin-top: 2px;
+/* E: the corrections from B, C and D return into A (the paper's black bracket) */
+.traces__corr { display: block; }
+.fig1-bracket { width: 100%; height: auto; overflow: visible; }
+/* Lora at 7.5 spans the PDF label's 172.2-249.7 pt (Times at 8.64), clear of C's drop line */
+.fig1-bracket__label { font: 400 7.5px var(--serif); fill: var(--ink); }
+.fig1-legend { display: none; }
+
+/* selection: the chosen trace stays full strength, the rest steps back */
+.fig1[data-active] [data-trace][aria-pressed="false"] { opacity: .42; }
+.fig1-panel:hover .fig1-panel__frame { box-shadow: var(--ring), 0 0 0 calc(.7 * var(--u)) var(--fig1-stroke); }
+.fig1-panel[aria-pressed="true"] .fig1-panel__frame {
+  box-shadow: var(--ring), 0 0 0 calc(1.1 * var(--u)) var(--fig1-stroke), 0 14px 28px -18px rgba(27, 31, 36, .55);
 }
-.traces__corr > span { grid-row: 1; justify-self: center; width: 2px; background: var(--blue); }
-.corr__up { grid-column: 1; position: relative; }
-.corr__up::before {
-  content: ""; position: absolute; left: 50%; top: -2px; transform: translateX(-50%);
-  border-left: 6px solid transparent; border-right: 6px solid transparent;
-  border-bottom: 10px solid var(--blue);
+.fig1-panel:focus-visible { outline: none; }
+.fig1-panel:focus-visible .fig1-panel__frame { outline: 2px solid var(--board); outline-offset: 3px; }
+/* on the blue backdrop brass is ~2.6:1; board green reads, as in the top bar */
+.fig1 :focus-visible { outline-color: var(--board); }
+.fig1-e[aria-pressed="true"] .fig1-bracket .fig1-stroke { stroke-width: 1.3; }
+
+/* animation (fig1.js): hidden until drawn; strokes run along pathLength = 1 */
+.fig1--anim:not(.is-drawn) [data-draw] { opacity: 0; }
+.fig1--anim:not(.is-drawn) .fig1-stroke { stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+.fig1--anim:not(.is-drawn) .fig1-pop { transform-box: fill-box; transform-origin: center; }
+
+.fig1-bar {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+  margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(108, 142, 191, .35);
 }
-.corr__drop--b { grid-column: 2; }
-.corr__drop--c { grid-column: 3; }
-.corr__drop--d { grid-column: 4; }
-.traces__corr > .corr__line {
-  grid-column: 1 / -1; align-self: end; justify-self: stretch;
-  width: auto; height: 2px;
-  margin: 0 calc((100% - 3 * var(--g)) / 8);
+.fig1-role { min-height: 30px; font-size: 15.5px; line-height: 1.45; color: #22324D; }
+.fig1-role__hint { display: block; padding-top: 4px; color: #4A5A73; font-style: italic; }
+.fig1-role__line { display: flex; align-items: flex-start; gap: 12px; }
+.fig1-role__line .token { margin-top: -3px; }
+.fig1-role__hint[hidden], .fig1-role__line[hidden], .fig1-replay[hidden] { display: none; }
+.fig1-replay {
+  flex: none; display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 13px 0 10px; border-radius: 999px;
+  border: 1px solid rgba(47, 109, 181, .35); background: rgba(255, 255, 255, .5);
+  color: #22324D; font: 500 13.5px/1 var(--sans); cursor: pointer;
 }
+.fig1-replay:hover { background: rgba(255, 255, 255, .85); }
+.fig1-replay .icon { width: 16px; height: 16px; }
 .traces__cap {
   display: flex; align-items: flex-start; gap: 12px;
-  margin-top: 14px; max-width: 80ch;
+  margin-top: 12px; max-width: 80ch;
   font-size: 15.5px; line-height: 1.5; color: #22324D;
 }
 .traces__cap strong { font-weight: 600; color: var(--blue); }
 .traces__cap .token { margin-top: -3px; }
+
+/* phones: a 2 x 2 grid; titles may wrap; E becomes a compact legend line */
+@media (max-width: 700px) {
+  .traces__grid { column-gap: calc(100% * 14.398 / 187.186); row-gap: 16px; }
+  .fig1-panel__title { display: block; white-space: normal; text-wrap: balance; line-height: 1.15; }
+  .fig1-legend {
+    display: flex; align-items: center; gap: 10px; margin-top: 16px;
+    font: 500 15px/1.3 var(--serif); color: var(--ink);
+  }
+  .fig1-legend__mark { width: 76px; height: 38px; flex: none; overflow: visible; }
+  .fig1-legend__mark text { font: 600 8.5px var(--sans); fill: var(--muted); text-anchor: middle; }
+  .fig1-legend__mark .fig1-stroke { fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: square; }
+  .fig1-legend__mark .fig1-pop { fill: currentColor; }
+  .fig1-legend img { width: 28px; height: 28px; flex: none; }
+  .fig1-e[aria-pressed="true"] .fig1-legend { font-weight: 600; }
+  .fig1-e[aria-pressed="true"] .fig1-legend__mark .fig1-stroke { stroke-width: 2; }
+  .fig1-bar { flex-direction: column; gap: 10px; }
+  .fig1-replay { align-self: flex-end; }
+}
 
 .token {
   display: inline-grid; place-items: center; flex: none;
@@ -467,8 +561,13 @@ h2 {
 
 /* ------------------------------------------------------------ Fig. 2 ---- */
 
-.fig2 { margin: 0; }
-.fig2__view { position: relative; }
+/* The figure is inline SVG rebuilt from the paper's PDF (extract_fig2.py) and animated by
+   fig2.js; the caption shares its row with the play/pause and replay controls. */
+.fig2 {
+  margin: 0;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 24px;
+}
+.fig2__view { position: relative; grid-column: 1 / -1; }
 .fig2__scroll {
   padding: clamp(14px, 2.2vw, 30px);
   background: #fff; border: 1px solid var(--sand); border-radius: var(--radius);
@@ -500,16 +599,25 @@ h2 {
 .fig2__hint .icon { width: 13px; height: 13px; }
 .fig2.is-scrollable:not(.is-end) .fig2__fade,
 .fig2.is-scrollable:not(.is-end) .fig2__hint { opacity: 1; visibility: visible; transition: opacity .2s, visibility 0s; }
-.fig2__frame img { width: 100%; height: auto; }
-.fig2__hl {
-  position: absolute; top: -6px; bottom: -6px; left: 0; width: 0;
-  border: 2px solid var(--brass); border-radius: 8px;
-  box-shadow: 0 0 0 3000px rgba(251, 248, 242, .74);
-  opacity: 0; pointer-events: none;
-  transition: left .45s var(--ease), width .45s var(--ease), opacity .25s ease;
+.fig2__svg { width: 100%; height: auto; overflow: visible; }
+.fig2__svg text { font-family: var(--serif); fill: #000; }
+.fig2__svg .f2-math { font-style: italic; }
+.fig2__svg .f2-math--bold { font-weight: 600; }
+.fig2__svg .f2-up { font-style: normal; }
+.fig2__svg .f2-flow, .fig2__svg .f2-focus { pointer-events: none; }
+.fig2__cap { grid-column: 1; grid-row: 2; margin-top: 14px; max-width: 84ch; font-size: 15px; line-height: 1.5; color: var(--muted); }
+.fig2__controls { grid-column: 2; grid-row: 2; display: flex; gap: 8px; margin-top: 12px; align-self: start; }
+.fig2__controls[hidden] { display: none; }
+.fig2__btn {
+  -webkit-appearance: none; appearance: none;
+  display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px 0 10px;
+  border: 1px solid var(--sand-2); border-radius: 999px; background: var(--card); color: var(--ink);
+  font: 500 12.5px/1 var(--mono); cursor: pointer; transition: border-color .2s, background-color .2s;
 }
-.fig2.is-active .fig2__hl { opacity: 1; }
-.fig2__cap { margin-top: 14px; max-width: 84ch; font-size: 15px; line-height: 1.5; color: var(--muted); }
+.fig2__btn:hover { border-color: var(--brass); }
+.fig2__btn .icon { width: 14px; height: 14px; }
+.fig2__btn .icon--play, .fig2__btn.is-paused .icon--pause { display: none; }
+.fig2__btn.is-paused .icon--play { display: block; }
 
 .steps {
   list-style: none; margin: 28px 0 0; padding: 0;
@@ -532,7 +640,7 @@ h2 {
 }
 .step__title { display: block; font: 500 19px/1.25 var(--serif); }
 .step__text { display: block; margin-top: 8px; font-size: 14.5px; line-height: 1.5; color: var(--muted); }
-.step:hover, .step.is-preview { border-top-color: rgba(176, 138, 74, .6); }
+.step:hover { border-top-color: rgba(176, 138, 74, .6); }
 .step[aria-pressed="true"] { border-top-color: var(--brass); }
 .step[aria-pressed="true"] .step__title { color: var(--board); }
 
@@ -1253,6 +1361,8 @@ h2 {
   .traces__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .traces__corr { display: none; }
   .steps { grid-template-columns: 1fr; gap: 0; }
+  .fig2__controls { grid-column: 1; grid-row: auto; }
+  .fig2__cap { grid-row: auto; }
   .sources__list { grid-template-columns: 1fr; gap: 22px; }
   .step { display: grid; grid-template-columns: 34px 1fr; padding: 14px 0; }
   .step::before { margin: 4px 0 0; }
@@ -1262,8 +1372,8 @@ h2 {
   .hero__toggle { right: 14px; bottom: 14px; }
   .hero__frame { padding: 6px; border-radius: 16px; }
   .hero__frame video { border-radius: 11px; }
-  .topnav__inner { gap: 16px; }
-  .topnav__links { margin-left: 0; -webkit-mask-image: linear-gradient(to right, #000 85%, transparent); mask-image: linear-gradient(to right, #000 85%, transparent); }
+  .topnav__link { padding: 0 8px; }
+  .topnav__links { margin-right: -8px; }
   .scope__col, .code__card { padding-left: 22px; padding-right: 22px; }
   .compare { grid-template-columns: 1fr; grid-template-rows: none; row-gap: 16px; }
   .compare__card { grid-row: auto; grid-template-rows: none; }
@@ -1316,6 +1426,21 @@ h2 {
 @media (max-width: 480px) {
   .stat--wide .stat__num { font-size: 38px; }
   .btn { padding: 0 14px 0 12px; font-size: 14px; }
+}
+
+/* Very narrow phones: the bar still fits on one row. The "soon" tag gives way to a dotted
+   underline (the item keeps its "coming soon" label for screen readers). */
+@media (max-width: 340px) {
+  .topnav__link { padding: 0 6px; }
+  .topnav__links { margin-right: -6px; }
+  .topnav__soon { display: none; }
+  .topnav__link[aria-disabled="true"] { text-decoration: underline dotted; text-underline-offset: .35em; }
+}
+
+/* Printing or saving as PDF: sections not yet scrolled into view are shown too (the two
+   figures finish themselves on beforeprint: fig1.js, fig2.js). */
+@media print {
+  .js-reveal .reveal { opacity: 1; transform: none; transition: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
