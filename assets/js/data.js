@@ -346,12 +346,6 @@ window.PACER = {
     "training_rows": 8836,
     "jval_span_bound": 0.003,
     "lane_d": 1.6,
-    "realised_mean_weight": {
-      "clean": 1.0,
-      "correction": 1.0,
-      "auto_success": 1.4566,
-      "partial": 1.0344
-    },
     "traces": [
       {
         "id": "success",
@@ -1162,7 +1156,6 @@ window.PACER = {
       "group": "collection",
       "title": "Data-collection loop",
       "note": "One collection cycle: autonomous rollout, operator correction, return home, supplementary clean demonstration.",
-      "summary": "one full collection cycle",
       "slots": [
         {
           "label": "Rollout \u2192 correction \u2192 home \u2192 clean demo",
@@ -1177,7 +1170,6 @@ window.PACER = {
       "group": "demo1",
       "title": "PACER vs. direct post-training",
       "note": "CPU fan and RAM, for the initial SFT policy, vanilla post-SFT, and PACER.",
-      "summary": "CPU fan and RAM \u00d7 3 policies",
       "slots": [
         {
           "label": "CPU fan \u00b7 \u03c0_\u03b80 (initial SFT)",
@@ -1221,7 +1213,6 @@ window.PACER = {
       "group": "demo2",
       "title": "PACER vs. outcome-only and fixed geometry",
       "note": "CPU fan and RAM, for outcome-only, fixed-geometry, and PACER post-training.",
-      "summary": "CPU fan and RAM \u00d7 3 policies",
       "slots": [
         {
           "label": "CPU fan \u00b7 Outcome only",
@@ -1265,7 +1256,6 @@ window.PACER = {
       "group": "all_components",
       "title": "PACER on all five components",
       "note": "Two held-out configurations for each of RAM, Connector, CPU, GPU and CPU fan.",
-      "summary": "5 components \u00d7 2 held-out configurations",
       "slots": [
         {
           "label": "RAM \u00b7 Config 1",

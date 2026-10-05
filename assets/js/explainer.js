@@ -210,18 +210,6 @@ var PACERExplainer = (function () {
     return f;
   }
 
-  // The paper's realised mean weights for the selected candidate (appendix, tab:app_weightdist):
-  // the toy lanes are illustrative, so the footnote says what the real roles average.
-  function realisedClause(rw) {
-    if (!rw || rw.clean === undefined || rw.correction === undefined || rw.auto_success === undefined) return "";
-    var f2 = function (v) { return Number(v).toFixed(2); };
-    var human = f2(rw.clean) === f2(rw.correction)
-      ? "clean and correction rows average weight " + f2(rw.clean)
-      : "clean rows average weight " + f2(rw.clean) + ", correction rows " + f2(rw.correction);
-    return "In the paper’s selected configuration, " + human + " and autonomous successes " +
-      f2(rw.auto_success) + " (appendix). ";
-  }
-
   function r1(v) { return Math.round(v * 10) / 10; }
   function fmt(v, d) { return v === null || v === undefined ? "–" : v.toFixed(d); }
   function trimNum(v) { return String(+v.toFixed(2)); }
@@ -331,8 +319,7 @@ var PACERExplainer = (function () {
     var foot = h("p", { class: "xp__foot" }, [
       "Illustrative traces, centered per role over their " + traces[0].chunks.length + " chunks. " +
       "Real weights are computed over " +
-      Number(ex.training_rows).toLocaleString("en-US") + " training rows with stratum-wise centering. " +
-      realisedClause(ex.realised_mean_weight) + "The " +
+      Number(ex.training_rows).toLocaleString("en-US") + " training rows with stratum-wise centering. The " +
       cands.length + " candidates span < " + ex.jval_span_bound + " in ", sym("J", "val"),
       ", so selection is a fixed protocol choice."
     ]);

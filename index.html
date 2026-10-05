@@ -158,7 +158,6 @@
             <div class="abstract" data-source="submission">
               <p>Robotic disassembly presents a key challenge in end-of-life (EoL) product remanufacturing automation, where a robot must perceive and interpret product states with uncertainty, satisfy prerequisite sequences, execute precise, contact-rich manipulation, and recover from failed attempts. Recent vision-language-action (VLA) models offer greater flexibility; however, they are largely applied to tabletop and daily-life manipulation rather than industrial settings. Supervised fine-tuning provides a practical path for adaptation, but limited and costly disassembly data cannot capture the distribution shifts arising from changing environments and product uncertainties. Human corrections expose the policy&rsquo;s own failure states, but the key challenge is how to turn a limited set of recovery trajectories into useful policy-improvement signals rather than treating them as ordinary demonstrations or coarse trial outcomes. Motivated by this, we introduce PACER, a Process-Aware Correction and Evidence Reweighting framework that preserves the native VLA training objective by converting correction trajectories and in-process robot evidence into weights or advantages. Using 70 human correction trajectories collected across seven positions, we evaluate PACER on real UR5e motherboard disassembly across five component classes and multiple configurations, achieving a <span data-bind="derived.delta_points"></span>-percentage-point success-rate improvement (<span data-bind="tldr.success.vanilla_post_sft"></span> &rarr; <span data-bind="tldr.success.pacer"></span> / <span data-bind="tldr.heldout_trials"></span> held-out trials) on robotic disassembly tasks compared with direct SFT.</p>
             </div>
-            <p class="note">The submitted text with one phrase changed: the success-rate gain is stated in percentage points, where the submission gave a percentage. The camera-ready abstract will replace it.</p>
           </div>
         </header>
       </div>
@@ -890,7 +889,7 @@
           <p class="eyebrow">Videos</p>
           <div class="section__intro">
             <h2 id="demos-h">Real-robot videos.</h2>
-            <p class="dek">Muted loops that play while on screen; each clip is marked with its playback speed. Slots fill in as clips are recorded.</p>
+            <p class="dek">Muted loops that play while on screen; each clip is marked with its playback speed.</p>
           </div>
         </header>
         <div class="demos" data-render="demos"></div>
@@ -937,40 +936,7 @@ python examples/end_to_end_demo.py</code></pre>
       </div>
     </section>
 
-    <!-- 11a · Scope ---------------------------------------------------------->
-    <section class="section" id="scope" aria-labelledby="scope-h">
-      <div class="wrap">
-        <header class="section__head reveal">
-          <p class="eyebrow">Scope</p>
-          <div class="section__intro">
-            <h2 id="scope-h">What PACER is&nbsp;&mdash; and is not.</h2>
-          </div>
-        </header>
-        <div class="scope">
-          <div class="scope__col reveal">
-            <h3>PACER is</h3>
-            <ul class="scope__list scope__list--is">
-              <li><strong>Offline post-training</strong> of one flow-matching VLA (<span class="pi">&pi;<sub>0.5</sub></span>) with LoRA adapters, on logged rollouts, corrections and clean demonstrations.</li>
-              <li><strong>A bounded per-chunk weight</strong> on the VLA&rsquo;s native action loss, set by process evidence.</li>
-              <li><strong>An eligibility gate:</strong> failure and excluded rows are kept for audit and never imitated.</li>
-              <li><strong>A validation-selected configuration</strong> from <span data-bind="candidates.length"></span> predeclared candidates, chosen before any held-out test.</li>
-              <li><strong>Tested on one UR5e:</strong> <span data-bind="tldr.components"></span> components, <span data-bind="tldr.heldout_trials"></span> held-out trials.</li>
-            </ul>
-          </div>
-          <div class="scope__col reveal">
-            <h3>PACER is not</h3>
-            <ul class="scope__list scope__list--not">
-              <li><strong>Learning on the robot:</strong> no policy update happens while rollouts run.</li>
-              <li><strong>A learned critic:</strong> no value function and no weighting network is trained; features, roles and gates are fixed by protocol.</li>
-              <li><strong>A change to the model:</strong> backbone, action head and loss stay as they are.</li>
-              <li><strong>A cross-backbone or cross-robot result:</strong> one VLA backbone, one robot arm.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 11b · BibTeX --------------------------------------------------------->
+    <!-- 11 · BibTeX ----------------------------------------------------------->
     <section class="section" id="bibtex" aria-labelledby="bibtex-h">
       <div class="wrap">
         <header class="section__head reveal">

@@ -334,43 +334,30 @@
     observeReveal(container);
   }
 
-  // Tiles only for slots that have a clip. Slots still waiting for one collapse into a
-  // single manifest line ("6 clips · CPU fan and RAM × 3 policies — coming soon").
+  // Only slots that have a clip (src set) are shown, and a group with none is skipped. The
+  // empty slots stay in the data, so a clip appears here as soon as its src is filled in.
   // Built off-document and appended only when complete, so a bad group leaves no half-drawn block.
   function renderGroup(container, g) {
     if (!g || !Array.isArray(g.slots) || !g.slots.length) throw new Error("needs a non-empty slots list");
-    var n = g.slots.length;
     var filled = g.slots.filter(function (s) { return s && s.src; });
-    var waiting = n - filled.length;
-    var portrait = filled.length === 1 && filled[0].aspect === "9:16";
+    var n = filled.length;
+    if (!n) return;
+    var portrait = n === 1 && filled[0].aspect === "9:16";
     var cls = "demo-group" +
-      (!filled.length ? " demo-group--pending" : "") +
-      (filled.length === 1 ? " demo-group--feature" : "") +
+      (n === 1 ? " demo-group--feature" : "") +
       (portrait ? " has-portrait" : "") +
-      (filled.length > 6 ? " demo-group--wide" : "");
+      (n > 6 ? " demo-group--wide" : "");
     var group = h("section", { class: cls + " reveal", "data-group": g.group, "aria-labelledby": "demo-" + g.group });
-    var text = h("div", { class: "demo-group__text" }, [
-      h("h3", { class: "demo-group__title", id: "demo-" + g.group, text: g.title }),
-      h("p", { class: "demo-group__note", text: g.note })
-    ]);
-    if (waiting) {
-      text.appendChild(h("p", { class: "demo-group__manifest" }, [
-        h("span", { class: "demo-group__glyph", "aria-hidden": "true" }, [icon("i-play")]),
-        h("span", {
-          text: waiting + (filled.length ? " more" : "") + (waiting === 1 ? " clip" : " clips") +
-            " \u00b7 " + (g.summary || g.title) + " \u2014 coming soon"
-        })
-      ]));
-    }
     group.appendChild(h("div", { class: "demo-group__head" }, [
-      h("p", { class: "demo-group__kicker", text: filled.length ? n + (n === 1 ? " clip" : " clips") : "" }),
-      text
+      h("p", { class: "demo-group__kicker", text: n + (n === 1 ? " clip" : " clips") }),
+      h("div", { class: "demo-group__text" }, [
+        h("h3", { class: "demo-group__title", id: "demo-" + g.group, text: g.title }),
+        h("p", { class: "demo-group__note", text: g.note })
+      ])
     ]));
-    if (filled.length) {
-      var grid = h("div", { class: "demo-grid" });
-      filled.forEach(function (s) { grid.appendChild(renderSlot(s)); });
-      group.appendChild(grid);
-    }
+    var grid = h("div", { class: "demo-grid" });
+    filled.forEach(function (s) { grid.appendChild(renderSlot(s)); });
+    group.appendChild(grid);
     container.appendChild(group);
   }
 
