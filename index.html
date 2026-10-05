@@ -175,52 +175,57 @@
           </div>
         </header>
 
-        <figure class="traces fig1 reveal" aria-labelledby="traces-cap">
+        <figure class="traces fig1" aria-labelledby="traces-cap">
           <!-- Fig. 1 rebuilt from the paper (_dev/tools/extract_fig1.py): its clean photos, and its annotations as SVG in PDF points. -->
           <ol class="traces__grid">
-            <li><button class="fig1-panel" type="button" data-trace="A" aria-pressed="false" aria-controls="fig1-role" aria-labelledby="fig1-t-A" aria-describedby="fig1-p-A1 fig1-p-A2">
+            <li><button class="fig1-panel" type="button" data-trace="A" aria-pressed="false" aria-controls="fig1-role" aria-labelledby="fig1-t-A" aria-describedby="fig1-p-A1 fig1-p-A2 fig1-chip-A">
               <span class="fig1-panel__title" id="fig1-t-A">A. Success Trace</span>
               <span class="fig1-panel__frame">
                 <span class="fig1-photo"><img id="fig1-p-A1" src="assets/img/fig1_A1.webp" width="299" height="299" loading="lazy" decoding="async" alt="A. Success trace, CPU fan: the gripper reaches the grasp point (green box).">
-                  <svg class="fig1-ov" viewBox="14.772 35.277 71.994 71.995" aria-hidden="true" focusable="false"><path class="fig1-stroke" data-draw="A1" d="M43.93 50.036H58.329V65.875H43.93Z" pathLength="1" fill="none" stroke="#00FF00" stroke-width="0.72"/></svg></span>
+                  <svg class="fig1-ov" viewBox="14.772 35.277 71.994 71.995" aria-hidden="true" focusable="false"><path class="fig1-mark fig1-pulse" data-pulse="A1" d="M43.93 50.036H58.329V65.875H43.93Z" fill="none" stroke="#00FF00" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="A1" d="M43.93 50.036H58.329V65.875H43.93Z" pathLength="1" fill="none" stroke="#00FF00" stroke-width="1.1"/></svg></span>
                 <span class="fig1-photo"><img id="fig1-p-A2" src="assets/img/fig1_A2.webp" width="299" height="299" loading="lazy" decoding="async" alt="A. Success trace, GPU bracket: the gripper reaches the grasp point (green box).">
-                  <svg class="fig1-ov" viewBox="14.772 114.471 71.994 71.995" aria-hidden="true" focusable="false"><path class="fig1-stroke" data-draw="A2" d="M36.73 122.03H51.129V137.869H36.73Z" pathLength="1" fill="none" stroke="#00FF00" stroke-width="0.72"/></svg></span>
+                  <svg class="fig1-ov" viewBox="14.772 114.471 71.994 71.995" aria-hidden="true" focusable="false"><path class="fig1-mark fig1-pulse" data-pulse="A2" d="M36.73 122.03H51.129V137.869H36.73Z" fill="none" stroke="#00FF00" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="A2" d="M36.73 122.03H51.129V137.869H36.73Z" pathLength="1" fill="none" stroke="#00FF00" stroke-width="1.1"/></svg></span>
+                <span class="fig1-chiprow"><span class="fig1-mark fig1-chip fig1-chip--ok" id="fig1-chip-A" data-draw="A-chip" title="Autonomous success, weighted by process evidence.">weighted</span></span>
               </span>
             </button></li>
-            <li><button class="fig1-panel" type="button" data-trace="B" aria-pressed="false" aria-controls="fig1-role" aria-labelledby="fig1-t-B" aria-describedby="fig1-p-B1 fig1-p-B2">
+            <li><button class="fig1-panel" type="button" data-trace="B" aria-pressed="false" aria-controls="fig1-role" aria-labelledby="fig1-t-B" aria-describedby="fig1-p-B1 fig1-p-B2 fig1-chip-B">
               <span class="fig1-panel__title" id="fig1-t-B">B. Near Grasp Trace</span>
               <span class="fig1-panel__frame">
                 <span class="fig1-photo"><img id="fig1-p-B1" src="assets/img/fig1_B1.webp" width="299" height="299" loading="lazy" decoding="async" alt="B. Near-grasp trace, CPU fan: the gripper stops just short of the target (orange arrow).">
-                  <svg class="fig1-ov" viewBox="115.564 35.277 71.995 71.995" aria-hidden="true" focusable="false"><path class="fig1-stroke" data-draw="B1" d="M166.32 60.835L156.507 60.835" pathLength="1" fill="none" stroke="#D79B00" stroke-width="0.72"/><path class="fig1-pop" data-draw="B1-head" d="M152.728 60.835L157.767 58.315L156.507 60.835L157.767 63.355Z" fill="#D79B00" stroke="#D79B00" stroke-width="0.72"/></svg></span>
+                  <svg class="fig1-ov" viewBox="115.564 35.277 71.995 71.995" aria-hidden="true" focusable="false"><circle class="fig1-mark fig1-pulse" data-pulse="B1" cx="152.728" cy="60.835" r="2.6" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="B1" d="M166.32 60.835L156.507 60.835" pathLength="1" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-pop" data-draw="B1-head" d="M152.728 60.835L157.767 58.315L156.507 60.835L157.767 63.355Z" fill="#D79B00" stroke="#D79B00" stroke-width="1.1"/></svg></span>
                 <span class="fig1-photo"><img id="fig1-p-B2" src="assets/img/fig1_B2.webp" width="299" height="299" loading="lazy" decoding="async" alt="B. Near-grasp trace, GPU bracket: the gripper stops just short of the target (orange arrow).">
-                  <svg class="fig1-ov" viewBox="115.564 114.471 71.995 71.995" aria-hidden="true" focusable="false"><path class="fig1-stroke" data-draw="B2" d="M130.323 143.629L140.618 138.481" pathLength="1" fill="none" stroke="#D79B00" stroke-width="0.72"/><path class="fig1-pop" data-draw="B2-head" d="M144.002 136.79L140.618 141.296L140.618 138.481L138.365 136.79Z" fill="#D79B00" stroke="#D79B00" stroke-width="0.72"/></svg></span>
+                  <svg class="fig1-ov" viewBox="115.564 114.471 71.995 71.995" aria-hidden="true" focusable="false"><circle class="fig1-mark fig1-pulse" data-pulse="B2" cx="144.002" cy="136.79" r="2.6" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="B2" d="M130.323 143.629L140.618 138.481" pathLength="1" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-pop" data-draw="B2-head" d="M144.002 136.79L140.618 141.296L140.618 138.481L138.365 136.79Z" fill="#D79B00" stroke="#D79B00" stroke-width="1.1"/></svg></span>
+                <span class="fig1-chiprow"><span class="fig1-mark fig1-chip fig1-chip--near" id="fig1-chip-B" data-draw="B-chip" title="Near miss (partial): weighted by process evidence; partial progress still counts.">partial credit</span></span>
               </span>
             </button></li>
-            <li><button class="fig1-panel" type="button" data-trace="C" aria-pressed="false" aria-controls="fig1-role" aria-labelledby="fig1-t-C" aria-describedby="fig1-p-C1 fig1-p-C2">
+            <li><button class="fig1-panel" type="button" data-trace="C" aria-pressed="false" aria-controls="fig1-role" aria-labelledby="fig1-t-C" aria-describedby="fig1-p-C1 fig1-p-C2 fig1-chip-C">
               <span class="fig1-panel__title" id="fig1-t-C">C. Wrong Location Trace</span>
               <span class="fig1-panel__frame">
                 <span class="fig1-photo"><img id="fig1-p-C1" src="assets/img/fig1_C1.webp" width="299" height="299" loading="lazy" decoding="async" alt="C. Wrong-location trace, CPU fan: the gripper settles beside the target (orange arrow).">
-                  <svg class="fig1-ov" viewBox="216.356 35.277 71.994 71.995" aria-hidden="true" focusable="false"><path class="fig1-stroke" data-draw="C1" d="M267.113 60.835L257.3 60.835" pathLength="1" fill="none" stroke="#D79B00" stroke-width="0.72"/><path class="fig1-pop" data-draw="C1-head" d="M253.52 60.835L258.559 58.315L257.3 60.835L258.559 63.355Z" fill="#D79B00" stroke="#D79B00" stroke-width="0.72"/></svg></span>
+                  <svg class="fig1-ov" viewBox="216.356 35.277 71.994 71.995" aria-hidden="true" focusable="false"><circle class="fig1-mark fig1-pulse" data-pulse="C1" cx="253.52" cy="60.835" r="2.6" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="C1" d="M267.113 60.835L257.3 60.835" pathLength="1" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-pop" data-draw="C1-head" d="M253.52 60.835L258.559 58.315L257.3 60.835L258.559 63.355Z" fill="#D79B00" stroke="#D79B00" stroke-width="1.1"/></svg></span>
                 <span class="fig1-photo"><img id="fig1-p-C2" src="assets/img/fig1_C2.webp" width="299" height="299" loading="lazy" decoding="async" alt="C. Wrong-location trace, GPU bracket: the gripper settles beside the target (orange arrow).">
-                  <svg class="fig1-ov" viewBox="216.356 114.471 71.994 71.995" aria-hidden="true" focusable="false"><path class="fig1-stroke" data-draw="C2" d="M259.913 143.629L249.618 138.481" pathLength="1" fill="none" stroke="#D79B00" stroke-width="0.72"/><path class="fig1-pop" data-draw="C2-head" d="M246.234 136.79L251.871 136.79L249.618 138.481L249.618 141.296Z" fill="#D79B00" stroke="#D79B00" stroke-width="0.72"/></svg></span>
+                  <svg class="fig1-ov" viewBox="216.356 114.471 71.994 71.995" aria-hidden="true" focusable="false"><circle class="fig1-mark fig1-pulse" data-pulse="C2" cx="246.234" cy="136.79" r="2.6" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="C2" d="M259.913 143.629L249.618 138.481" pathLength="1" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-pop" data-draw="C2-head" d="M246.234 136.79L251.871 136.79L249.618 138.481L249.618 141.296Z" fill="#D79B00" stroke="#D79B00" stroke-width="1.1"/></svg></span>
+                <span class="fig1-chiprow"><span class="fig1-mark fig1-chip fig1-chip--fail" id="fig1-chip-C" data-draw="C-chip" title="Wrong location: a failure label; gated, kept for audit with zero weight.">gated · audit</span></span>
               </span>
             </button></li>
-            <li><button class="fig1-panel" type="button" data-trace="D" aria-pressed="false" aria-controls="fig1-role" aria-labelledby="fig1-t-D" aria-describedby="fig1-p-D1 fig1-p-D2">
+            <li><button class="fig1-panel" type="button" data-trace="D" aria-pressed="false" aria-controls="fig1-role" aria-labelledby="fig1-t-D" aria-describedby="fig1-p-D1 fig1-p-D2 fig1-chip-D">
               <span class="fig1-panel__title" id="fig1-t-D">D. Failure Trace</span>
               <span class="fig1-panel__frame">
                 <span class="fig1-photo"><img id="fig1-p-D1" src="assets/img/fig1_D1.webp" width="299" height="299" loading="lazy" decoding="async" alt="D. Failure trace, CPU fan: the gripper ends far from the target region (red circle).">
-                  <svg class="fig1-ov" viewBox="317.149 35.277 71.995 71.995" aria-hidden="true" focusable="false"><path class="fig1-stroke" data-draw="D1" d="M396.701 71.634A14.398 14.398 0 1 1 367.905 71.634A14.398 14.398 0 1 1 396.701 71.634Z" pathLength="1" fill="none" stroke="#FF0000" stroke-width="0.72"/></svg></span>
+                  <svg class="fig1-ov" viewBox="317.149 35.277 71.995 71.995" aria-hidden="true" focusable="false"><path class="fig1-mark fig1-pulse" data-pulse="D1" d="M396.701 71.634A14.398 14.398 0 1 1 367.905 71.634A14.398 14.398 0 1 1 396.701 71.634Z" fill="none" stroke="#FF0000" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="D1" d="M396.701 71.634A14.398 14.398 0 1 1 367.905 71.634A14.398 14.398 0 1 1 396.701 71.634Z" pathLength="1" fill="none" stroke="#FF0000" stroke-width="1.1"/></svg></span>
                 <span class="fig1-photo"><img id="fig1-p-D2" src="assets/img/fig1_D2.webp" width="299" height="299" loading="lazy" decoding="async" alt="D. Failure trace, GPU bracket: the gripper ends far from the target region (red circle).">
-                  <svg class="fig1-ov" viewBox="317.149 114.471 71.995 71.995" aria-hidden="true" focusable="false"><path class="fig1-stroke" data-draw="D2" d="M346.306 158.028A14.398 14.398 0 1 1 317.51 158.028A14.398 14.398 0 1 1 346.306 158.028Z" pathLength="1" fill="none" stroke="#FF0000" stroke-width="0.72"/></svg></span>
+                  <svg class="fig1-ov" viewBox="317.149 114.471 71.995 71.995" aria-hidden="true" focusable="false"><path class="fig1-mark fig1-pulse" data-pulse="D2" d="M346.306 158.028A14.398 14.398 0 1 1 317.51 158.028A14.398 14.398 0 1 1 346.306 158.028Z" fill="none" stroke="#FF0000" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="D2" d="M346.306 158.028A14.398 14.398 0 1 1 317.51 158.028A14.398 14.398 0 1 1 346.306 158.028Z" pathLength="1" fill="none" stroke="#FF0000" stroke-width="1.1"/></svg></span>
+                <span class="fig1-chiprow"><span class="fig1-mark fig1-chip fig1-chip--fail" id="fig1-chip-D" data-draw="D-chip" title="Failure: gated, kept for audit with zero weight.">gated · audit</span></span>
               </span>
             </button></li>
           </ol>
           <button class="fig1-e" type="button" data-trace="E" aria-pressed="false" aria-controls="fig1-role" aria-label="E. Human Corrections">
-            <span class="traces__corr"><svg class="fig1-bracket" viewBox="7.932 194.025 388.77 22.319" aria-hidden="true" focusable="false"><path class="fig1-stroke" data-draw="E-down" d="M353.506 194.025L353.506 215.624" pathLength="1" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-stroke" data-draw="E-along" d="M353.506 215.624L44.736 215.624" pathLength="1" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-stroke" data-draw="E-up" d="M44.736 215.624L44.736 198.532" pathLength="1" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-stroke" data-draw="E-drop" data-from="B" d="M151.705 194.025L151.921 215.624" pathLength="1" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-stroke" data-draw="E-drop" data-from="C" d="M252.498 194.025L252.714 215.624" pathLength="1" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-pop" data-draw="E-head" d="M44.736 193.672L47.976 200.152L44.736 198.532L41.496 200.152Z" fill="#000000" stroke="#000000" stroke-width="0.72"/><image class="fig1-pop" data-draw="E-icon" href="assets/img/fig1_operator.webp" x="151.561" y="193.665" width="21.598" height="21.598"/><text class="fig1-pop fig1-bracket__label" data-draw="E-icon" x="172.204" y="207.344">E. Human Corrections</text></svg></span>
+            <span class="traces__corr"><svg class="fig1-bracket" viewBox="7.932 194.025 388.77 22.319" aria-hidden="true" focusable="false"><defs><radialGradient id="fig1-dot-halo-b"><stop offset="0" stop-color="#5B9BE6" stop-opacity=".85"/><stop offset=".45" stop-color="#7DB4F2" stop-opacity=".4"/><stop offset="1" stop-color="#2F6DB5" stop-opacity="0"/></radialGradient><radialGradient id="fig1-dot-core-b" cx=".38" cy=".35" r=".7"><stop offset="0" stop-color="#EAF3FF"/><stop offset=".5" stop-color="#4A8EDC"/><stop offset="1" stop-color="#2F6DB5"/></radialGradient></defs><path class="fig1-mark fig1-glow" data-glow="D" data-at="353.506" d="M353.506 194.025L353.506 215.624" fill="none"/><path class="fig1-mark fig1-glow" data-glow="C" data-at="252.714" d="M252.498 194.025L252.714 215.624" fill="none"/><path class="fig1-mark fig1-glow" data-glow="B" data-at="151.921" d="M151.705 194.025L151.921 215.624" fill="none"/><path class="fig1-line" data-part="E-down" d="M353.506 194.025L353.506 215.624" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-line" data-part="E-along" d="M353.506 215.624L44.736 215.624" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-line" data-part="E-up" d="M44.736 215.624L44.736 198.532" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-line" data-part="E-drop" data-from="B" d="M151.705 194.025L151.921 215.624" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-line" data-part="E-drop" data-from="C" d="M252.498 194.025L252.714 215.624" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-arrowhead" data-part="E-head" d="M44.736 193.672L47.976 200.152L44.736 198.532L41.496 200.152Z" fill="#000000" stroke="#000000" stroke-width="0.72"/><circle class="fig1-mark fig1-pulse" data-pulse="E-head" cx="44.736" cy="196.102" r="2.6" fill="none" stroke="#2F6DB5" stroke-width="0.72"/><image class="fig1-operator" data-nod="bracket" data-at="151.921" href="assets/img/fig1_operator.webp" x="151.561" y="193.665" width="21.598" height="21.598"/><text class="fig1-bracket__label" x="172.204" y="207.344">E. Human Corrections</text><path class="fig1-mark fig1-trail" data-trail="bracket" data-lag="2" d="M353.506 194.025" fill="none" stroke="#5B9BE6" stroke-opacity="0.16" stroke-width="1.444" stroke-linecap="round" stroke-linejoin="round"/><path class="fig1-mark fig1-trail" data-trail="bracket" data-lag="1" d="M353.506 194.025" fill="none" stroke="#5B9BE6" stroke-opacity="0.2" stroke-width="2.28" stroke-linecap="round" stroke-linejoin="round"/><path class="fig1-mark fig1-trail" data-trail="bracket" data-lag="0" d="M353.506 194.025" fill="none" stroke="#5B9BE6" stroke-opacity="0.28" stroke-width="3.116" stroke-linecap="round" stroke-linejoin="round"/><g class="fig1-mark fig1-dot" data-dot="bracket" data-path="353.506,194.025 353.506,215.624 44.736,215.624 44.736,196.102" transform="translate(353.506 194.025)"><circle class="fig1-dot__halo" r="5.2" fill="url(#fig1-dot-halo-b)"/><circle class="fig1-dot__core" r="1.9" fill="url(#fig1-dot-core-b)"/></g></svg><span class="fig1-mark fig1-chip fig1-chip--corr fig1-chip--e" data-draw="E-chip" title="Human correction from the failure state; weighted, with a protocol floor.">correction · floor</span></span>
             <span class="fig1-legend">
-              <svg class="fig1-legend__mark" viewBox="0 0 64 32" aria-hidden="true" focusable="false"><g class="fig1-pop" data-draw="E-icon"><text x="5" y="8">A</text><text x="23" y="8">B</text><text x="41" y="8">C</text><text x="59" y="8">D</text></g><path class="fig1-stroke" data-draw="E-down" d="M59 12V29" pathLength="1"/><path class="fig1-stroke" data-draw="E-along" d="M59 29H5" pathLength="1"/><path class="fig1-stroke" data-draw="E-up" d="M5 29V17" pathLength="1"/><path class="fig1-stroke" data-draw="E-drop" d="M23 12V29" pathLength="1"/><path class="fig1-stroke" data-draw="E-drop" d="M41 12V29" pathLength="1"/><path class="fig1-pop" data-draw="E-head" d="M5 11L8.2 17.4L5 15.8L1.8 17.4Z"/></svg>
-              <img class="fig1-pop" data-draw="E-icon" src="assets/img/fig1_operator.webp" width="89" height="89" alt="" loading="lazy" decoding="async">
-              <span class="fig1-pop" data-draw="E-icon">E. Human Corrections</span>
+              <svg class="fig1-legend__mark" viewBox="0 0 64 32" aria-hidden="true" focusable="false"><defs><radialGradient id="fig1-dot-halo-l"><stop offset="0" stop-color="#5B9BE6" stop-opacity=".85"/><stop offset=".45" stop-color="#7DB4F2" stop-opacity=".4"/><stop offset="1" stop-color="#2F6DB5" stop-opacity="0"/></radialGradient><radialGradient id="fig1-dot-core-l" cx=".38" cy=".35" r=".7"><stop offset="0" stop-color="#EAF3FF"/><stop offset=".5" stop-color="#4A8EDC"/><stop offset="1" stop-color="#2F6DB5"/></radialGradient></defs><text x="5" y="8">A</text><text x="23" y="8">B</text><text x="41" y="8">C</text><text x="59" y="8">D</text><path class="fig1-mark fig1-glow" data-glow="D" data-at="59" d="M59 12V29"/><path class="fig1-mark fig1-glow" data-glow="C" data-at="41" d="M41 12V29"/><path class="fig1-mark fig1-glow" data-glow="B" data-at="23" d="M23 12V29"/><path class="fig1-line" d="M59 12V29H5V17M23 12V29M41 12V29"/><path class="fig1-arrowhead" d="M5 11L8.2 17.4L5 15.8L1.8 17.4Z"/><circle class="fig1-mark fig1-pulse" data-pulse="E-head" cx="5" cy="14" r="3"/><path class="fig1-mark fig1-trail" data-trail="legend" data-lag="2" d="M59 12" fill="none" stroke="#5B9BE6" stroke-opacity="0.16" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/><path class="fig1-mark fig1-trail" data-trail="legend" data-lag="1" d="M59 12" fill="none" stroke="#5B9BE6" stroke-opacity="0.2" stroke-width="4.3" stroke-linecap="round" stroke-linejoin="round"/><path class="fig1-mark fig1-trail" data-trail="legend" data-lag="0" d="M59 12" fill="none" stroke="#5B9BE6" stroke-opacity="0.28" stroke-width="5.9" stroke-linecap="round" stroke-linejoin="round"/><g class="fig1-mark fig1-dot" data-dot="legend" data-path="59,12 59,29 5,29 5,14" transform="translate(59 12)"><circle class="fig1-dot__halo" r="6.5" fill="url(#fig1-dot-halo-l)"/><circle class="fig1-dot__core" r="3.6" fill="url(#fig1-dot-core-l)"/></g></svg>
+              <img class="fig1-operator" data-nod="legend" data-at="23" src="assets/img/fig1_operator.webp" width="89" height="89" alt="" loading="lazy" decoding="async">
+              <span class="fig1-legend__label">E. Human Corrections</span>
+              <span class="fig1-mark fig1-chip fig1-chip--corr" data-draw="E-chip" title="Human correction from the failure state; weighted, with a protocol floor.">correction · floor</span>
             </span>
           </button>
           <div class="fig1-bar">
@@ -232,7 +237,10 @@
               <span class="fig1-role__line" data-for="D" hidden><span class="token token--fail">D</span><span class="fig1-role__text">Failure: gated, kept for audit with zero weight.</span></span>
               <span class="fig1-role__line" data-for="E" hidden><span class="token token--corr">E</span><span class="fig1-role__text">Human correction from the failure state; weighted, with a protocol floor.</span></span>
             </p>
-            <button class="fig1-replay" type="button" aria-label="Replay the figure&rsquo;s annotations" hidden><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3M4.5 4.5v4h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Replay</span></button>
+            <span class="fig1-controls" hidden>
+              <button class="fig1-btn fig1-toggle" type="button" aria-pressed="false" aria-label="Pause the Fig. 1 animation"><svg class="icon" aria-hidden="true"><use href="#i-pause"/></svg><span>Pause</span></button>
+              <button class="fig1-btn fig1-replay" type="button" aria-label="Replay the Fig. 1 animation"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3M4.5 4.5v4h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Replay</span></button>
+            </span>
           </div>
           <figcaption class="traces__cap" id="traces-cap"><span class="token token--corr">E</span><span><strong>Human corrections.</strong> From the state where B, C or D went wrong, an operator steers the arm to the target; the recovery joins the training pool.</span></figcaption>
         </figure>
@@ -299,7 +307,7 @@
           </div>
         </header>
 
-        <figure class="fig2 reveal">
+        <figure class="fig2">
           <div class="fig2__view">
           <div class="fig2__scroll" tabindex="0" role="region" aria-label="Fig. 2, the PACER pipeline (scrolls sideways on narrow screens)">
             <div class="fig2__frame" id="fig2-frame">
@@ -329,6 +337,11 @@
                       <path d="M84.61 92.15L80.68 91.17" fill="none" stroke="#6C8EBF" stroke-width="0.72"/>
                       <path d="M79.62 90.91L81.2 90.56L80.68 91.17L80.85 91.96L79.62 90.91Z" fill="#6C8EBF"/>
                     </g>
+                    <circle class="f2-ping" data-trace="corr" cx="79.68" cy="93.06" r="0" fill="none" stroke="#6C8EBF" stroke-width="1.6" opacity="0"/>
+                    <circle class="f2-ping" data-trace="success" cx="76.87" cy="87.31" r="0" fill="none" stroke="#82B366" stroke-width="1.6" opacity="0"/>
+                    <circle class="f2-ping" data-trace="near" cx="83.98" cy="90.21" r="0" fill="none" stroke="#D6B656" stroke-width="1.6" opacity="0"/>
+                    <circle class="f2-ping" data-trace="offsets" cx="64.44" cy="92.38" r="0" fill="none" stroke="#D79B00" stroke-width="1.6" opacity="0"/>
+                    <circle class="f2-ping" data-trace="wrong" cx="64.09" cy="128.51" r="0" fill="none" stroke="#B85450" stroke-width="1.6" opacity="0"/>
                     <text class="f2-cap" x="68.41" y="150.83" font-size="7.4" text-anchor="middle">Experimental Setup</text>
                   </g>
                   <g class="f2-col" data-col="processes">
@@ -336,22 +349,27 @@
                     <line class="f2-sep" x1="144.36" y1="87.11" x2="230.75" y2="87.11" stroke="#B85450" stroke-width="0.72"/>
                     <g class="f2-arrow" data-trace="corr" data-fate="pass">
                       <line x1="151.56" y1="11.35" x2="175.77" y2="11.35" stroke="#6C8EBF" stroke-width="0.72"/>
+                      <line class="f2-march" data-trace="corr" x1="151.56" y1="11.35" x2="175.77" y2="11.35" stroke="#6C8EBF" stroke-width="1.5" stroke-dasharray="2.16 2.16" opacity="0"/>
                       <path d="M179.55 11.35L174.51 13.87L175.77 11.35L174.51 8.83Z" fill="#6C8EBF"/>
                     </g>
                     <g class="f2-arrow" data-trace="success" data-fate="pass">
                       <line x1="151.56" y1="40.15" x2="175.77" y2="40.15" stroke="#82B366" stroke-width="0.72" stroke-dasharray="2.16 2.16"/>
+                      <line class="f2-march" data-trace="success" x1="151.56" y1="40.15" x2="175.77" y2="40.15" stroke="#82B366" stroke-width="1.5" stroke-dasharray="2.16 2.16" opacity="0"/>
                       <path d="M179.55 40.15L174.51 42.67L175.77 40.15L174.51 37.63Z" fill="#82B366"/>
                     </g>
                     <g class="f2-arrow" data-trace="near" data-fate="pass">
                       <line x1="151.56" y1="68.95" x2="175.77" y2="68.95" stroke="#D6B656" stroke-width="0.72" stroke-dasharray="2.16 2.16"/>
+                      <line class="f2-march" data-trace="near" x1="151.56" y1="68.95" x2="175.77" y2="68.95" stroke="#D6B656" stroke-width="1.5" stroke-dasharray="2.16 2.16" opacity="0"/>
                       <path d="M179.55 68.95L174.51 71.47L175.77 68.95L174.51 66.43Z" fill="#D6B656"/>
                     </g>
                     <g class="f2-arrow" data-trace="offsets" data-fate="audit">
                       <line x1="151.56" y1="97.75" x2="175.77" y2="97.75" stroke="#D79B00" stroke-width="0.72" stroke-dasharray="2.16 2.16"/>
+                      <line class="f2-march" data-trace="offsets" x1="151.56" y1="97.75" x2="175.77" y2="97.75" stroke="#D79B00" stroke-width="1.5" stroke-dasharray="2.16 2.16" opacity="0"/>
                       <path d="M179.55 97.75L174.51 100.27L175.77 97.75L174.51 95.23Z" fill="#D79B00"/>
                     </g>
                     <g class="f2-arrow" data-trace="wrong" data-fate="audit">
                       <line x1="151.56" y1="126.54" x2="175.77" y2="126.54" stroke="#B85450" stroke-width="0.72" stroke-dasharray="2.16 2.16"/>
+                      <line class="f2-march" data-trace="wrong" x1="151.56" y1="126.54" x2="175.77" y2="126.54" stroke="#B85450" stroke-width="1.5" stroke-dasharray="2.16 2.16" opacity="0"/>
                       <path d="M179.55 126.54L174.51 129.06L175.77 126.54L174.51 124.02Z" fill="#B85450"/>
                     </g>
                     <text class="f2-cap" x="183.59" y="150.83" font-size="7.4" text-anchor="middle">Processes and Results</text>
@@ -361,8 +379,8 @@
                     <rect class="f2-flash" data-flash="pass" x="230.75" y="0.72" width="28.8" height="86.39" fill="#82B366" opacity="0"/>
                     <rect class="f2-cell" x="230.75" y="87.11" width="28.8" height="50.4" fill="#F8CECC" stroke="#B85450" stroke-width="0.72" stroke-dasharray="2.16 2.16" data-cell="audit"/>
                     <rect class="f2-flash" data-flash="audit" x="230.75" y="87.11" width="28.8" height="50.4" fill="#B85450" opacity="0"/>
-                    <circle class="f2-rest" data-trace="offsets" cx="245.15" cy="97.75" r="2.4" fill="#D79B00" stroke="#FFFFFF" stroke-width="0.7"/>
-                    <circle class="f2-rest" data-trace="wrong" cx="245.15" cy="126.54" r="2.4" fill="#B85450" stroke="#FFFFFF" stroke-width="0.7"/>
+                    <line class="f2-hit" data-trace="offsets" x1="259.55" y1="93.15" x2="259.55" y2="102.35" stroke="#B85450" stroke-width="1.8" stroke-linecap="round" opacity="0"/>
+                    <line class="f2-hit" data-trace="wrong" x1="259.55" y1="121.94" x2="259.55" y2="131.14" stroke="#B85450" stroke-width="1.8" stroke-linecap="round" opacity="0"/>
                     <text class="f2-cap" x="244.79" y="145.79" font-size="7.4" text-anchor="middle">Outcome</text>
                     <text class="f2-cap" x="244.79" y="156.59" font-size="7.4" text-anchor="middle">Gate</text>
                   </g>
@@ -395,54 +413,65 @@
                   <g class="f2-col" data-col="evidence">
                     <rect class="f2-frame" x="318.95" y="0.72" width="46.8" height="136.79" fill="#F5F5F5" stroke="#666666" stroke-width="0.72" stroke-dasharray="2.16 2.16"/>
                     <g class="f2-chip" data-chip="0">
-                      <rect x="324.34" y="4.32" width="36" height="18" rx="2.7" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="0.72"/>
+                      <rect class="f2-aura" data-for="chip0" x="322.14" y="2.12" width="40.4" height="22.4" rx="4.9" fill="#6C8EBF" opacity="0"/>
+                      <rect class="f2-chip__box" x="324.34" y="4.32" width="36" height="18" rx="2.7" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="0.72"/>
                       <text class="f2-label" x="341.98" y="16.2" font-size="7.4" text-anchor="middle">Progress</text>
                     </g>
                     <g class="f2-chip" data-chip="1">
-                      <rect x="324.34" y="32.76" width="36" height="18" rx="2.7" fill="#F8CECC" stroke="#B85450" stroke-width="0.72"/>
+                      <rect class="f2-aura" data-for="chip1" x="322.14" y="30.56" width="40.4" height="22.4" rx="4.9" fill="#B85450" opacity="0"/>
+                      <rect class="f2-chip__box" x="324.34" y="32.76" width="36" height="18" rx="2.7" fill="#F8CECC" stroke="#B85450" stroke-width="0.72"/>
                       <text class="f2-label" x="341.99" y="44.28" font-size="7.4" text-anchor="middle">Proximity</text>
                     </g>
                     <g class="f2-chip" data-chip="2">
-                      <rect x="324.34" y="60.11" width="36" height="18" rx="2.7" fill="#FFF2CC" stroke="#D6B656" stroke-width="0.72"/>
+                      <rect class="f2-aura" data-for="chip2" x="322.14" y="57.91" width="40.4" height="22.4" rx="4.9" fill="#D6B656" opacity="0"/>
+                      <rect class="f2-chip__box" x="324.34" y="60.11" width="36" height="18" rx="2.7" fill="#FFF2CC" stroke="#D6B656" stroke-width="0.72"/>
                       <text class="f2-label" x="341.98" y="71.63" font-size="7.4" text-anchor="middle">Terminal</text>
                     </g>
                     <g class="f2-chip" data-chip="3">
-                      <rect x="324.34" y="87.11" width="36" height="18" rx="2.7" fill="#E1D5E7" stroke="#9673A6" stroke-width="0.72"/>
+                      <rect class="f2-aura" data-for="chip3" x="322.14" y="84.91" width="40.4" height="22.4" rx="4.9" fill="#9673A6" opacity="0"/>
+                      <rect class="f2-chip__box" x="324.34" y="87.11" width="36" height="18" rx="2.7" fill="#E1D5E7" stroke="#9673A6" stroke-width="0.72"/>
                       <text class="f2-label" x="341.97" y="98.99" font-size="7.4" text-anchor="middle">Stop</text>
                     </g>
                     <g class="f2-chip" data-chip="4">
-                      <rect x="324.34" y="115.91" width="36" height="18" rx="2.7" fill="#FFE6CC" stroke="#D79B00" stroke-width="0.72"/>
+                      <rect class="f2-aura" data-for="chip4" x="322.14" y="113.71" width="40.4" height="22.4" rx="4.9" fill="#D79B00" opacity="0"/>
+                      <rect class="f2-chip__box" x="324.34" y="115.91" width="36" height="18" rx="2.7" fill="#FFE6CC" stroke="#D79B00" stroke-width="0.72"/>
                       <text class="f2-label" x="341.98" y="127.79" font-size="7.4" text-anchor="middle">Operator</text>
                     </g>
+                    <path class="f2-tick" d="M-1.9 -2.3L2.1 0L-1.9 2.3Z" transform="translate(321.94 13.32)" fill="#B08A4A" opacity="0"/>
                     <text class="f2-cap" x="340.53" y="145.79" font-size="7.4" text-anchor="middle">Process</text>
                     <text class="f2-cap" x="340.54" y="156.59" font-size="7.4" text-anchor="middle">Evidence</text>
                   </g>
                   <g class="f2-col" data-col="weight">
                     <rect class="f2-frame" x="374.74" y="0.72" width="71.99" height="136.79" fill="#F5F5F5" stroke="#666666" stroke-width="0.72" stroke-dasharray="2.16 2.16"/>
                     <g class="f2-box" data-box="eta">
-                      <rect x="381.94" y="8.46" width="57.59" height="25.56" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="0.72"/>
+                      <rect class="f2-aura" data-for="eta" x="379.74" y="6.26" width="61.99" height="29.96" rx="2.2" fill="#6C8EBF" opacity="0"/>
+                      <rect class="f2-box__box" x="381.94" y="8.46" width="57.59" height="25.56" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="0.72"/>
                       <text class="f2-label" x="410.36" y="19.08" font-size="7.4" text-anchor="middle">Evidence</text>
                       <text class="f2-label" x="410.37" y="29.88" font-size="7.4" text-anchor="middle">Coefficient</text>
                       <text class="f2-math f2-math--bold" x="385.36" y="20.88" font-size="7.92">η</text>
                     </g>
                     <g class="f2-box" data-box="score">
-                      <rect x="381.94" y="54" width="57.59" height="25.56" fill="#F8CECC" stroke="#B85450" stroke-width="0.72"/>
+                      <rect class="f2-aura" data-for="score" x="379.74" y="51.8" width="61.99" height="29.96" rx="2.2" fill="#B85450" opacity="0"/>
+                      <rect class="f2-box__box" x="381.94" y="54" width="57.59" height="25.56" fill="#F8CECC" stroke="#B85450" stroke-width="0.72"/>
                       <text class="f2-label" x="410.38" y="64.43" font-size="7.4" text-anchor="middle">Evidence</text>
                       <text class="f2-label" x="410.37" y="75.23" font-size="7.4" text-anchor="middle">Score</text>
                       <text class="f2-math f2-math--bold" x="383.56" y="68.95" font-size="8.45">s<tspan font-size="5.91" dy="1.61">η</tspan></text>
                     </g>
                     <g class="f2-box" data-box="transform">
-                      <rect x="381.94" y="99.17" width="57.59" height="25.56" fill="#FFE6CC" stroke="#D79B00" stroke-width="0.72"/>
+                      <rect class="f2-aura" data-for="transform" x="379.74" y="96.97" width="61.99" height="29.96" rx="2.2" fill="#D79B00" opacity="0"/>
+                      <rect class="f2-box__box" x="381.94" y="99.17" width="57.59" height="25.56" fill="#FFE6CC" stroke="#D79B00" stroke-width="0.72"/>
                       <text class="f2-label" x="410.37" y="109.79" font-size="7.4" text-anchor="middle">Score to Weight</text>
                       <text class="f2-label" x="410.37" y="120.59" font-size="7.4" text-anchor="middle">Transform</text>
                     </g>
                     <g class="f2-warrow" data-warrow="0">
                       <line x1="410.74" y1="33.84" x2="410.74" y2="49.41" stroke="#000000" stroke-width="0.72"/>
                       <path class="f2-warrow__head" d="M410.74 53.19L408.22 48.15L410.74 49.41L413.26 48.15Z" fill="#000000"/>
+                      <circle class="f2-wpulse" data-warrow="0" cx="410.74" cy="33.84" r="2.4" fill="#B08A4A" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
                     </g>
                     <g class="f2-warrow" data-warrow="1">
                       <line x1="410.67" y1="79.55" x2="410.67" y2="94.4" stroke="#000000" stroke-width="0.72"/>
                       <path class="f2-warrow__head" d="M410.67 98.18L408.15 93.15L410.67 94.4L413.19 93.15Z" fill="#000000"/>
+                      <circle class="f2-wpulse" data-warrow="1" cx="410.67" cy="79.55" r="2.4" fill="#B08A4A" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
                     </g>
                     <g class="f2-gauge">
                       <line class="f2-gauge__track" x1="388.14" y1="130.72" x2="426.33" y2="130.72" stroke="#666666" stroke-width="0.5"/>
@@ -458,12 +487,14 @@
                     <rect class="f2-frame" x="453.93" y="0.72" width="71.99" height="136.79" fill="#F5F5F5" stroke="#666666" stroke-width="0.72" stroke-dasharray="2.16 2.16"/>
                     <rect class="f2-ripple" x="461.13" y="8.46" width="57.59" height="25.56" fill="none" stroke="#6C8EBF" stroke-width="0.9" opacity="0"/>
                     <g class="f2-box" data-box="loss">
-                      <rect x="461.13" y="8.46" width="57.59" height="25.56" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="0.72"/>
+                      <rect class="f2-aura" data-for="loss" x="458.93" y="6.26" width="61.99" height="29.96" rx="2.2" fill="#6C8EBF" opacity="0"/>
+                      <rect class="f2-box__box" x="461.13" y="8.46" width="57.59" height="25.56" fill="#DAE8FC" stroke="#6C8EBF" stroke-width="0.72"/>
                       <text class="f2-label" x="489.57" y="19.08" font-size="7.4" text-anchor="middle">Weighted</text>
                       <text class="f2-label" x="489.57" y="29.88" font-size="7.4" text-anchor="middle">Native Loss</text>
                     </g>
                     <g class="f2-box" data-box="val">
-                      <rect x="457.53" y="96.74" width="64.79" height="18.81" fill="#E1D5E7" stroke="#9673A6" stroke-width="0.72"/>
+                      <rect class="f2-aura" data-for="val" x="455.33" y="94.54" width="69.19" height="23.21" rx="2.2" fill="#9673A6" opacity="0"/>
+                      <rect class="f2-box__box" x="457.53" y="96.74" width="64.79" height="18.81" fill="#E1D5E7" stroke="#9673A6" stroke-width="0.72"/>
                       <text class="f2-label" x="489.57" y="108.35" font-size="7.4" text-anchor="middle">Validation Score</text>
                     </g>
                     <g class="f2-net">
@@ -481,6 +512,21 @@
                         <path class="f2-edge" data-edge="10" d="M488.56 83.84L495.12 77.55M496.34 76.38L496.34 76.38M497.56 75.21L506.74 66.41"/>
                         <path class="f2-edge" data-edge="11" d="M488.56 72.32L488.56 83.84"/>
                         <path class="f2-edge" data-edge="12" d="M488.73 60.59L506.74 66.41"/>
+                      </g>
+                      <g class="f2-edge-glows" fill="none" stroke="#B08A4A" stroke-width="1.5" stroke-linecap="round">
+                        <path class="f2-edge-glow" data-edge="0" d="M472.4 55.15L488.56 48.99" opacity="0"/>
+                        <path class="f2-edge-glow" data-edge="1" d="M472.4 55.15L488.73 60.59" opacity="0"/>
+                        <path class="f2-edge-glow" data-edge="2" d="M472.4 55.15L488.56 72.32" opacity="0"/>
+                        <path class="f2-edge-glow" data-edge="3" d="M472.4 55.15L472.4 77.42" opacity="0"/>
+                        <path class="f2-edge-glow" data-edge="4" d="M472.4 77.42L488.73 60.59" opacity="0"/>
+                        <path class="f2-edge-glow" data-edge="5" d="M472.4 77.42L488.56 72.32" opacity="0"/>
+                        <path class="f2-edge-glow" data-edge="6" d="M472.4 77.42L488.56 83.84" opacity="0"/>
+                        <path class="f2-edge-glow" data-edge="7" d="M488.56 48.99L488.73 60.59" opacity="0"/>
+                        <path class="f2-edge-glow" data-edge="8" d="M488.56 48.99L506.74 66.41" opacity="0"/>
+                        <path class="f2-edge-glow" data-edge="9" d="M488.56 72.32L506.74 66.41" opacity="0"/>
+                        <path class="f2-edge-glow" data-edge="10" d="M488.56 83.84L506.74 66.41" opacity="0"/>
+                        <path class="f2-edge-glow" data-edge="11" d="M488.56 72.32L488.56 83.84" opacity="0"/>
+                        <path class="f2-edge-glow" data-edge="12" d="M488.73 60.59L506.74 66.41" opacity="0"/>
                       </g>
                       <g class="f2-nodes">
                         <g class="f2-node" data-node="0">
@@ -513,48 +559,13 @@
                         </g>
                       </g>
                     </g>
-                    <g class="f2-jval"><text class="f2-math" x="477.85" y="122.82" font-size="8.52">J<tspan class="f2-up" font-size="5.96" dy="1.38">val</tspan><tspan class="f2-up" dy="-1.38">(</tspan>η<tspan class="f2-up">)</tspan></text></g>
+                    <g class="f2-jval">
+                      <rect class="f2-aura" data-for="jval" x="475.65" y="115.22" width="28.4" height="11.2" rx="2.4" fill="#B08A4A" opacity="0"/>
+                      <text class="f2-math" x="477.85" y="122.82" font-size="8.52">J<tspan class="f2-up" font-size="5.96" dy="1.38">val</tspan><tspan class="f2-up" dy="-1.38">(</tspan>η<tspan class="f2-up">)</tspan></text>
+                    </g>
                     <text class="f2-cap" x="489.56" y="145.79" font-size="7.4" text-anchor="middle">VLA</text>
                     <text class="f2-cap" x="489.57" y="156.59" font-size="7.4" text-anchor="middle">Training</text>
                   </g>
-                </g>
-                <g class="f2-shade" aria-hidden="true">
-                  <path class="f2-wash" d="" fill="#FBF8F2" fill-rule="evenodd" opacity="0"/>
-                </g>
-                <g class="f2-flow" aria-hidden="true">
-                  <g class="f2-routes" fill="none" stroke="none">
-                    <path class="f2-route" data-trace="corr" data-leg="collect" d="M79.68 93.06C112.03 93.06 126.4 11.35 151.56 11.35H179.55"/>
-                    <path class="f2-route" data-trace="corr" data-leg="gate" d="M179.55 11.35H263.87"/>
-                    <path class="f2-route" data-trace="success" data-leg="collect" d="M76.87 87.31C110.48 87.31 125.42 40.15 151.56 40.15H179.55"/>
-                    <path class="f2-route" data-trace="success" data-leg="gate" d="M179.55 40.15H263.87"/>
-                    <path class="f2-route" data-trace="near" data-leg="collect" d="M83.98 90.21C114.39 90.21 127.91 68.95 151.56 68.95H179.55"/>
-                    <path class="f2-route" data-trace="near" data-leg="gate" d="M179.55 68.95H263.87"/>
-                    <path class="f2-route" data-trace="offsets" data-leg="collect" d="M64.44 92.38C103.64 92.38 121.07 97.75 151.56 97.75H179.55"/>
-                    <path class="f2-route" data-trace="offsets" data-leg="gate" d="M179.55 97.75H245.15"/>
-                    <path class="f2-route" data-trace="wrong" data-leg="collect" d="M64.09 128.51C103.45 128.51 120.95 126.54 151.56 126.54H179.55"/>
-                    <path class="f2-route" data-trace="wrong" data-leg="gate" d="M179.55 126.54H245.15"/>
-                  </g>
-                  <line class="f2-read" x1="275.39" y1="16.36" x2="275.39" y2="110.57" stroke="#B08A4A" stroke-width="0.9" stroke-linecap="round" opacity="0" data-from="275.39" data-to="304.19"/>
-                  <rect class="f2-chunk" data-trace="corr" data-bar="0" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#6C8EBF" opacity="0"/>
-                  <rect class="f2-chunk" data-trace="corr" data-bar="1" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#6C8EBF" opacity="0"/>
-                  <rect class="f2-chunk" data-trace="corr" data-bar="2" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#6C8EBF" opacity="0"/>
-                  <rect class="f2-chunk" data-trace="corr" data-bar="3" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#6C8EBF" opacity="0"/>
-                  <rect class="f2-chunk" data-trace="corr" data-bar="4" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#6C8EBF" opacity="0"/>
-                  <rect class="f2-chunk" data-trace="success" data-bar="0" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#82B366" opacity="0"/>
-                  <rect class="f2-chunk" data-trace="success" data-bar="1" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#82B366" opacity="0"/>
-                  <rect class="f2-chunk" data-trace="success" data-bar="2" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#82B366" opacity="0"/>
-                  <rect class="f2-chunk" data-trace="success" data-bar="3" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#82B366" opacity="0"/>
-                  <rect class="f2-chunk" data-trace="success" data-bar="4" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#82B366" opacity="0"/>
-                  <rect class="f2-chunk" data-trace="near" data-bar="0" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#D6B656" opacity="0"/>
-                  <rect class="f2-chunk" data-trace="near" data-bar="1" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#D6B656" opacity="0"/>
-                  <rect class="f2-chunk" data-trace="near" data-bar="2" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#D6B656" opacity="0"/>
-                  <rect class="f2-chunk" data-trace="near" data-bar="3" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#D6B656" opacity="0"/>
-                  <rect class="f2-chunk" data-trace="near" data-bar="4" x="0" y="0" width="2.6" height="2.6" rx="0.4" fill="#D6B656" opacity="0"/>
-                  <circle class="f2-token" data-trace="corr" data-fate="pass" cx="263.87" cy="11.35" r="2.4" fill="#6C8EBF" stroke="#FFFFFF" stroke-width="0.7" opacity="0"/>
-                  <circle class="f2-token" data-trace="success" data-fate="pass" cx="263.87" cy="40.15" r="2.4" fill="#82B366" stroke="#FFFFFF" stroke-width="0.7" opacity="0"/>
-                  <circle class="f2-token" data-trace="near" data-fate="pass" cx="263.87" cy="68.95" r="2.4" fill="#D6B656" stroke="#FFFFFF" stroke-width="0.7" opacity="0"/>
-                  <circle class="f2-token" data-trace="offsets" data-fate="audit" cx="245.15" cy="97.75" r="2.4" fill="#D79B00" stroke="#FFFFFF" stroke-width="0.7" opacity="0"/>
-                  <circle class="f2-token" data-trace="wrong" data-fate="audit" cx="245.15" cy="126.54" r="2.4" fill="#B85450" stroke="#FFFFFF" stroke-width="0.7" opacity="0"/>
                 </g>
                 <g class="f2-over">
                   <g data-col="processes">
@@ -577,10 +588,169 @@
                     <text class="f2-math" x="240.99" y="35.86" font-size="10.6" stroke="#D5E8D4" stroke-width="1.8" stroke-linejoin="round" paint-order="stroke">G<tspan font-size="7.42" dy="1.39">i</tspan></text>
                   </g>
                 </g>
-                <g class="f2-focus" aria-hidden="true">
-                  <rect class="f2-hl" x="0" y="0" width="0" height="0" rx="3" fill="none" stroke="#B08A4A" stroke-width="2" vector-effect="non-scaling-stroke" opacity="0"/>
+                <g class="f2-flow" aria-hidden="true">
+                  <rect class="f2-chunk" data-trace="corr" data-k="0" data-bar="0" x="0" y="0" width="3" height="3" rx="0.5" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="corr" data-k="0" data-bar="1" x="0" y="0" width="3" height="3" rx="0.5" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="corr" data-k="0" data-bar="2" x="0" y="0" width="3" height="3" rx="0.5" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="corr" data-k="0" data-bar="3" x="0" y="0" width="3" height="3" rx="0.5" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="corr" data-k="0" data-bar="4" x="0" y="0" width="3" height="3" rx="0.5" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="corr" data-k="1" data-bar="0" x="0" y="0" width="3" height="3" rx="0.5" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="corr" data-k="1" data-bar="1" x="0" y="0" width="3" height="3" rx="0.5" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="corr" data-k="1" data-bar="2" x="0" y="0" width="3" height="3" rx="0.5" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="corr" data-k="1" data-bar="3" x="0" y="0" width="3" height="3" rx="0.5" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="corr" data-k="1" data-bar="4" x="0" y="0" width="3" height="3" rx="0.5" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="corr" data-k="2" data-bar="0" x="0" y="0" width="3" height="3" rx="0.5" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="corr" data-k="2" data-bar="1" x="0" y="0" width="3" height="3" rx="0.5" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="corr" data-k="2" data-bar="2" x="0" y="0" width="3" height="3" rx="0.5" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="corr" data-k="2" data-bar="3" x="0" y="0" width="3" height="3" rx="0.5" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="corr" data-k="2" data-bar="4" x="0" y="0" width="3" height="3" rx="0.5" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-k="0" data-bar="0" x="0" y="0" width="3" height="3" rx="0.5" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-k="0" data-bar="1" x="0" y="0" width="3" height="3" rx="0.5" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-k="0" data-bar="2" x="0" y="0" width="3" height="3" rx="0.5" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-k="0" data-bar="3" x="0" y="0" width="3" height="3" rx="0.5" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-k="0" data-bar="4" x="0" y="0" width="3" height="3" rx="0.5" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-k="1" data-bar="0" x="0" y="0" width="3" height="3" rx="0.5" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-k="1" data-bar="1" x="0" y="0" width="3" height="3" rx="0.5" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-k="1" data-bar="2" x="0" y="0" width="3" height="3" rx="0.5" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-k="1" data-bar="3" x="0" y="0" width="3" height="3" rx="0.5" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-k="1" data-bar="4" x="0" y="0" width="3" height="3" rx="0.5" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-k="2" data-bar="0" x="0" y="0" width="3" height="3" rx="0.5" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-k="2" data-bar="1" x="0" y="0" width="3" height="3" rx="0.5" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-k="2" data-bar="2" x="0" y="0" width="3" height="3" rx="0.5" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-k="2" data-bar="3" x="0" y="0" width="3" height="3" rx="0.5" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="success" data-k="2" data-bar="4" x="0" y="0" width="3" height="3" rx="0.5" fill="#82B366" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-k="0" data-bar="0" x="0" y="0" width="3" height="3" rx="0.5" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-k="0" data-bar="1" x="0" y="0" width="3" height="3" rx="0.5" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-k="0" data-bar="2" x="0" y="0" width="3" height="3" rx="0.5" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-k="0" data-bar="3" x="0" y="0" width="3" height="3" rx="0.5" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-k="0" data-bar="4" x="0" y="0" width="3" height="3" rx="0.5" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-k="1" data-bar="0" x="0" y="0" width="3" height="3" rx="0.5" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-k="1" data-bar="1" x="0" y="0" width="3" height="3" rx="0.5" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-k="1" data-bar="2" x="0" y="0" width="3" height="3" rx="0.5" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-k="1" data-bar="3" x="0" y="0" width="3" height="3" rx="0.5" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-k="1" data-bar="4" x="0" y="0" width="3" height="3" rx="0.5" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-k="2" data-bar="0" x="0" y="0" width="3" height="3" rx="0.5" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-k="2" data-bar="1" x="0" y="0" width="3" height="3" rx="0.5" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-k="2" data-bar="2" x="0" y="0" width="3" height="3" rx="0.5" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-k="2" data-bar="3" x="0" y="0" width="3" height="3" rx="0.5" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-chunk" data-trace="near" data-k="2" data-bar="4" x="0" y="0" width="3" height="3" rx="0.5" fill="#D6B656" opacity="0"/>
+                  <g class="f2-token" data-trace="corr" data-k="0" data-fate="pass" opacity="0">
+                    <circle class="f2-token__trail" cx="151.56" cy="11.35" r="2.4" fill="#6C8EBF" opacity="0" data-o="0.34"/>
+                    <circle class="f2-token__trail" cx="151.56" cy="11.35" r="1.98" fill="#6C8EBF" opacity="0" data-o="0.22"/>
+                    <circle class="f2-token__trail" cx="151.56" cy="11.35" r="1.56" fill="#6C8EBF" opacity="0" data-o="0.12"/>
+                    <circle class="f2-token__halo" cx="151.56" cy="11.35" r="5.25" fill="#6C8EBF" opacity="0"/>
+                    <circle class="f2-token__core" cx="151.56" cy="11.35" r="3" fill="#6C8EBF" stroke="#FFFFFF" stroke-width="0.8"/>
+                  </g>
+                  <g class="f2-token" data-trace="corr" data-k="1" data-fate="pass" opacity="0">
+                    <circle class="f2-token__trail" cx="151.56" cy="11.35" r="2.4" fill="#6C8EBF" opacity="0" data-o="0.34"/>
+                    <circle class="f2-token__trail" cx="151.56" cy="11.35" r="1.98" fill="#6C8EBF" opacity="0" data-o="0.22"/>
+                    <circle class="f2-token__trail" cx="151.56" cy="11.35" r="1.56" fill="#6C8EBF" opacity="0" data-o="0.12"/>
+                    <circle class="f2-token__halo" cx="151.56" cy="11.35" r="5.25" fill="#6C8EBF" opacity="0"/>
+                    <circle class="f2-token__core" cx="151.56" cy="11.35" r="3" fill="#6C8EBF" stroke="#FFFFFF" stroke-width="0.8"/>
+                  </g>
+                  <g class="f2-token" data-trace="corr" data-k="2" data-fate="pass" opacity="0">
+                    <circle class="f2-token__trail" cx="151.56" cy="11.35" r="2.4" fill="#6C8EBF" opacity="0" data-o="0.34"/>
+                    <circle class="f2-token__trail" cx="151.56" cy="11.35" r="1.98" fill="#6C8EBF" opacity="0" data-o="0.22"/>
+                    <circle class="f2-token__trail" cx="151.56" cy="11.35" r="1.56" fill="#6C8EBF" opacity="0" data-o="0.12"/>
+                    <circle class="f2-token__halo" cx="151.56" cy="11.35" r="5.25" fill="#6C8EBF" opacity="0"/>
+                    <circle class="f2-token__core" cx="151.56" cy="11.35" r="3" fill="#6C8EBF" stroke="#FFFFFF" stroke-width="0.8"/>
+                  </g>
+                  <g class="f2-token" data-trace="success" data-k="0" data-fate="pass" opacity="0">
+                    <circle class="f2-token__trail" cx="151.56" cy="40.15" r="2.4" fill="#82B366" opacity="0" data-o="0.34"/>
+                    <circle class="f2-token__trail" cx="151.56" cy="40.15" r="1.98" fill="#82B366" opacity="0" data-o="0.22"/>
+                    <circle class="f2-token__trail" cx="151.56" cy="40.15" r="1.56" fill="#82B366" opacity="0" data-o="0.12"/>
+                    <circle class="f2-token__halo" cx="151.56" cy="40.15" r="5.25" fill="#82B366" opacity="0"/>
+                    <circle class="f2-token__core" cx="151.56" cy="40.15" r="3" fill="#82B366" stroke="#FFFFFF" stroke-width="0.8"/>
+                  </g>
+                  <g class="f2-token" data-trace="success" data-k="1" data-fate="pass" opacity="0">
+                    <circle class="f2-token__trail" cx="151.56" cy="40.15" r="2.4" fill="#82B366" opacity="0" data-o="0.34"/>
+                    <circle class="f2-token__trail" cx="151.56" cy="40.15" r="1.98" fill="#82B366" opacity="0" data-o="0.22"/>
+                    <circle class="f2-token__trail" cx="151.56" cy="40.15" r="1.56" fill="#82B366" opacity="0" data-o="0.12"/>
+                    <circle class="f2-token__halo" cx="151.56" cy="40.15" r="5.25" fill="#82B366" opacity="0"/>
+                    <circle class="f2-token__core" cx="151.56" cy="40.15" r="3" fill="#82B366" stroke="#FFFFFF" stroke-width="0.8"/>
+                  </g>
+                  <g class="f2-token" data-trace="success" data-k="2" data-fate="pass" opacity="0">
+                    <circle class="f2-token__trail" cx="151.56" cy="40.15" r="2.4" fill="#82B366" opacity="0" data-o="0.34"/>
+                    <circle class="f2-token__trail" cx="151.56" cy="40.15" r="1.98" fill="#82B366" opacity="0" data-o="0.22"/>
+                    <circle class="f2-token__trail" cx="151.56" cy="40.15" r="1.56" fill="#82B366" opacity="0" data-o="0.12"/>
+                    <circle class="f2-token__halo" cx="151.56" cy="40.15" r="5.25" fill="#82B366" opacity="0"/>
+                    <circle class="f2-token__core" cx="151.56" cy="40.15" r="3" fill="#82B366" stroke="#FFFFFF" stroke-width="0.8"/>
+                  </g>
+                  <g class="f2-token" data-trace="near" data-k="0" data-fate="pass" opacity="0">
+                    <circle class="f2-token__trail" cx="151.56" cy="68.95" r="2.4" fill="#D6B656" opacity="0" data-o="0.34"/>
+                    <circle class="f2-token__trail" cx="151.56" cy="68.95" r="1.98" fill="#D6B656" opacity="0" data-o="0.22"/>
+                    <circle class="f2-token__trail" cx="151.56" cy="68.95" r="1.56" fill="#D6B656" opacity="0" data-o="0.12"/>
+                    <circle class="f2-token__halo" cx="151.56" cy="68.95" r="5.25" fill="#D6B656" opacity="0"/>
+                    <circle class="f2-token__core" cx="151.56" cy="68.95" r="3" fill="#D6B656" stroke="#FFFFFF" stroke-width="0.8"/>
+                  </g>
+                  <g class="f2-token" data-trace="near" data-k="1" data-fate="pass" opacity="0">
+                    <circle class="f2-token__trail" cx="151.56" cy="68.95" r="2.4" fill="#D6B656" opacity="0" data-o="0.34"/>
+                    <circle class="f2-token__trail" cx="151.56" cy="68.95" r="1.98" fill="#D6B656" opacity="0" data-o="0.22"/>
+                    <circle class="f2-token__trail" cx="151.56" cy="68.95" r="1.56" fill="#D6B656" opacity="0" data-o="0.12"/>
+                    <circle class="f2-token__halo" cx="151.56" cy="68.95" r="5.25" fill="#D6B656" opacity="0"/>
+                    <circle class="f2-token__core" cx="151.56" cy="68.95" r="3" fill="#D6B656" stroke="#FFFFFF" stroke-width="0.8"/>
+                  </g>
+                  <g class="f2-token" data-trace="near" data-k="2" data-fate="pass" opacity="0">
+                    <circle class="f2-token__trail" cx="151.56" cy="68.95" r="2.4" fill="#D6B656" opacity="0" data-o="0.34"/>
+                    <circle class="f2-token__trail" cx="151.56" cy="68.95" r="1.98" fill="#D6B656" opacity="0" data-o="0.22"/>
+                    <circle class="f2-token__trail" cx="151.56" cy="68.95" r="1.56" fill="#D6B656" opacity="0" data-o="0.12"/>
+                    <circle class="f2-token__halo" cx="151.56" cy="68.95" r="5.25" fill="#D6B656" opacity="0"/>
+                    <circle class="f2-token__core" cx="151.56" cy="68.95" r="3" fill="#D6B656" stroke="#FFFFFF" stroke-width="0.8"/>
+                  </g>
+                  <g class="f2-token" data-trace="offsets" data-k="0" data-fate="audit">
+                    <circle class="f2-token__trail" cx="252.9" cy="97.75" r="2.4" fill="#D79B00" opacity="0" data-o="0.34"/>
+                    <circle class="f2-token__trail" cx="252.9" cy="97.75" r="1.98" fill="#D79B00" opacity="0" data-o="0.22"/>
+                    <circle class="f2-token__trail" cx="252.9" cy="97.75" r="1.56" fill="#D79B00" opacity="0" data-o="0.12"/>
+                    <circle class="f2-token__halo" cx="252.9" cy="97.75" r="5.25" fill="#D79B00" opacity="0"/>
+                    <circle class="f2-token__core" cx="252.9" cy="97.75" r="3" fill="#D79B00" stroke="#FFFFFF" stroke-width="0.8"/>
+                  </g>
+                  <g class="f2-token" data-trace="offsets" data-k="1" data-fate="audit">
+                    <circle class="f2-token__trail" cx="245.15" cy="97.75" r="2.4" fill="#D79B00" opacity="0" data-o="0.34"/>
+                    <circle class="f2-token__trail" cx="245.15" cy="97.75" r="1.98" fill="#D79B00" opacity="0" data-o="0.22"/>
+                    <circle class="f2-token__trail" cx="245.15" cy="97.75" r="1.56" fill="#D79B00" opacity="0" data-o="0.12"/>
+                    <circle class="f2-token__halo" cx="245.15" cy="97.75" r="5.25" fill="#D79B00" opacity="0"/>
+                    <circle class="f2-token__core" cx="245.15" cy="97.75" r="3" fill="#D79B00" stroke="#FFFFFF" stroke-width="0.8"/>
+                  </g>
+                  <g class="f2-token" data-trace="offsets" data-k="2" data-fate="audit">
+                    <circle class="f2-token__trail" cx="237.4" cy="97.75" r="2.4" fill="#D79B00" opacity="0" data-o="0.34"/>
+                    <circle class="f2-token__trail" cx="237.4" cy="97.75" r="1.98" fill="#D79B00" opacity="0" data-o="0.22"/>
+                    <circle class="f2-token__trail" cx="237.4" cy="97.75" r="1.56" fill="#D79B00" opacity="0" data-o="0.12"/>
+                    <circle class="f2-token__halo" cx="237.4" cy="97.75" r="5.25" fill="#D79B00" opacity="0"/>
+                    <circle class="f2-token__core" cx="237.4" cy="97.75" r="3" fill="#D79B00" stroke="#FFFFFF" stroke-width="0.8"/>
+                  </g>
+                  <g class="f2-token" data-trace="wrong" data-k="0" data-fate="audit">
+                    <circle class="f2-token__trail" cx="252.9" cy="126.54" r="2.4" fill="#B85450" opacity="0" data-o="0.34"/>
+                    <circle class="f2-token__trail" cx="252.9" cy="126.54" r="1.98" fill="#B85450" opacity="0" data-o="0.22"/>
+                    <circle class="f2-token__trail" cx="252.9" cy="126.54" r="1.56" fill="#B85450" opacity="0" data-o="0.12"/>
+                    <circle class="f2-token__halo" cx="252.9" cy="126.54" r="5.25" fill="#B85450" opacity="0"/>
+                    <circle class="f2-token__core" cx="252.9" cy="126.54" r="3" fill="#B85450" stroke="#FFFFFF" stroke-width="0.8"/>
+                  </g>
+                  <g class="f2-token" data-trace="wrong" data-k="1" data-fate="audit">
+                    <circle class="f2-token__trail" cx="245.15" cy="126.54" r="2.4" fill="#B85450" opacity="0" data-o="0.34"/>
+                    <circle class="f2-token__trail" cx="245.15" cy="126.54" r="1.98" fill="#B85450" opacity="0" data-o="0.22"/>
+                    <circle class="f2-token__trail" cx="245.15" cy="126.54" r="1.56" fill="#B85450" opacity="0" data-o="0.12"/>
+                    <circle class="f2-token__halo" cx="245.15" cy="126.54" r="5.25" fill="#B85450" opacity="0"/>
+                    <circle class="f2-token__core" cx="245.15" cy="126.54" r="3" fill="#B85450" stroke="#FFFFFF" stroke-width="0.8"/>
+                  </g>
+                  <g class="f2-token" data-trace="wrong" data-k="2" data-fate="audit">
+                    <circle class="f2-token__trail" cx="237.4" cy="126.54" r="2.4" fill="#B85450" opacity="0" data-o="0.34"/>
+                    <circle class="f2-token__trail" cx="237.4" cy="126.54" r="1.98" fill="#B85450" opacity="0" data-o="0.22"/>
+                    <circle class="f2-token__trail" cx="237.4" cy="126.54" r="1.56" fill="#B85450" opacity="0" data-o="0.12"/>
+                    <circle class="f2-token__halo" cx="237.4" cy="126.54" r="5.25" fill="#B85450" opacity="0"/>
+                    <circle class="f2-token__core" cx="237.4" cy="126.54" r="3" fill="#B85450" stroke="#FFFFFF" stroke-width="0.8"/>
+                  </g>
+                </g>
+                <g class="f2-rules" aria-hidden="true">
+                  <line class="f2-rule" data-col="setup" x1="34.21" y1="153.13" x2="102.6" y2="153.13" stroke="#B08A4A" stroke-width="0.9" stroke-linecap="round" opacity="0"/>
+                  <line class="f2-rule" data-col="processes" x1="145.68" y1="153.13" x2="221.5" y2="153.13" stroke="#B08A4A" stroke-width="0.9" stroke-linecap="round" opacity="0"/>
+                  <line class="f2-rule" data-col="gate" x1="228.95" y1="158.89" x2="260.62" y2="158.89" stroke="#B08A4A" stroke-width="0.9" stroke-linecap="round" opacity="0"/>
+                  <line class="f2-rule" data-col="chunk" x1="277.66" y1="158.89" x2="301.18" y2="158.89" stroke="#B08A4A" stroke-width="0.9" stroke-linecap="round" opacity="0"/>
+                  <line class="f2-rule" data-col="evidence" x1="324.47" y1="158.89" x2="356.62" y2="158.89" stroke="#B08A4A" stroke-width="0.9" stroke-linecap="round" opacity="0"/>
+                  <line class="f2-rule" data-col="weight" x1="389.86" y1="158.89" x2="430.89" y2="158.89" stroke="#B08A4A" stroke-width="0.9" stroke-linecap="round" opacity="0"/>
+                  <line class="f2-rule" data-col="training" x1="474.84" y1="158.89" x2="504.29" y2="158.89" stroke="#B08A4A" stroke-width="0.9" stroke-linecap="round" opacity="0"/>
                 </g>
               </svg>
+              <script type="application/json" id="fig2-flow">{"R":3.0,"N":3,"SP":7.0,"CH":3.0,"rows":[{"trace":"corr","fate":"pass","y":11.35,"x0":151.56,"tip":179.55,"end":[79.68,93.06],"colour":"#6C8EBF"},{"trace":"success","fate":"pass","y":40.15,"x0":151.56,"tip":179.55,"end":[76.87,87.31],"colour":"#82B366"},{"trace":"near","fate":"pass","y":68.95,"x0":151.56,"tip":179.55,"end":[83.98,90.21],"colour":"#D6B656"},{"trace":"offsets","fate":"audit","y":97.75,"x0":151.56,"tip":179.55,"end":[64.44,92.38],"colour":"#D79B00"},{"trace":"wrong","fate":"audit","y":126.54,"x0":151.56,"tip":179.55,"end":[64.09,128.51],"colour":"#B85450"}],"gate":{"x0":230.75,"x1":259.55,"cx":245.15,"exit":263.87,"park":304.43,"contact":256.19,"rest":[252.9,245.15,237.4],"audit":[230.75,87.11,28.8,50.4]},"hist":{"corr":{"entry":[289.79,11.35],"bars":[[271.79,25.56,7.2,12.96],[278.99,32.76,7.2,5.76],[286.19,18.36,7.2,20.16],[293.39,31.32,7.2,7.2],[300.59,32.76,7.2,5.76]]},"success":{"entry":[289.79,44.64],"bars":[[271.79,72.35,7.2,2.16],[278.99,50.76,7.2,23.76],[286.19,65.15,7.2,9.36],[293.39,67.31,7.2,7.2],[300.59,57.95,7.2,16.56]]},"near":{"entry":[289.79,80.63],"bars":[[271.79,101.15,7.2,7.92],[278.99,103.31,7.2,5.76],[286.19,93.95,7.2,15.12],[293.39,86.75,7.2,22.32],[300.59,103.31,7.2,5.76]]}},"chips":[[342.34,13.32],[342.34,41.76],[342.34,69.11],[342.34,96.11],[342.34,124.91]],"tickX":321.94,"warrows":[[410.74,33.84,53.19],[410.67,79.55,98.18]],"nodes":[[472.4,55.15],[472.4,77.42],[488.56,48.99],[488.73,60.59],[488.56,72.32],[488.56,83.84],[506.74,66.41]],"edges":[{"a":0,"b":2},{"a":0,"b":3},{"a":0,"b":4},{"a":0,"b":1},{"a":1,"b":3},{"a":1,"b":4},{"a":1,"b":5},{"a":2,"b":3},{"a":2,"b":6},{"a":4,"b":6},{"a":5,"b":6},{"a":4,"b":5},{"a":3,"b":6}],"nodeOrder":[0,1,2,4,5,3,6],"edgeOrder":[0,2,5,6,1,4,3,8,12,9,10,11,7]}</script>
               <!-- /fig2:svg -->
             </div>
           </div>

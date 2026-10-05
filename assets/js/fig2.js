@@ -1,48 +1,59 @@
-/* PACER project page — Fig. 2, the PACER pipeline, as an animated vector figure.
+/* PACER project page — Fig. 2, the PACER pipeline, as a looping token-flow figure (R40).
 
-   The inline <svg class="fig2__svg"> in index.html is generated from the paper's figure PDF
-   by _dev/tools/extract_fig2.py and is the complete, static figure (what readers without
-   JavaScript or with prefers-reduced-motion see). This script animates it once when it
-   scrolls into view (≈ 11 s, calm and eased), with play/pause and replay, and links it to
-   the five step buttons under the figure:
+   The inline <svg class="fig2__svg"> in index.html is generated from the paper's figure PDF by
+   _dev/tools/extract_fig2.py. It is the complete figure, and it always stays complete and crisp:
+   nothing is ever washed, dimmed or filtered. Motion is additive, drawn on top by moving marks
+   that are hidden at rest: tokens, chunk squares, glows, pulses and the phase rule. Next to the
+   SVG the tool writes the flow layout L (<script type="application/json" id="fig2-flow">).
 
-     01 Collect & label   collect   tokens leave the setup along the five process arrows
-     02 Gate              gate      corrections, successes and near traces pass the green gate;
-                                    offsets and wrong-region tokens stop in the red Audit cell
-                                    and stay there (gated to zero weight, kept for audit)
-     03 Process evidence  chunks    passing tokens break into action chunks; histogram bars grow
-                          evidence  the five evidence chips light in turn as chunks are read
-     04 Bounded weight    weight    eta -> s_eta -> score-to-weight transform; a weight in [0, w_max]
-     05 Train & select    train     the weighted native loss pulses, the network's edges draw,
-                                    the validation score J_val(eta) appears
+   One cycle (DURATION ≈ 10.6 s), then the complete figure holds (HOLD 1.8 s) and the moving marks
+   retract quietly (RESET 0.3 s) before the next cycle. It loops while the figure is on screen:
 
-   state(t) is a pure function of time (progress values only; the geometry comes from the
-   SVG), and control(c, action) is a pure reducer for the player, so both are unit-tested in
-   node (_dev/tests/fig2.test.js). The DOM side (mount) only maps them onto the SVG.
+     01 Collect & label   collect   a ping at each trace's end in the photo; each of the five
+                                    process arrows emits three tokens in its colour while its
+                                    dashes march
+     02 Gate              gate      corrections, successes and near traces pass the green gate,
+                                    which pulses as each crosses, into the Action Chunk column;
+                                    offsets and wrong-region tokens
+                                    touch the Audit cell's red wall, spring back and rest there
+                                    (gated to zero weight, kept for audit: never deleted)
+     03 Process evidence  chunks    each passing token splits into five squares that drop onto its
+                                    histogram's bars; the bars grow by thirds
+                          evidence  a brass tick runs down the five evidence chips; each glows
+     04 Bounded weight    weight    eta, a pulse down, s_eta, a pulse down, the transform; the
+                                    graphite 0..w_max gauge fills
+     05 Train & select    train     the weighted native loss pulses, the network's edges light
+                                    from the inputs, J_val(eta) is emphasised
 
-   Printing (beforeprint) finishes the figure: complete, nothing pinned, no focus wash. If
-   mount or a frame throws, the SVG is put back exactly as index.html shipped it (the complete
-   static figure), the controls hide and the steps go inert.
+   The current phase is marked by a thin brass rule under its column caption and by its step
+   button pressed (aria-pressed). A step click plays only that phase and holds (the loop pauses)
+   until Play or the same step again. Pause is a toggle button (aria-pressed = paused).
 
-   Classic script (no ES modules, no fetch) so the page works from file://; it also loads in
-   node (module.exports at the bottom). main.js calls PACERFig2.mount(figure, steps, opts);
-   PACERFig2.finish() completes the mounted figure (screenshots).
+   state(t, L) is a pure function and control(c, action) a pure reducer, both unit-tested in node
+   (_dev/tests/fig2.test.js). Reduced motion, no IntersectionObserver, no JS and printing show the
+   complete figure. If mount or a frame throws, the SVG is put back exactly as index.html shipped
+   it, the controls hide and the steps go inert.
+
+   Classic script (no ES modules, no fetch) so the page works from file://; it also loads in node
+   (module.exports at the bottom). main.js calls PACERFig2.mount(figure, steps, opts);
+   PACERFig2.finish() completes the mounted figure (print, screenshots).
 */
 var PACERFig2 = (function () {
   "use strict";
 
-  var DURATION = 10.8;
+  var DURATION = 10.6;
+  var HOLD = 1.8;
+  var RESET = 0.3;
+  var LOOP = DURATION + HOLD + RESET;
   var MAX_DT = 0.1;          // a stalled frame never skips more than this
-  var DIM = 0.22;            // opacity of a box before its phase has reached it
-  var WASH = 0.6;            // opacity of the paper wash over the columns outside a step's focus
 
   var PHASES = [
     { id: "collect", t0: 0, t1: 2.0 },
     { id: "gate", t0: 2.0, t1: 3.8 },
-    { id: "chunks", t0: 3.8, t1: 5.6 },
-    { id: "evidence", t0: 5.6, t1: 7.4 },
-    { id: "weight", t0: 7.4, t1: 9.0 },
-    { id: "train", t0: 9.0, t1: DURATION }
+    { id: "chunks", t0: 3.8, t1: 5.8 },
+    { id: "evidence", t0: 5.8, t1: 7.3 },
+    { id: "weight", t0: 7.3, t1: 8.8 },
+    { id: "train", t0: 8.8, t1: DURATION }
   ];
   var STEPS = [
     { id: "collect", phases: ["collect"], cols: ["setup", "processes"] },
@@ -56,7 +67,6 @@ var PACERFig2 = (function () {
     { id: "offsets", fate: "audit" }, { id: "wrong", fate: "audit" }
   ];
   var PASS = ["corr", "success", "near"];
-  var AUDIT = ["offsets", "wrong"];
 
   /* ------------------------------------------------------------ timing */
 
@@ -64,15 +74,15 @@ var PACERFig2 = (function () {
   function ramp(t, a, b) { return clamp01((t - a) / (b - a)); }
   function easeInOut(x) { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
   function easeOut(x) { return 1 - Math.pow(1 - x, 3); }
+  function easeIn(x) { return x * x * x; }
   function bump(t, a, b) {
     var x = ramp(t, a, b);
     return x <= 0 || x >= 1 ? 0 : Math.sin(Math.PI * x);
   }
-  // One progress p spread over n items in order: item i starts at spread * i / (n - 1).
-  function stagger(p, i, n, spread) {
-    var s = spread === undefined ? 0.6 : spread;
-    var start = n > 1 ? s * i / (n - 1) : 0;
-    return clamp01((p - start) / (1 - s));
+  // A glow read at time r: rises quickly, peaks at r + 0.02, decays by r + 0.4.
+  function glow(t, r) {
+    if (t <= r - 0.08 || t >= r + 0.4) return 0;
+    return t < r + 0.02 ? easeOut(ramp(t, r - 0.08, r + 0.02)) : 1 - easeInOut(ramp(t, r + 0.02, r + 0.4));
   }
 
   function phaseAt(t) {
@@ -94,159 +104,225 @@ var PACERFig2 = (function () {
 
   /* ------------------------------------------------------------- state */
 
-  // Every token: at = hidden | setup | arrow | gate | audit | chunk, on route leg
-  // "collect" (photo -> process arrow tip) or "gate" (arrow tip -> gate exit / Audit cell).
-  function token(t, i, fate) {
-    var appear = 0.15 + 0.06 * i;
-    var go = 0.35 + 0.06 * i;
-    var s = { at: "hidden", leg: null, u: 0, o: 0, s: 0 };
-    if (t < appear) return s;
-    s.o = easeOut(ramp(t, appear, appear + 0.3));
-    s.s = easeOut(ramp(t, appear, appear + 0.35));
-    s.leg = "collect";
-    s.at = t < go ? "setup" : "arrow";
-    s.u = easeInOut(ramp(t, go, go + 1.4));
-    var g0, g1;
-    if (fate === "pass") { g0 = 2.05 + 0.1 * i; g1 = g0 + 1.2; } else { g0 = 2.2 + 0.12 * (i - 3); g1 = g0 + 1.15; }
-    if (t < g0) return s;
-    s.leg = "gate";
-    s.at = "gate";
-    s.u = fate === "pass" ? easeInOut(ramp(t, g0, g1)) : easeOut(ramp(t, g0, g1));
-    if (fate === "audit") {
-      if (s.u >= 1) s.at = "audit";
-      return s;
+  var COLLECT = { start: 0.3, stagger: 0.09, dur: 1.3 };       // each trace's train along its arrow
+  var GATE = { pass: 2.05, passStagger: 0.1, passDur: 1.25, audit: 2.15, auditStagger: 0.15, approach: 1.0, recoil: 0.4 };
+  var CHUNK = { start: 3.9, traceStagger: 0.08, tokenStagger: 0.38, pop: 0.18, drop: 0.4, grow: 0.25 };
+
+  function splitAt(i, k) { return CHUNK.start + CHUNK.traceStagger * i + CHUNK.tokenStagger * k; }
+
+  // Token k of trace row i at time t: {x, y, o, s, at} (at: hidden | arrow | gate | audit | chunk).
+  function tokenAt(L, i, k, t) {
+    var row = L.rows[i];
+    var lead0 = row.tip - 1;                                  // the lead token's slot at the arrow tip
+    var e = COLLECT.start + COLLECT.stagger * i;
+    var lead = row.x0 + (lead0 - row.x0) * easeInOut(ramp(t, e, e + COLLECT.dur));
+    var x = lead - L.SP * k, y = row.y, at = "arrow";
+    if (row.fate === "pass") {
+      // through the green gate, then on into the (still empty) Action Chunk column, gliding to
+      // the row above the trace's histogram once clear of the gate
+      var g0 = GATE.pass + GATE.passStagger * i;
+      if (t > g0) {
+        x = lead0 + (L.gate.park - lead0) * easeInOut(ramp(t, g0, g0 + GATE.passDur)) - L.SP * k;
+        var ey = L.hist[row.trace].entry[1], park = L.gate.park - L.SP * k;
+        y = row.y + (ey - row.y) * easeInOut(clamp01((x - L.gate.x1) / (park - L.gate.x1)));
+        at = "gate";
+      }
+      var d = splitAt(i, k);
+      if (t > d) {                                          // the token breaks into its chunks
+        return { x: x, y: y, o: 1 - ramp(t, d + 0.04, d + CHUNK.pop), s: 1 + 0.4 * easeOut(ramp(t, d, d + CHUNK.pop)), at: "chunk" };
+      }
+    } else {
+      var a0 = GATE.audit + GATE.auditStagger * (i - 3);
+      var hit = a0 + GATE.approach;
+      if (t > a0) {
+        var contact = L.gate.contact - L.SP * k;
+        x = t <= hit
+          ? lead0 - L.SP * k + (contact - lead0 + L.SP * k) * easeInOut(ramp(t, a0, hit))
+          : contact + (L.gate.rest[k] - contact) * easeOut(ramp(t, hit, hit + GATE.recoil));
+        at = x - L.R >= L.gate.x0 ? "audit" : "gate";
+      }
     }
-    var split = 3.85 + 0.18 * i;
-    if (t >= split) {
-      s.at = "chunk";
-      s.o = 1 - ramp(t, split, split + 0.2);
-    }
-    return s;
+    if (x < row.x0 - 1e-9) return { x: row.x0, y: y, o: 0, s: 0, at: "hidden" };
+    var pop = easeOut(ramp(x, row.x0, row.x0 + 4));            // tokens emerge from the arrow's start
+    return { x: x, y: y, o: pop, s: 0.5 + 0.5 * pop, at: at };
   }
 
-  function state(time) {
-    var t = time < 0 ? 0 : time > DURATION ? DURATION : time;
-    var pi = phaseAt(t);
-    var si = stepAt(t);
+  function cycle(t, L) {
     var out = {
-      t: t, phase: pi < 0 ? null : PHASES[pi].id, step: si < 0 ? null : si,
-      tokens: {}, chunks: {}, bars: {}, read: null, chips: [], flash: null, weight: null, train: null
+      t: t, phase: null, step: null, tokens: [], chunks: [], bars: {}, pings: {}, march: {},
+      flash: { pass: 0, audit: 0 }, hits: {}, tick: null, chips: [], weight: null, train: null
     };
-    TRACES.forEach(function (tr, i) { out.tokens[tr.id] = token(t, i, tr.fate); });
+    var pi = phaseAt(t), si = stepAt(t);
+    out.phase = pi < 0 ? null : PHASES[pi].id;
+    out.step = si < 0 ? null : si;
 
-    // chunks: each passing token breaks into five chunks that fly to its histogram's bars
-    PASS.forEach(function (id, p) {
-      var split = 3.85 + 0.18 * p;
-      out.chunks[id] = [];
-      out.bars[id] = [];
-      for (var k = 0; k < 5; k++) {
-        var c0 = split + 0.05 * k;
-        var bar = easeOut(ramp(t, split + 0.5 + 0.07 * k, split + 1.0 + 0.07 * k));
-        out.bars[id].push(bar);
-        out.chunks[id].push({ u: easeInOut(ramp(t, c0, c0 + 0.55)), o: ramp(t, c0, c0 + 0.1) * (1 - bar) });
+    L.rows.forEach(function (row, i) {
+      for (var k = 0; k < L.N; k++) {
+        var tk = tokenAt(L, i, k, t);
+        var trail = [1, 2, 3].map(function (m) {
+          var p = tokenAt(L, i, k, t - 0.045 * m);
+          var far = Math.abs(p.x - tk.x) + Math.abs(p.y - tk.y) > 0.3;
+          return { x: p.x, y: p.y, o: far && tk.at !== "chunk" ? p.o * tk.o : 0 };
+        });
+        var moving = trail[0].o > 0;
+        out.tokens.push({ trace: row.trace, k: k, fate: row.fate, x: tk.x, y: tk.y, o: tk.o, s: tk.s, at: tk.at,
+                          halo: moving ? 0.28 * tk.o : 0, trail: trail });
+        if (row.fate === "pass" && tk.at === "gate") out.flash.pass = Math.max(out.flash.pass, clamp01(1 - Math.abs(tk.x - L.gate.cx) / 9));
+      }
+      // the ping in the photo, and the arrow's marching dashes while its train travels
+      var e = COLLECT.start + COLLECT.stagger * i;
+      var pp = ramp(t, 0.05 + 0.06 * i, 0.75 + 0.06 * i);
+      out.pings[row.trace] = { r: easeOut(pp), o: pp > 0 && pp < 1 ? 1 - easeIn(pp) : 0 };
+      out.march[row.trace] = {
+        o: ramp(t, e, e + 0.15) * (1 - ramp(t, e + COLLECT.dur - 0.2, e + COLLECT.dur + 0.05)),
+        shift: -4.32 * 3 * easeInOut(ramp(t, e, e + COLLECT.dur))
+      };
+      if (row.fate === "audit") {
+        var hit = GATE.audit + GATE.auditStagger * (i - 3) + GATE.approach;
+        out.hits[row.trace] = bump(t, hit - 0.05, hit + 0.45);
+        out.flash.audit = Math.max(out.flash.audit, bump(t, hit - 0.05, hit + 0.6));
       }
     });
 
-    // evidence: a read head sweeps the chunks while the chips light in turn
-    out.read = { u: ramp(t, 5.7, 7.1), o: ramp(t, 5.6, 5.75) * (1 - ramp(t, 7.1, 7.3)) };
-    for (var k = 0; k < 5; k++) {
-      var c = 5.8 + 0.3 * k;
-      out.chips.push({ lit: easeOut(ramp(t, c, c + 0.25)), pop: bump(t, c, c + 0.4) });
-    }
-    out.flash = { pass: bump(t, 2.5, 3.5), audit: bump(t, 3.1, 3.75) };
+    // chunks: each passing token splits into five squares that drop onto its histogram's bars
+    PASS.forEach(function (id, i) {
+      var h = L.hist[id];
+      out.bars[id] = [0, 0, 0, 0, 0];
+      for (var k = 0; k < L.N; k++) {
+        var land = splitAt(i, k);
+        for (var b = 0; b < 5; b++) {
+          var bar = h.bars[b];
+          var u = ramp(t, land, land + CHUNK.drop);
+          var tx = bar[0] + bar[2] / 2 - L.CH / 2, ty = bar[1] + bar[3] - bar[3] * k / L.N - L.CH - 0.3;
+          var sx = L.gate.park - L.SP * k - L.CH / 2, sy = h.entry[1] - L.CH / 2;
+          out.chunks.push({
+            trace: id, k: k, bar: b,
+            x: sx + (tx - sx) * easeOut(u), y: sy + (ty - sy) * easeIn(u),
+            o: ramp(t, land, land + 0.05) * (1 - ramp(t, land + CHUNK.drop, land + CHUNK.drop + 0.1))
+          });
+          out.bars[id][b] += easeOut(ramp(t, land + CHUNK.drop - 0.05, land + CHUNK.drop + CHUNK.grow)) / L.N;
+        }
+      }
+      out.bars[id] = out.bars[id].map(function (v) { return v > 1 - 1e-9 ? 1 : v; });
+    });
 
+    // evidence: a tick runs down the chips; each glows as it is read
+    var reads = [0, 1, 2, 3, 4].map(function (k) { return 5.92 + 0.24 * k; });
+    out.chips = reads.map(function (r) { return glow(t, r); });
+    var pos = 0;
+    for (var k2 = 1; k2 < 5; k2++) pos += easeInOut(ramp(t, reads[k2 - 1] + 0.06, reads[k2] - 0.02));
+    var c0 = Math.floor(Math.min(pos, 3.999)), f = pos - c0;
+    out.tick = {
+      y: L.chips[c0][1] + (L.chips[Math.min(c0 + 1, 4)][1] - L.chips[c0][1]) * f,
+      o: ramp(t, 5.82, 5.9) * (1 - ramp(t, 7.0, 7.2))
+    };
+
+    function pulse(a, b) {
+      return { u: easeInOut(ramp(t, a, b)), o: ramp(t, a, a + 0.05) * (1 - ramp(t, b - 0.05, b)) };
+    }
     out.weight = {
-      eta: easeOut(ramp(t, 7.45, 7.7)),
-      a0: easeInOut(ramp(t, 7.7, 7.95)),
-      score: easeOut(ramp(t, 7.95, 8.2)),
-      a1: easeInOut(ramp(t, 8.2, 8.45)),
-      transform: easeOut(ramp(t, 8.45, 8.7)),
-      gauge: ramp(t, 8.6, 8.75),
-      fill: easeOut(ramp(t, 8.7, 8.98))      // a share of the bar between 0 and w_max
+      eta: glow(t, 7.4), pulses: [pulse(7.55, 7.85), pulse(8.0, 8.32)],
+      score: glow(t, 7.9), transform: glow(t, 8.38),
+      fill: easeOut(ramp(t, 8.4, 8.78))                        // up to its illustrative share of w_max
     };
 
     function ripple(a, b) {
       var u = ramp(t, a, b);
-      return { u: u, o: u > 0 && u < 1 ? 0.9 * (1 - u) : 0 };
+      return { u: u, o: u > 0 && u < 1 ? 0.7 * (1 - u) : 0 };
     }
+    var edges = L.edges.map(function () { return 0; });
+    var litAt = L.edges.map(function () { return Infinity; });
+    L.edgeOrder.forEach(function (e, j) { litAt[e] = 9.1 + 0.075 * j; edges[e] = glow(t, litAt[e]); });
+    var nodeAt = L.nodes.map(function (_, n) {
+      if (L.nodeOrder.indexOf(n) < 2) return 9.05;           // the inputs light first
+      var first = Infinity;
+      L.edges.forEach(function (e, m) { if (e.a === n || e.b === n) first = Math.min(first, litAt[m]); });
+      return first + 0.1;
+    });
     out.train = {
-      loss: easeOut(ramp(t, 9.05, 9.3)),
-      ripple: [ripple(9.25, 9.95), ripple(9.6, 10.3)],
-      nodes: easeOut(ramp(t, 9.2, 9.5)),
-      edges: ramp(t, 9.35, 10.15),
-      val: easeOut(ramp(t, 10.05, 10.3)),
-      jval: easeOut(ramp(t, 10.25, 10.7))
+      loss: glow(t, 8.88), ripple: [ripple(8.95, 9.6), ripple(9.2, 9.85)],
+      edges: edges, nodes: nodeAt.map(function (r) { return glow(t, r); }),
+      val: glow(t, 10.05), jval: bump(t, 10.1, 10.58)
     };
     return out;
   }
 
+  // The complete figure, held through the hold; in the reset only the moving marks retract.
+  function state(time, L) {
+    var t = time < 0 ? 0 : time > LOOP ? LOOP : time;
+    if (t <= DURATION) return cycle(t, L);
+    var s = cycle(DURATION, L);
+    s.t = t;
+    if (t <= DURATION + HOLD) return s;
+    var r = easeInOut(ramp(t, DURATION + HOLD, LOOP));
+    PASS.forEach(function (id) { s.bars[id] = s.bars[id].map(function (v) { return v * (1 - r); }); });
+    s.weight.fill *= 1 - r;
+    s.tokens.forEach(function (k) { k.o *= 1 - r; });
+    return s;
+  }
+
   /* -------------------------------------------------------- controller */
 
-  // c = {t, playing, until, pinned, started, reduced}. A pinned step plays its own phases
-  // and holds at their end; without a pin the player runs to the end of the figure.
+  // c = {t, playing, until, pinned, started, reduced}. Unpinned, the player loops; a pinned step
+  // plays its own phases and holds at their end (the loop is paused).
   function initial(opts) {
-    var reduced = !!(opts && opts.reduced);
-    return { t: reduced ? DURATION : 0, playing: false, until: DURATION, pinned: null, started: false, reduced: reduced };
+    return { t: DURATION, playing: false, until: null, pinned: null, started: false, reduced: !!(opts && opts.reduced) };
   }
 
   function copy(c) {
     return { t: c.t, playing: c.playing, until: c.until, pinned: c.pinned, started: c.started, reduced: c.reduced };
   }
 
-  function playAll(n, from) {
-    n.started = true;
-    n.t = from;
-    n.playing = true;
-    n.until = DURATION;
-    n.pinned = null;
-    return n;
-  }
+  function loop(n) { n.started = true; n.playing = true; n.until = null; n.pinned = null; return n; }
 
   function control(c, a) {
     var n = copy(c);
     switch (a.type) {
-      case "view":                                   // first time in view: autoplay once
+      case "view":                                   // first time in view: retract quietly, then loop
         if (c.started || c.reduced) return c;
-        return playAll(n, 0);
+        n.t = DURATION + HOLD;
+        return loop(n);
       case "tick":
         if (!c.playing) return c;
-        n.t = Math.min(c.until, c.t + Math.min(Math.max(a.dt || 0, 0), MAX_DT));
-        if (n.t >= c.until) n.playing = false;
+        var dt = Math.min(Math.max(a.dt || 0, 0), MAX_DT);
+        if (c.until !== null) {
+          n.t = Math.min(c.until, c.t + dt);
+          if (n.t >= c.until) n.playing = false;
+        } else {
+          n.t = c.t + dt;
+          if (n.t >= LOOP) n.t -= LOOP;
+        }
         return n;
       case "toggle":
         if (c.reduced) return c;
         if (c.playing) { n.playing = false; n.started = true; return n; }
-        return playAll(n, c.t >= DURATION ? 0 : c.t);
+        return loop(n);
       case "pause":
         if (!c.playing) return c;
         n.playing = false;
         return n;
       case "replay":
         if (c.reduced) return c;
-        return playAll(n, 0);
+        n.t = 0;
+        return loop(n);
       case "seek":
         if (c.reduced) return c;
         n.started = true;
-        n.t = Math.max(0, Math.min(DURATION, a.t));
+        n.t = Math.max(0, Math.min(LOOP, a.t));
         n.pinned = null;
-        n.until = DURATION;
-        if (n.t >= DURATION) n.playing = false;
+        n.until = null;
         return n;
       case "finish":                                 // print, screenshots: the complete figure, unpinned
-        n.started = true; n.t = DURATION; n.playing = false; n.until = DURATION; n.pinned = null;
+        n.started = true; n.t = DURATION; n.playing = false; n.until = null; n.pinned = null;
         return n;
       case "step":
         n.started = true;
         if (c.reduced) { n.pinned = c.pinned === a.k ? null : a.k; return n; }
-        if (c.pinned === a.k) {                    // second click: back to the complete figure
-          n.pinned = null; n.playing = false; n.t = DURATION; n.until = DURATION;
-          return n;
-        }
+        if (c.pinned === a.k) return loop(n);         // the same step again: the loop resumes
         var r = stepRange(a.k);
         n.pinned = a.k;
-        n.until = r[1];
-        if (c.playing && c.pinned === null && stepAt(c.t) === a.k) return n;   // already in it: hold at its end
         n.t = r[0];
+        n.until = r[1];
         n.playing = true;
         return n;
       default:
@@ -257,10 +333,12 @@ var PACERFig2 = (function () {
   // The step button that shows as pressed: the pinned step, else the playing (or paused) phase's.
   function pressed(c) {
     if (c.pinned !== null) return c.pinned;
-    if (c.reduced || !c.started || c.t >= DURATION) return null;
+    if (c.reduced || !c.started) return null;
     var k = stepAt(c.t);
     return k < 0 ? null : k;
   }
+
+  function paused(c) { return !c.reduced && c.started && !c.playing; }
 
   /* --------------------------------------------------------------- DOM */
 
@@ -276,12 +354,6 @@ var PACERFig2 = (function () {
   function scaleAbout(el, k, cx, cy) {
     if (Math.abs(k - 1) < 1e-4) el.removeAttribute("transform");
     else el.setAttribute("transform", "matrix(" + [f2(k), 0, 0, f2(k), f2(cx * (1 - k)), f2(cy * (1 - k))].join(" ") + ")");
-  }
-
-  function draw(el, len, p) {
-    if (p >= 1) { el.removeAttribute("stroke-dasharray"); el.removeAttribute("stroke-dashoffset"); return; }
-    el.setAttribute("stroke-dasharray", f2(len) + " " + f2(len + 1));
-    el.setAttribute("stroke-dashoffset", f2(len * (1 - p)));
   }
 
   // If anything in mount or in a frame throws, the SVG is put back exactly as index.html
@@ -314,187 +386,164 @@ var PACERFig2 = (function () {
   function player(fig, svg, steps, opts, guard) {
     var doc = fig.ownerDocument;
     var win = doc.defaultView;
-    var reduced = !!opts.reduceMotion;
     var hasIO = "IntersectionObserver" in win;
+    var still = !!opts.reduceMotion || !hasIO;                  // the complete figure, no motion
+    var L = JSON.parse(doc.getElementById("fig2-flow").textContent);
     var scroller = fig.querySelector(".fig2__scroll");
     var controls = fig.querySelector(".fig2__controls");
     var toggleBtn = controls && controls.querySelector('[data-fig2="toggle"]');
     var replayBtn = controls && controls.querySelector('[data-fig2="replay"]');
-    var vb = svg.viewBox.baseVal;
-    var W = vb.width, H = vb.height;
+    var W = svg.viewBox.baseVal.width;
     function q(sel) { return svg.querySelector(sel); }
     function qa(sel) { return Array.prototype.slice.call(svg.querySelectorAll(sel)); }
     function num(el, a) { return parseFloat(el.getAttribute(a)); }
+    function centre(r) { return [num(r, "x") + num(r, "width") / 2, num(r, "y") + num(r, "height") / 2]; }
 
-    /* geometry, read once from the generated SVG */
-    var g = { tokens: {}, routes: {}, chunks: {}, bars: {}, chips: [], boxes: {}, warrows: [], edges: [], cols: {} };
-    g.rest = {};
-    TRACES.forEach(function (tr) {
-      var id = tr.id;
-      g.tokens[id] = q('.f2-token[data-trace="' + id + '"]');
-      g.rest[id] = q('.f2-rest[data-trace="' + id + '"]');
-      g.routes[id] = {};
-      ["collect", "gate"].forEach(function (leg) {
-        var p = q('.f2-route[data-trace="' + id + '"][data-leg="' + leg + '"]');
-        g.routes[id][leg] = { el: p, len: p.getTotalLength() };
-      });
+    /* the moving marks, read once from the generated SVG */
+    var tokens = qa(".f2-token").map(function (g) {
+      return { core: g.querySelector(".f2-token__core"), halo: g.querySelector(".f2-token__halo"), g: g,
+               trail: Array.prototype.slice.call(g.querySelectorAll(".f2-token__trail")) };
     });
+    var trailO = tokens[0].trail.map(function (c) { return num(c, "data-o"); });
+    var chunks = {};
+    qa(".f2-chunk").forEach(function (el) {
+      chunks[el.getAttribute("data-trace") + el.getAttribute("data-k") + el.getAttribute("data-bar")] = el;
+    });
+    var bars = {};
     PASS.forEach(function (id) {
-      var gate = g.routes[id].gate;
-      var from = gate.el.getPointAtLength(gate.len);
-      g.chunks[id] = [];
-      g.bars[id] = qa('.f2-hist[data-trace="' + id + '"] .f2-bar').map(function (b, k) {
-        var r = { el: b, y: num(b, "y"), h: num(b, "height"), x: num(b, "x"), w: num(b, "width") };
-        var c = q('.f2-chunk[data-trace="' + id + '"][data-bar="' + k + '"]');
-        var size = num(c, "width");
-        g.chunks[id].push({ el: c, x0: from.x - size / 2, y0: from.y - size / 2,
-                            x1: r.x + r.w / 2 - size / 2, y1: r.y + r.h - size - 0.6 });
-        return r;
+      bars[id] = qa('.f2-hist[data-trace="' + id + '"] .f2-bar').map(function (b) {
+        return { el: b, y: num(b, "y"), h: num(b, "height") };
       });
     });
-    var read = q(".f2-read");
-    var readX = [num(read, "data-from"), num(read, "data-to")];
-    qa(".f2-chip").forEach(function (el) {
-      var r = el.querySelector("rect");
-      g.chips.push({ el: el, cx: num(r, "x") + num(r, "width") / 2, cy: num(r, "y") + num(r, "height") / 2 });
-    });
-    ["eta", "score", "transform", "loss", "val"].forEach(function (k) { g.boxes[k] = q('.f2-box[data-box="' + k + '"]'); });
-    qa(".f2-warrow").forEach(function (el) {
-      var line = el.querySelector("line");
-      g.warrows.push({ line: line, head: el.querySelector(".f2-warrow__head"), len: num(line, "y2") - num(line, "y1") });
-    });
-    var gauge = q(".f2-gauge"), gaugeFill = q(".f2-gauge__fill"), gaugeW = num(gaugeFill, "data-w");
-    var ripple = q(".f2-ripple");
-    var rippleC = [num(ripple, "x") + num(ripple, "width") / 2, num(ripple, "y") + num(ripple, "height") / 2];
-    var nodes = q(".f2-nodes");
-    qa(".f2-edge").forEach(function (el) { g.edges.push({ el: el, len: el.getTotalLength() }); });
-    var jval = q(".f2-jval");
+    function byTrace(cls) {
+      var m = {};
+      qa(cls).forEach(function (el) { m[el.getAttribute("data-trace")] = el; });
+      return m;
+    }
+    var pings = byTrace(".f2-ping"), march = byTrace(".f2-march"), hits = byTrace(".f2-hit");
     var flash = { pass: q('.f2-flash[data-flash="pass"]'), audit: q('.f2-flash[data-flash="audit"]') };
-    var wash = q(".f2-wash"), hl = q(".f2-hl");
-    qa(".f2-col").forEach(function (el) {
-      var b = el.getBBox();
-      g.cols[el.getAttribute("data-col")] = [b.x, b.x + b.width];
-    });
-    // labels the tokens pass behind sit above the wash: they fade with their column instead
-    var over = qa(".f2-over > [data-col]").map(function (el) { return { el: el, span: g.cols[el.getAttribute("data-col")] }; });
+    function lit(group) {
+      var box = group.querySelector(".f2-chip__box, .f2-box__box");
+      return { aura: group.querySelector(".f2-aura"), box: box, w: box ? num(box, "stroke-width") : 0 };
+    }
+    var chips = qa(".f2-chip").map(lit);
+    var boxes = {};
+    ["eta", "score", "transform", "loss", "val"].forEach(function (k) { boxes[k] = lit(q('.f2-box[data-box="' + k + '"]')); });
+    var tick = q(".f2-tick");
+    var pulses = qa(".f2-wpulse");
+    var gaugeFill = q(".f2-gauge__fill"), gaugeW = num(gaugeFill, "data-w");
+    var ripple = q(".f2-ripple"), rippleC = centre(ripple);
+    var edgeGlows = qa(".f2-edge-glow");
+    var nodes = qa(".f2-node");
+    var jval = q(".f2-jval"), jvalAura = jval.querySelector(".f2-aura"), jvalC = centre(jvalAura);
 
     /* state -> SVG */
     function apply(s) {
-      TRACES.forEach(function (tr) {
-        var tk = s.tokens[tr.id], el = g.tokens[tr.id];
-        if (tk.leg) {
-          var route = g.routes[tr.id][tk.leg];
-          var p = route.el.getPointAtLength(route.len * tk.u);
-          el.setAttribute("cx", f2(p.x));
-          el.setAttribute("cy", f2(p.y));
-        }
-        el.setAttribute("r", f2(2.4 * Math.max(tk.s, 0.01)));
-        // a gated token that has settled is handed to its resting dot in the Audit cell
-        var rest = g.rest[tr.id], settled = tk.at === "audit";
-        el.setAttribute("opacity", f2(settled ? 0 : tk.o));
-        if (rest) setOpacity(rest, settled ? tk.o : 0);
+      s.tokens.forEach(function (tk, i) {
+        var el = tokens[i];
+        setOpacity(el.g, tk.o);
+        el.core.setAttribute("cx", f2(tk.x));
+        el.core.setAttribute("cy", f2(tk.y));
+        el.core.setAttribute("r", f2(L.R * Math.max(tk.s, 0.05)));
+        el.halo.setAttribute("cx", f2(tk.x));
+        el.halo.setAttribute("cy", f2(tk.y));
+        el.halo.setAttribute("opacity", f2(tk.halo));
+        tk.trail.forEach(function (p, m) {
+          var c = el.trail[m];
+          c.setAttribute("cx", f2(p.x));
+          c.setAttribute("cy", f2(p.y));
+          c.setAttribute("opacity", f2(p.o * trailO[m]));
+        });
+      });
+      s.chunks.forEach(function (c) {
+        var el = chunks[c.trace + c.k + c.bar];
+        el.setAttribute("x", f2(c.x));
+        el.setAttribute("y", f2(c.y));
+        el.setAttribute("opacity", f2(c.o));
       });
       PASS.forEach(function (id) {
-        s.chunks[id].forEach(function (c, k) {
-          var ch = g.chunks[id][k];
-          ch.el.setAttribute("x", f2(ch.x0 + (ch.x1 - ch.x0) * c.u));
-          ch.el.setAttribute("y", f2(ch.y0 + (ch.y1 - ch.y0) * c.u - 3 * Math.sin(Math.PI * c.u)));
-          ch.el.setAttribute("opacity", f2(c.o));
-        });
         s.bars[id].forEach(function (v, k) {
-          var b = g.bars[id][k];
+          var b = bars[id][k];
           b.el.setAttribute("y", f2(b.y + b.h * (1 - v)));
           b.el.setAttribute("height", f2(b.h * v));
           setOpacity(b.el, v > 0.001 ? 1 : 0);
         });
       });
-      var rx = readX[0] + (readX[1] - readX[0]) * s.read.u;
-      read.setAttribute("x1", f2(rx));
-      read.setAttribute("x2", f2(rx));
-      read.setAttribute("opacity", f2(s.read.o));
-      s.chips.forEach(function (c, k) {
-        var ch = g.chips[k];
-        setOpacity(ch.el, DIM + (1 - DIM) * c.lit);
-        scaleAbout(ch.el, 1 + 0.07 * c.pop, ch.cx, ch.cy);
+      Object.keys(pings).forEach(function (id) {
+        pings[id].setAttribute("r", f2(9 * s.pings[id].r));
+        pings[id].setAttribute("opacity", f2(s.pings[id].o));
+        march[id].setAttribute("opacity", f2(s.march[id].o));
+        march[id].setAttribute("stroke-dashoffset", f2(s.march[id].shift));
       });
-      flash.pass.setAttribute("opacity", f2(0.3 * s.flash.pass));
+      Object.keys(hits).forEach(function (id) { hits[id].setAttribute("opacity", f2(s.hits[id])); });
+      flash.pass.setAttribute("opacity", f2(0.32 * s.flash.pass));
       flash.audit.setAttribute("opacity", f2(0.3 * s.flash.audit));
-
+      function glowBox(b, g) {
+        b.aura.setAttribute("opacity", f2(0.4 * g));
+        if (b.box) b.box.setAttribute("stroke-width", f2(b.w + 0.9 * g));
+      }
+      s.chips.forEach(function (g, k) { glowBox(chips[k], g); });
+      tick.setAttribute("transform", "translate(" + f2(L.tickX) + " " + f2(s.tick.y) + ")");
+      tick.setAttribute("opacity", f2(s.tick.o));
       var w = s.weight;
-      setOpacity(g.boxes.eta, DIM + (1 - DIM) * w.eta);
-      setOpacity(g.boxes.score, DIM + (1 - DIM) * w.score);
-      setOpacity(g.boxes.transform, DIM + (1 - DIM) * w.transform);
-      [w.a0, w.a1].forEach(function (p, k) {
-        var a = g.warrows[k];
-        draw(a.line, a.len, p);
-        setOpacity(a.head, ramp(p, 0.8, 1));
+      glowBox(boxes.eta, w.eta);
+      glowBox(boxes.score, w.score);
+      glowBox(boxes.transform, w.transform);
+      w.pulses.forEach(function (p, k) {
+        var a = L.warrows[k];
+        pulses[k].setAttribute("cy", f2(a[1] + (a[2] - a[1]) * p.u));
+        pulses[k].setAttribute("opacity", f2(p.o));
       });
-      setOpacity(gauge, w.gauge);
       gaugeFill.setAttribute("width", f2(gaugeW * w.fill));
-
       var tr = s.train;
-      setOpacity(g.boxes.loss, DIM + (1 - DIM) * tr.loss);
+      glowBox(boxes.loss, tr.loss);
+      glowBox(boxes.val, tr.val);
       var rp = tr.ripple[0].o >= tr.ripple[1].o ? tr.ripple[0] : tr.ripple[1];
       ripple.setAttribute("opacity", f2(rp.o));
-      scaleAbout(ripple, 1 + 0.16 * rp.u, rippleC[0], rippleC[1]);
-      setOpacity(nodes, DIM + (1 - DIM) * tr.nodes);
-      g.edges.forEach(function (e, i) { draw(e.el, e.len, stagger(tr.edges, i, g.edges.length, 0.55)); });
-      setOpacity(g.boxes.val, DIM + (1 - DIM) * tr.val);
-      setOpacity(jval, tr.jval);
-      if (tr.jval >= 1) jval.removeAttribute("transform");
-      else jval.setAttribute("transform", "translate(0 " + f2(1.5 * (1 - tr.jval)) + ")");
+      scaleAbout(ripple, 1 + 0.1 * rp.u, rippleC[0], rippleC[1]);
+      tr.edges.forEach(function (g, e) { edgeGlows[e].setAttribute("opacity", f2(g)); });
+      tr.nodes.forEach(function (g, n) { scaleAbout(nodes[n], 1 + 0.22 * g, L.nodes[n][0], L.nodes[n][1]); });
+      jvalAura.setAttribute("opacity", f2(0.3 * tr.jval));
+      scaleAbout(jval, 1 + 0.12 * tr.jval, jvalC[0], jvalC[1]);
     }
 
-    /* column focus: a wash over the other columns, a brass outline around the step's */
-    var focus = { x0: 0, x1: W, o: 0 };
-    var target = { x0: 0, x1: W, o: 0 };
-    var PAD = 2.5;
-    function focusTarget(k) {
-      if (k === null) { target.o = 0; return; }
-      var cols = STEPS[k].cols.map(function (id) { return g.cols[id]; });
-      target.x0 = Math.min.apply(null, cols.map(function (c) { return c[0]; })) - PAD;
-      target.x1 = Math.max.apply(null, cols.map(function (c) { return c[1]; })) + PAD;
-      target.o = 1;
-      if (focus.o < 0.02) { focus.x0 = target.x0; focus.x1 = target.x1; }     // appear in place
+    /* the phase rule: a thin brass line under the current step's column captions */
+    var rules = qa(".f2-rule").map(function (el) {
+      var col = el.getAttribute("data-col");
+      var caps = qa('.f2-col[data-col="' + col + '"] .f2-cap');
+      var x0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+      caps.forEach(function (c) { var b = c.getBBox(); x0 = Math.min(x0, b.x); x1 = Math.max(x1, b.x + b.width); y1 = Math.max(y1, b.y + b.height); });
+      el.setAttribute("y1", f2(y1 + 0.2));
+      el.setAttribute("y2", f2(y1 + 0.2));
+      return { el: el, col: col, cx: (x0 + x1) / 2, half: (x1 - x0) / 2, o: 0, target: 0 };
+    });
+    function rulesTarget(k) {
+      var cols = k === null ? [] : STEPS[k].cols;
+      rules.forEach(function (r) { r.target = cols.indexOf(r.col) >= 0 ? 1 : 0; });
     }
-    function focusMoving() {
-      return Math.abs(focus.o - target.o) > 0.002 ||
-        (target.o > 0 && (Math.abs(focus.x0 - target.x0) > 0.05 || Math.abs(focus.x1 - target.x1) > 0.05));
+    function rulesMoving() { return rules.some(function (r) { return Math.abs(r.o - r.target) > 0.002; }); }
+    function tweenRules(dt) {
+      var k = still ? 1 : 1 - Math.exp(-dt / 0.08);
+      rules.forEach(function (r) { r.o += (r.target - r.o) * k; if (Math.abs(r.o - r.target) <= 0.002) r.o = r.target; });
     }
-    function tweenFocus(dt) {
-      var k = reduced ? 1 : 1 - Math.exp(-dt / 0.09);
-      focus.o += (target.o - focus.o) * k;
-      if (target.o > 0) {
-        focus.x0 += (target.x0 - focus.x0) * k;
-        focus.x1 += (target.x1 - focus.x1) * k;
-      }
-      if (!focusMoving()) { focus.o = target.o; if (target.o > 0) { focus.x0 = target.x0; focus.x1 = target.x1; } }
-    }
-    function drawFocus() {
-      var x0 = Math.max(0, focus.x0), x1 = Math.min(W, focus.x1);
-      wash.setAttribute("d", "M0 0H" + f2(W) + "V" + f2(H) + "H0Z" +
-        "M" + f2(x0) + " 0H" + f2(x1) + "V" + f2(H) + "H" + f2(x0) + "Z");
-      wash.setAttribute("opacity", f2(WASH * focus.o));
-      over.forEach(function (o) {
-        var a = o.span[0], b = o.span[1];
-        var inside = Math.max(0, Math.min(b, focus.x1) - Math.max(a, focus.x0)) / (b - a);
-        setOpacity(o.el, 1 - WASH * focus.o * (1 - inside));
+    function drawRules() {
+      rules.forEach(function (r) {
+        var h = r.half * (0.4 + 0.6 * r.o);
+        r.el.setAttribute("x1", f2(r.cx - h));
+        r.el.setAttribute("x2", f2(r.cx + h));
+        setOpacity(r.el, r.o);
       });
-      hl.setAttribute("x", f2(focus.x0));
-      hl.setAttribute("y", f2(-PAD));
-      hl.setAttribute("width", f2(focus.x1 - focus.x0));
-      hl.setAttribute("height", f2(H + 2 * PAD));
-      hl.setAttribute("opacity", f2(focus.o));
     }
 
     /* narrow screens: bring a step's columns into the scroller's view */
     var userScrolled = false;
+    var colX = {};
+    qa(".f2-col").forEach(function (el) { colX[el.getAttribute("data-col")] = el.getBBox().x; });
     function reveal(k, smooth) {
       if (!scroller || scroller.scrollWidth <= scroller.clientWidth || k === null) return;
-      var cols = STEPS[k].cols.map(function (id) { return g.cols[id]; });
-      var x0 = Math.min.apply(null, cols.map(function (c) { return c[0]; }));
+      var x0 = Math.min.apply(null, STEPS[k].cols.map(function (id) { return colX[id]; }));
       var px = x0 / W * svg.getBoundingClientRect().width;
-      scroller.scrollTo({ left: Math.max(0, px - 24), behavior: smooth && !reduced ? "smooth" : "auto" });
+      scroller.scrollTo({ left: Math.max(0, px - 24), behavior: smooth && !still ? "smooth" : "auto" });
     }
     if (scroller) {
       ["pointerdown", "wheel", "touchstart", "keydown"].forEach(function (ev) {
@@ -503,32 +552,31 @@ var PACERFig2 = (function () {
     }
 
     /* the player */
-    var c = initial({ reduced: reduced });
-    if (!reduced && !hasIO) { c.t = DURATION; c.started = true; }     // no autoplay trigger: start complete
+    var c = initial({ reduced: still });
     var visible = !hasIO;
-    var raf = 0, last = 0, drawnT = -1, shown, wasPlaying;
+    var raf = 0, last = 0, drawnT = -1, shown, wasPaused;
     guard.stop = function () { if (raf) win.cancelAnimationFrame(raf); raf = 0; };
 
     function render() {
       try {
-        if (c.t !== drawnT) { apply(state(c.t)); drawnT = c.t; }
-        drawFocus();
+        if (c.t !== drawnT) { apply(state(c.t, L)); drawnT = c.t; }
+        drawRules();
       } catch (err) { guard.fail(err); }
     }
-    // Buttons follow the player; the DOM is touched only when the pressed step or play state changes.
+    // Buttons follow the player; the DOM is touched only when the pressed step or pause state changes.
     function sync() {
       var k = pressed(c);
       if (k !== shown) {
         steps.forEach(function (s, i) { s.setAttribute("aria-pressed", String(i === k)); });
-        focusTarget(k);
+        rulesTarget(k);
         if (k !== null && c.pinned === null && c.playing && !userScrolled) reveal(k, true);
         shown = k;
       }
-      if (toggleBtn && c.playing !== wasPlaying) {
-        toggleBtn.classList.toggle("is-paused", !c.playing);
-        toggleBtn.querySelector(".fig2__btn-text").textContent = c.playing ? "Pause" : "Play";
-        toggleBtn.setAttribute("aria-label", (c.playing ? "Pause" : "Play") + " the Fig. 2 animation");
-        wasPlaying = c.playing;
+      var p = paused(c);
+      if (toggleBtn && p !== wasPaused) {
+        toggleBtn.setAttribute("aria-pressed", String(p));
+        toggleBtn.classList.toggle("is-paused", p);
+        wasPaused = p;
       }
     }
     function frame(now) {
@@ -541,9 +589,9 @@ var PACERFig2 = (function () {
         c = control(c, { type: "tick", dt: dt });
         if (c !== before) sync();
       }
-      tweenFocus(dt);
+      tweenRules(dt);
       render();
-      if ((c.playing && visible) || focusMoving()) raf = win.requestAnimationFrame(frame);
+      if ((c.playing && visible) || rulesMoving()) raf = win.requestAnimationFrame(frame);
       else last = 0;
     }
     function kick() { if (!raf && !guard.broken) { last = 0; raf = win.requestAnimationFrame(frame); } }
@@ -551,7 +599,7 @@ var PACERFig2 = (function () {
       if (guard.broken) return;
       c = control(c, a);
       sync();
-      if (reduced) tweenFocus(1);
+      if (still) tweenRules(1);
       render();
       kick();
     }
@@ -564,7 +612,7 @@ var PACERFig2 = (function () {
         reveal(pressed(c), true);
       });
     });
-    if (controls && !reduced) {
+    if (controls && !still) {
       controls.hidden = false;
       toggleBtn.addEventListener("click", function () { dispatch({ type: "toggle" }); });
       replayBtn.addEventListener("click", function () { userScrolled = false; dispatch({ type: "replay" }); reveal(0, true); });
@@ -583,28 +631,28 @@ var PACERFig2 = (function () {
       else win.addEventListener("resize", cue);
     }
 
-    // Autoplay once, when a good part of the figure is on screen; time stands still while
+    // Loop while on screen: start once a good part of the figure is seen; time stands still while
     // the figure is entirely off screen.
-    if (hasIO && !reduced) {
+    if (hasIO && !still) {
       var timer = 0, seen = false;
       new win.IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
           visible = e.isIntersecting;
           seen = e.intersectionRatio >= 0.35;
           if (seen && !c.started && !timer) {
-            timer = win.setTimeout(function () { timer = 0; if (seen) dispatch({ type: "view" }); }, 350);
+            timer = win.setTimeout(function () { timer = 0; if (seen) dispatch({ type: "view" }); }, 400);
           }
           if (visible) kick();
         });
       }, { threshold: [0, 0.35] }).observe(fig.querySelector(".fig2__view") || svg);
     }
 
-    // Printing or saving as PDF captures the complete figure, never an empty start or a focus wash.
+    // Printing or saving as PDF captures the complete figure, never a moving frame or a phase rule.
     function finish() {
       if (guard.broken) return;
       c = control(c, { type: "finish" });
       sync();
-      tweenFocus(1e9);
+      tweenRules(1e9);
       render();
     }
     win.addEventListener("beforeprint", finish);
@@ -620,7 +668,7 @@ var PACERFig2 = (function () {
       pause: function () { dispatch({ type: "pause" }); },
       replay: function () { dispatch({ type: "replay" }); },
       select: function (k) { dispatch({ type: "step", k: k }); },
-      state: function () { return state(c.t); }
+      state: function () { return state(c.t, L); }
     };
     Object.defineProperty(api, "ctl", { get: function () { return c; } });
     active = api;
@@ -629,6 +677,9 @@ var PACERFig2 = (function () {
 
   var API = {
     DURATION: DURATION,
+    HOLD: HOLD,
+    RESET: RESET,
+    LOOP: LOOP,
     MAX_DT: MAX_DT,
     PHASES: PHASES,
     STEPS: STEPS,
@@ -636,11 +687,11 @@ var PACERFig2 = (function () {
     phaseAt: phaseAt,
     stepAt: stepAt,
     stepRange: stepRange,
-    stagger: stagger,
     state: state,
     initial: initial,
     control: control,
     pressed: pressed,
+    paused: paused,
     mount: mount,
     finish: function () { if (active) active.finish(); }
   };

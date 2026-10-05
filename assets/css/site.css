@@ -378,8 +378,10 @@ h2 {
    the eight clean photos, the annotations as inline SVG whose viewBox is each photo's rect in
    PDF points, and the panels sized in PDF points too. Each panel button is a size container
    86.394 pt wide, so inside it 1 pt = var(--u). Colours are the PDF's (draw.io green, yellow,
-   red; the annotations' pure green, orange #D79B00 and pure red). fig1.js draws the
-   annotations once when the figure scrolls into view; without it they are simply there. */
+   red; the annotations' pure green, orange #D79B00 and pure red; the bracket black).
+   R40: the figure is never washed, dimmed or bleached. fig1.js only moves the marks (.fig1-mark:
+   annotations, pulses, status chips, the correction dot and its glows), in a loop while the
+   figure is in view; without it, the complete figure simply shows. */
 
 .traces {
   margin: 0;
@@ -397,7 +399,6 @@ h2 {
   display: block; width: 100%; margin: 0; padding: 0; border: 0;
   background: none; color: inherit; font: inherit; text-align: center; cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition: opacity .3s ease;
 }
 .fig1-panel {
   container-type: inline-size;
@@ -415,15 +416,17 @@ h2 {
   color: var(--ink);
 }
 /* The frame's outer edge is the PDF path; the photos sit 6.84 pt in. Its 0.72 pt stroke is an
-   inset ring: a border would snap to whole pixels (1.97 px -> 1 px at 1440). */
+   inset ring: a border would snap to whole pixels (1.97 px -> 1 px at 1440). Under the photos,
+   a band for the status chip (R40): the PDF's 7.56 pt, or 30 px when that is less. */
 .fig1-panel__frame {
   --ring: inset 0 0 0 calc(.72 * var(--u)) var(--fig1-stroke);
+  --lift: 0 12px 24px -14px rgba(27, 31, 36, .45);
   display: block;
-  padding: calc(6.84 * var(--u)) calc(7.56 * var(--u)) calc(7.56 * var(--u)) calc(6.84 * var(--u));
+  padding: calc(6.84 * var(--u)) calc(7.56 * var(--u)) 0 calc(6.84 * var(--u));
   border-radius: calc(12.959 * var(--u));
   background: var(--fig1-fill);
   box-shadow: var(--ring);
-  transition: box-shadow .3s ease;
+  transition: transform .3s var(--ease), box-shadow .3s ease;   /* hover and selection; the loop's lift is per frame */
 }
 .fig1-photo { display: block; position: relative; }
 .fig1-photo + .fig1-photo { margin-top: calc(7.199 * var(--u)); }
@@ -432,30 +435,54 @@ h2 {
   position: absolute; inset: 0; width: 100%; height: 100%;
   overflow: visible; pointer-events: none;
 }
+.fig1-chiprow {
+  display: flex; justify-content: center; align-items: center;
+  height: max(calc(7.56 * var(--u)), 30px);
+}
+
+/* status chips: how PACER treats the trace (their titles are the captions below) */
+.fig1-chip {
+  display: inline-flex; align-items: center; height: 21px; padding: 0 10px;
+  border: 1px solid; border-radius: 999px;
+  font: 600 12px/1 var(--sans); letter-spacing: .01em; white-space: nowrap;
+}
+.fig1-chip--ok { color: var(--teal-ink); background: #EAF5F3; border-color: var(--teal); }
+.fig1-chip--near { color: #8A5A06; background: #FFF6DD; border-color: var(--amber-line); }
+.fig1-chip--fail { color: var(--rust-ink); background: #FBECE8; border-color: var(--rust); }
+.fig1-chip--corr { color: var(--blue); background: #EEF4FC; border-color: var(--blue); }
 
 /* E: the corrections from B, C and D return into A (the paper's black bracket) */
-.traces__corr { display: block; }
+.traces__corr { display: block; position: relative; }
 .fig1-bracket { width: 100%; height: auto; overflow: visible; }
 /* Lora at 7.5 spans the PDF label's 172.2-249.7 pt (Times at 8.64), clear of C's drop line */
 .fig1-bracket__label { font: 400 7.5px var(--serif); fill: var(--ink); }
+/* the E chip sits just right of C's drop (x 259 pt), level with the label */
+.fig1-chip--e { position: absolute; left: calc(100% * (259 - 7.932) / 388.77); top: 49%; margin-top: -10.5px; }
 .fig1-legend { display: none; }
 
-/* selection: the chosen trace stays full strength, the rest steps back */
-.fig1[data-active] [data-trace][aria-pressed="false"] { opacity: .42; }
+/* the moving marks: bold annotations (they draw along pathLength = 1), one-time pulses, the
+   correction dot and the glows it lights; pulses, dot and glows are not part of the final state */
+.fig1--anim .fig1-stroke { stroke-dasharray: 1 1; }
+.fig1-pop, .fig1-pulse { transform-box: fill-box; transform-origin: center; }
+.fig1-pulse { opacity: 0; vector-effect: non-scaling-stroke; stroke-width: 3px; }
+.fig1-glow { opacity: 0; stroke: #8EC0F5; stroke-width: 3.4; stroke-linecap: round; }
+.fig1-dot, .fig1-trail { opacity: 0; }
+.fig1-operator { transform-box: fill-box; transform-origin: 50% 100%; }
+
+/* the panel being drawn lifts ~2 px with a soft shadow (fig1.js, per frame); a selected trace
+   gets a brass outline. Nothing fades. */
+.fig1.is-playing .fig1-panel__frame { transition: none; }
 .fig1-panel:hover .fig1-panel__frame { box-shadow: var(--ring), 0 0 0 calc(.7 * var(--u)) var(--fig1-stroke); }
 .fig1-panel[aria-pressed="true"] .fig1-panel__frame {
-  box-shadow: var(--ring), 0 0 0 calc(1.1 * var(--u)) var(--fig1-stroke), 0 14px 28px -18px rgba(27, 31, 36, .55);
+  transform: translateY(-2px);
+  box-shadow: var(--ring), 0 0 0 2px var(--brass), var(--lift);
 }
+.fig1-e { padding-bottom: 8px; }               /* room for its selection outline under the bracket line */
+.fig1-e[aria-pressed="true"] { outline: 2px solid var(--brass); outline-offset: -2px; border-radius: 10px; }   /* inset: clear of the frames above */
 .fig1-panel:focus-visible { outline: none; }
 .fig1-panel:focus-visible .fig1-panel__frame { outline: 2px solid var(--board); outline-offset: 3px; }
 /* on the blue backdrop brass is ~2.6:1; board green reads, as in the top bar */
 .fig1 :focus-visible { outline-color: var(--board); }
-.fig1-e[aria-pressed="true"] .fig1-bracket .fig1-stroke { stroke-width: 1.3; }
-
-/* animation (fig1.js): hidden until drawn; strokes run along pathLength = 1 */
-.fig1--anim:not(.is-drawn) [data-draw] { opacity: 0; }
-.fig1--anim:not(.is-drawn) .fig1-stroke { stroke-dasharray: 1 1; stroke-dashoffset: 1; }
-.fig1--anim:not(.is-drawn) .fig1-pop { transform-box: fill-box; transform-origin: center; }
 
 .fig1-bar {
   display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
@@ -465,15 +492,17 @@ h2 {
 .fig1-role__hint { display: block; padding-top: 4px; color: #4A5A73; font-style: italic; }
 .fig1-role__line { display: flex; align-items: flex-start; gap: 12px; }
 .fig1-role__line .token { margin-top: -3px; }
-.fig1-role__hint[hidden], .fig1-role__line[hidden], .fig1-replay[hidden] { display: none; }
-.fig1-replay {
-  flex: none; display: inline-flex; align-items: center; gap: 6px;
-  height: 32px; padding: 0 13px 0 10px; border-radius: 999px;
-  border: 1px solid rgba(47, 109, 181, .35); background: rgba(255, 255, 255, .5);
-  color: #22324D; font: 500 13.5px/1 var(--sans); cursor: pointer;
+.fig1-role__hint[hidden], .fig1-role__line[hidden], .fig1-controls[hidden] { display: none; }
+.fig1-controls { flex: none; display: flex; gap: 8px; }
+.fig1-btn {
+  -webkit-appearance: none; appearance: none;
+  display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px 0 10px;
+  border: 1px solid var(--sand-2); border-radius: 999px; background: var(--card); color: var(--ink);
+  font: 500 12.5px/1 var(--mono); cursor: pointer; transition: border-color .2s, background-color .2s, color .2s;
 }
-.fig1-replay:hover { background: rgba(255, 255, 255, .85); }
-.fig1-replay .icon { width: 16px; height: 16px; }
+.fig1-btn:hover { border-color: var(--brass); }
+.fig1-btn .icon { width: 14px; height: 14px; }
+.fig1-toggle[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 .traces__cap {
   display: flex; align-items: flex-start; gap: 12px;
   margin-top: 12px; max-width: 80ch;
@@ -482,23 +511,24 @@ h2 {
 .traces__cap strong { font-weight: 600; color: var(--blue); }
 .traces__cap .token { margin-top: -3px; }
 
-/* phones: a 2 x 2 grid; titles may wrap; E becomes a compact legend line */
+/* phones: a 2 x 2 grid; titles may wrap; E becomes a compact legend line with its own dot */
 @media (max-width: 700px) {
   .traces__grid { column-gap: calc(100% * 14.398 / 187.186); row-gap: 16px; }
   .fig1-panel__title { display: block; white-space: normal; text-wrap: balance; line-height: 1.15; }
+  .fig1-chip { font-size: 11px; padding: 0 8px; }
   .fig1-legend {
-    display: flex; align-items: center; gap: 10px; margin-top: 16px;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-top: 16px;
     font: 500 15px/1.3 var(--serif); color: var(--ink);
   }
   .fig1-legend__mark { width: 76px; height: 38px; flex: none; overflow: visible; }
   .fig1-legend__mark text { font: 600 8.5px var(--sans); fill: var(--muted); text-anchor: middle; }
-  .fig1-legend__mark .fig1-stroke { fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: square; }
-  .fig1-legend__mark .fig1-pop { fill: currentColor; }
+  .fig1-legend__mark .fig1-line { fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: square; }
+  .fig1-legend__mark .fig1-arrowhead { fill: currentColor; }
+  .fig1-legend__mark .fig1-glow { stroke-width: 5; }
+  .fig1-legend__mark .fig1-pulse { fill: none; stroke: var(--blue); }
   .fig1-legend img { width: 28px; height: 28px; flex: none; }
-  .fig1-e[aria-pressed="true"] .fig1-legend { font-weight: 600; }
-  .fig1-e[aria-pressed="true"] .fig1-legend__mark .fig1-stroke { stroke-width: 2; }
   .fig1-bar { flex-direction: column; gap: 10px; }
-  .fig1-replay { align-self: flex-end; }
+  .fig1-controls { align-self: flex-end; }
 }
 
 .token {
@@ -561,8 +591,8 @@ h2 {
 
 /* ------------------------------------------------------------ Fig. 2 ---- */
 
-/* The figure is inline SVG rebuilt from the paper's PDF (extract_fig2.py) and animated by
-   fig2.js; the caption shares its row with the play/pause and replay controls. */
+/* The figure is inline SVG rebuilt from the paper's PDF (extract_fig2.py); fig2.js loops a token
+   flow over it (never dimming it). The caption shares its row with the Pause toggle and Replay. */
 .fig2 {
   margin: 0;
   display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 24px;
@@ -604,7 +634,7 @@ h2 {
 .fig2__svg .f2-math { font-style: italic; }
 .fig2__svg .f2-math--bold { font-weight: 600; }
 .fig2__svg .f2-up { font-style: normal; }
-.fig2__svg .f2-flow, .fig2__svg .f2-focus { pointer-events: none; }
+.fig2__svg .f2-flow, .fig2__svg .f2-rules { pointer-events: none; }
 .fig2__cap { grid-column: 1; grid-row: 2; margin-top: 14px; max-width: 84ch; font-size: 15px; line-height: 1.5; color: var(--muted); }
 .fig2__controls { grid-column: 2; grid-row: 2; display: flex; gap: 8px; margin-top: 12px; align-self: start; }
 .fig2__controls[hidden] { display: none; }
@@ -618,6 +648,7 @@ h2 {
 .fig2__btn .icon { width: 14px; height: 14px; }
 .fig2__btn .icon--play, .fig2__btn.is-paused .icon--pause { display: none; }
 .fig2__btn.is-paused .icon--play { display: block; }
+.fig2__btn[aria-pressed="true"] { border-color: var(--brass); color: var(--board); background: #fff; }
 
 .steps {
   list-style: none; margin: 28px 0 0; padding: 0;
