@@ -94,10 +94,6 @@
   }
 
   var formats = {
-    mmss: function (v) {   /* a running time, as a player's clock shows it (whole seconds, floored) */
-      var t = Math.floor(v), m = Math.floor(t / 60), s = t % 60;
-      return m + ":" + (s < 10 ? "0" : "") + s;
-    },
     list: function (v) { return v.join(" · "); },
     dp2: function (v) { return Number(v).toFixed(2); }   /* protocol constants as the paper prints them (0.80) */
   };
