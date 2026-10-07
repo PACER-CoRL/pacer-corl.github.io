@@ -100,7 +100,10 @@
       <div class="wrap">
         <div class="tldr__head reveal">
           <h2 class="tldr__label" id="tldr-h">In short</h2>
-          <p class="tldr__lede"><strong>SFT can do more than expected in robotics.</strong> PACER post-trains a VLA policy offline on its own rollouts, human corrections and supplementary clean demonstrations, weighting every action chunk by how the attempt unfolded&nbsp;&mdash; not only by whether it succeeded.</p>
+          <div class="tldr__text">
+            <p class="tldr__claim">SFT can do more than expected in robotics.</p>
+            <p class="tldr__lede">PACER post-trains a VLA policy offline on its own rollouts, human corrections and supplementary clean demonstrations, weighting every action chunk by how the attempt unfolded&nbsp;&mdash; not only by whether it succeeded.</p>
+          </div>
         </div>
         <div class="tldr__stats reveal">
           <div class="stat">
@@ -145,7 +148,6 @@
           </button>
           <figcaption class="player__meta"><span data-bind="videos.motivation.duration_s" data-format="mmss"></span> &middot; narrated &middot; English captions</figcaption>
         </figure>
-        <p class="video__close reveal"><strong>SFT can do more than expected in robotics.</strong> Weighting the robot&rsquo;s own rollouts, human corrections and clean demonstrations by how each attempt unfolded lifts held-out success from <span data-bind="tldr.success.vanilla_post_sft"></span> to <span data-bind="tldr.success.pacer"></span>/<span data-bind="tldr.heldout_trials"></span>, offline and with the VLA architecture, action head and training loss unchanged.</p>
       </div>
     </section>
 
