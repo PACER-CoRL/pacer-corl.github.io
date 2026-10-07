@@ -237,7 +237,7 @@
     var fig = $("[data-render='motivation']");
     var btn = $(".player__play", fig);
     var video = h("video", {
-      preload: "none", playsinline: true, poster: m.poster,
+      preload: "metadata", playsinline: true, poster: m.poster,
       "data-src": m.src, "data-src-small": m.src720,
       "aria-label": "Narrated motivation video"
     });

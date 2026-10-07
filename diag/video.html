@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>PACER video check</title>
+<style>
+  body { margin: 0; padding: 16px; font: 15px/1.5 -apple-system, system-ui, sans-serif; color: #1b1f24; background: #f6f6f4; }
+  h1 { font-size: 20px; margin: 0 0 6px; }
+  .env { font: 12px/1.5 ui-monospace, Menlo, monospace; color: #444; white-space: pre-wrap; word-break: break-all; margin: 0 0 18px; }
+  .case { background: #fff; border: 1px solid #ddd; border-radius: 10px; padding: 12px; margin: 0 0 16px; }
+  .case h2 { font-size: 16px; margin: 0 0 4px; }
+  .case p { margin: 0 0 8px; color: #555; font-size: 13px; }
+  video { width: 100%; aspect-ratio: 16 / 9; background: #1e4236; display: block; border-radius: 6px; }
+  button { margin: 8px 0; font: 600 15px/1 system-ui, sans-serif; padding: 10px 16px; border-radius: 8px; border: 0; background: #1e4236; color: #fff; }
+  .log { font: 12px/1.45 ui-monospace, Menlo, monospace; white-space: pre-wrap; word-break: break-all; background: #f1f1ee; border-radius: 6px; padding: 8px; min-height: 40px; }
+  .ok { color: #0b6e70; } .bad { color: #b3261e; font-weight: 700; }
+</style>
+</head>
+<body>
+<h1>PACER video check</h1>
+<p style="margin:0 0 8px">Tap <b>Play</b> under each player, wait a few seconds, then screenshot the whole page (or each box).</p>
+<div class="env" id="env"></div>
+<div id="cases"></div>
+<script>
+(function () {
+  var V1080 = "../assets/video/motivation_v2_1080.mp4";
+  var V720 = "../assets/video/motivation_v2_720.mp4";
+  var VTT = "../assets/video/motivation_v2.en.vtt";
+  var POSTER = "../assets/img/motivation_v2_poster.jpg";
+  var ERR = { 1: "ABORTED", 2: "NETWORK", 3: "DECODE", 4: "SRC_NOT_SUPPORTED" };
+
+  var probe = document.createElement("video");
+  document.getElementById("env").textContent =
+    "UA: " + navigator.userAgent +
+    "\ninnerWidth: " + window.innerWidth + "  devicePixelRatio: " + window.devicePixelRatio +
+    "\ncanPlay 720p (avc1.64001F): " + probe.canPlayType('video/mp4; codecs="avc1.64001F, mp4a.40.2"') +
+    "\ncanPlay 1080p (avc1.640032): " + probe.canPlayType('video/mp4; codecs="avc1.640032, mp4a.40.2"') +
+    "\npage would pick: " + (window.innerWidth < 900 ? "720p" : "1080p");
+
+  function t0() { return (performance.now() / 1000).toFixed(1) + "s "; }
+
+  function makeCase(n, title, note, build) {
+    var box = document.createElement("div"); box.className = "case";
+    box.innerHTML = "<h2>" + n + ". " + title + "</h2><p>" + note + "</p>";
+    var log = document.createElement("div"); log.className = "log";
+    function say(msg, cls) {
+      var line = document.createElement("div");
+      if (cls) line.className = cls;
+      line.textContent = t0() + msg;
+      log.appendChild(line);
+    }
+    var v = build();
+    ["loadstart", "loadedmetadata", "canplay", "playing", "waiting", "stalled", "suspend", "abort", "emptied"].forEach(function (ev) {
+      v.addEventListener(ev, function () { say(ev + "  (readyState " + v.readyState + ", networkState " + v.networkState + ")", ev === "playing" ? "ok" : ""); });
+    });
+    v.addEventListener("error", function () {
+      var e = v.error;
+      say("VIDEO ERROR " + (e ? e.code + " " + (ERR[e.code] || "") + (e.message ? " / " + e.message : "") : "(no detail)"), "bad");
+    });
+    var tracks = v.querySelectorAll("track");
+    Array.prototype.forEach.call(tracks, function (tr) {
+      tr.addEventListener("load", function () { say("captions loaded (" + (tr.track && tr.track.cues ? tr.track.cues.length : "?") + " cues)"); });
+      tr.addEventListener("error", function () { say("CAPTIONS TRACK ERROR", "bad"); });
+    });
+    var btn = document.createElement("button"); btn.type = "button"; btn.textContent = "Play";
+    btn.addEventListener("click", function () {
+      try {
+        if (v.__beforePlay) v.__beforePlay();
+        say("src = " + (v.getAttribute("src") || "(none)"));
+        var p = v.play();
+        if (p && p.then) p.then(function () { say("play() resolved", "ok"); }, function (err) { say("play() REJECTED: " + err.name + ": " + err.message, "bad"); });
+      } catch (err) { say("EXCEPTION: " + err.name + ": " + err.message, "bad"); }
+    });
+    box.appendChild(v); box.appendChild(btn); box.appendChild(log);
+    document.getElementById("cases").appendChild(box);
+  }
+
+  function base(opts) {
+    var v = document.createElement("video");
+    v.setAttribute("preload", opts.preload || "none");
+    v.setAttribute("playsinline", "");
+    v.setAttribute("poster", POSTER);
+    if (opts.track) {
+      var t = document.createElement("track");
+      t.setAttribute("kind", "captions"); t.setAttribute("srclang", "en"); t.setAttribute("label", "English");
+      t.setAttribute("default", ""); t.setAttribute("src", opts.track);
+      v.appendChild(t);
+    }
+    if (opts.src) v.setAttribute("src", opts.src);
+    if (opts.lazySrc) v.__beforePlay = function () {
+      if (!v.getAttribute("src")) v.setAttribute("src", opts.lazySrc());
+      v.controls = true;
+    };
+    return v;
+  }
+
+  function pick() { return window.innerWidth < 900 ? V720 : V1080; }
+
+  fetch(VTT).then(function (r) { return r.text(); }).then(function (vttText) {
+    var blobUrl = URL.createObjectURL(new Blob([vttText], { type: "text/vtt" }));
+
+    makeCase(1, "Old page setup", "preload none, source attached on tap, captions from a blob: URL.",
+      function () { return base({ track: blobUrl, lazySrc: pick }); });
+    makeCase(2, "New page setup", "preload metadata, source attached before the tap (as when the video scrolls into view), captions from a blob: URL.",
+      function () { var v = base({ preload: "metadata", track: blobUrl, src: pick() }); v.__beforePlay = function () { v.controls = true; }; return v; });
+    makeCase(3, "Old setup, without captions", "Same as 1 but no captions track.",
+      function () { return base({ lazySrc: pick }); });
+    makeCase(4, "Old setup, captions from the .vtt file", "Same as 1 but the captions load from the .vtt file, not a blob.",
+      function () { return base({ track: VTT, lazySrc: pick }); });
+    makeCase(5, "Old setup, 1080p forced", "Same as 1 but always the 1080p file.",
+      function () { return base({ track: blobUrl, lazySrc: function () { return V1080; } }); });
+    makeCase(6, "Plain video, 720p", "A native player with controls; no script, no captions.",
+      function () { var v = base({ preload: "metadata", src: V720 }); v.controls = true; return v; });
+  }, function (err) {
+    document.getElementById("cases").textContent = "Could not load captions file: " + err;
+  });
+})();
+</script>
+</body>
+</html>
