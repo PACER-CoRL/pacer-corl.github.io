@@ -237,7 +237,7 @@
     var fig = $("[data-render='motivation']");
     var btn = $(".player__play", fig);
     var video = h("video", {
-      preload: "metadata", playsinline: true, poster: m.poster,
+      preload: "none", playsinline: true, poster: m.poster,
       "data-src": m.src, "data-src-small": m.src720,
       "aria-label": "Narrated motivation video"
     });
@@ -249,9 +249,16 @@
     } else if (m.vtt) {
       trackSrc = m.vtt;
     }
-    if (trackSrc) {
-      video.appendChild(h("track", { kind: "captions", srclang: "en", label: "English", default: true, src: trackSrc }));
+    // Ruling R45: iPhone WebKit rejects the source (MEDIA_ERR_SRC_NOT_SUPPORTED) when a
+    // <track> is already present as loading starts, so the captions are attached only
+    // once the metadata has loaded, and switched on explicitly.
+    function attachCaptions() {
+      if (!trackSrc || video.querySelector("track")) return;
+      var t = h("track", { kind: "captions", srclang: "en", label: "English", default: true, src: trackSrc });
+      video.appendChild(t);
+      if (t.track) t.track.mode = "showing";
     }
+    video.addEventListener("loadedmetadata", attachCaptions);
     var frame = h("div", { class: "player__frame" }, [video, btn]);
     fig.insertBefore(frame, fig.firstChild);
 

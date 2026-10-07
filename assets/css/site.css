@@ -303,6 +303,7 @@ p { margin: 0; }
   letter-spacing: -.005em;
   text-wrap: pretty;
 }
+.tldr__lede strong { font-weight: 600; }
 .tldr__stats {
   display: grid; grid-template-columns: 1fr 1fr .8fr 1.75fr;
   margin-top: clamp(36px, 4vw, 52px);

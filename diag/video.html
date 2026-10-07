@@ -55,6 +55,7 @@
     ["loadstart", "loadedmetadata", "canplay", "playing", "waiting", "stalled", "suspend", "abort", "emptied"].forEach(function (ev) {
       v.addEventListener(ev, function () { say(ev + "  (readyState " + v.readyState + ", networkState " + v.networkState + ")", ev === "playing" ? "ok" : ""); });
     });
+    v.addEventListener("diaglog", function (e) { say(e.detail, /ERROR/.test(e.detail) ? "bad" : "ok"); });
     v.addEventListener("error", function () {
       var e = v.error;
       say("VIDEO ERROR " + (e ? e.code + " " + (ERR[e.code] || "") + (e.message ? " / " + e.message : "") : "(no detail)"), "bad");
@@ -113,6 +114,25 @@
       function () { return base({ track: blobUrl, lazySrc: function () { return V1080; } }); });
     makeCase(6, "Plain video, 720p", "A native player with controls; no script, no captions.",
       function () { var v = base({ preload: "metadata", src: V720 }); v.controls = true; return v; });
+    function late(trackSrc) {
+      var v = base({ lazySrc: pick });
+      v.addEventListener("loadedmetadata", function () {
+        if (v.querySelector("track")) return;
+        var t = document.createElement("track");
+        t.setAttribute("kind", "captions"); t.setAttribute("srclang", "en"); t.setAttribute("label", "English");
+        t.setAttribute("default", ""); t.setAttribute("src", trackSrc);
+        t.addEventListener("load", function () { v.dispatchEvent(new CustomEvent("diaglog", { detail: "captions loaded (" + (t.track && t.track.cues ? t.track.cues.length : "?") + " cues), mode " + (t.track ? t.track.mode : "?") })); });
+        t.addEventListener("error", function () { v.dispatchEvent(new CustomEvent("diaglog", { detail: "CAPTIONS TRACK ERROR" })); });
+        v.appendChild(t);
+        if (t.track) t.track.mode = "showing";
+        v.dispatchEvent(new CustomEvent("diaglog", { detail: "captions track attached after loadedmetadata" }));
+      });
+      return v;
+    }
+    makeCase(7, "Fix: captions added after metadata (blob)", "As 1, but the captions track is attached only after loadedmetadata. This is the fix now on the page.",
+      function () { return late(blobUrl); });
+    makeCase(8, "Fix: captions added after metadata (.vtt file)", "As 7, but the captions load from the .vtt file.",
+      function () { return late(VTT); });
   }, function (err) {
     document.getElementById("cases").textContent = "Could not load captions file: " + err;
   });

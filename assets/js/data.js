@@ -35,7 +35,7 @@ window.PACER = {
       {
         "name": "Jiachen Li",
         "affil": [
-          2
+          3
         ],
         "url": null
       },
@@ -56,11 +56,13 @@ window.PACER = {
     ],
     "affiliations": [
       "Texas A&M University",
-      "University of California, Riverside"
+      "University of California, Riverside",
+      "Georgia Institute of Technology"
     ],
     "affiliations_short": [
       "Texas A&M",
-      "UC Riverside"
+      "UC Riverside",
+      "Georgia Tech"
     ],
     "links": {
       "paper": null,
