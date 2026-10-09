@@ -1159,13 +1159,90 @@ window.PACER = {
       "group": "collection",
       "title": "Data-collection loop",
       "note": "One collection cycle: autonomous rollout, operator correction, return home, supplementary clean demonstration.",
+      "flow": {
+        "_": "The author's slide-4 flowchart. {key} in a note is a tldr number. The clip's phases (slot.phases) light the steps as it plays.",
+        "steps": [
+          {
+            "id": "teleop",
+            "title": "Original data collection",
+            "note": "{teleop_demos} teleoperated demonstrations",
+            "role": "neutral"
+          },
+          {
+            "id": "sft",
+            "title": "Supervised fine-tuning of the VLA (\u03c0_0.5)",
+            "role": "neutral"
+          },
+          {
+            "id": "rollout",
+            "title": "Rollout trials",
+            "note": "{autonomous_rollouts} autonomous rollouts",
+            "role": "neutral"
+          },
+          {
+            "id": "success",
+            "title": "Success",
+            "note": "kept as a trace",
+            "role": "success",
+            "branch": "success"
+          },
+          {
+            "id": "failure",
+            "title": "Failure",
+            "note": "near, wrong or off",
+            "role": "failure",
+            "branch": "failure"
+          },
+          {
+            "id": "correction",
+            "title": "Human correction",
+            "note": "\u2264 {max_corrections_per_component} per component, {collection_positions} positions",
+            "role": "correction",
+            "branch": "failure"
+          },
+          {
+            "id": "home",
+            "title": "Return to home",
+            "role": "home",
+            "branch": "failure"
+          },
+          {
+            "id": "clean",
+            "title": "Clean demonstration",
+            "note": "by the operator",
+            "role": "clean",
+            "branch": "failure"
+          }
+        ]
+      },
       "slots": [
         {
           "label": "Rollout \u2192 correction \u2192 home \u2192 clean demo",
           "src": "assets/video/demo_collection_loop.mp4",
           "poster": "assets/img/demo_collection_poster.jpg",
           "speed": "4\u00d7",
-          "aspect": "9:16"
+          "aspect": "9:16",
+          "phases": [
+            {
+              "step": "rollout",
+              "from": 0
+            },
+            {
+              "step": "correction",
+              "from": 4.067,
+              "via": [
+                "failure"
+              ]
+            },
+            {
+              "step": "home",
+              "from": 6.667
+            },
+            {
+              "step": "clean",
+              "from": 8.967
+            }
+          ]
         }
       ]
     },

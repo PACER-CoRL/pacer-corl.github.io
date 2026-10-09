@@ -1206,6 +1206,67 @@ h2 {
 .slot__outcome--failed { background: var(--rust-ink); }
 .slot__outcome + .slot__label { margin-top: 6px; }
 
+/* the data-collection flowchart beside the collection clip (the author's slide 4); the step of
+   the clip's current phase is lit, steps passed in this loop keep their colour */
+.cflow { --gap: 10px; list-style: none; margin: 18px 0 0; padding: 0; max-width: 520px; }
+.cflow ol { list-style: none; margin: 0; padding: 0; }
+.cflow__step {
+  --c: var(--board);
+  position: relative; display: flex; flex-direction: column; justify-content: center; gap: 1px;
+  min-height: 38px; padding: 6px 12px 8px;
+  border: 1px solid var(--sand-2); border-radius: 10px; background: var(--card);
+  transition: border-color .35s var(--ease), background-color .35s var(--ease), box-shadow .35s var(--ease);
+}
+.cflow__step[data-role="success"] { --c: var(--teal); }
+.cflow__step[data-role="failure"] { --c: var(--rust); }
+.cflow__step[data-role="correction"] { --c: var(--blue); }
+.cflow__step[data-role="home"] { --c: var(--gray); }
+.cflow__step[data-role="clean"] { --c: var(--ink); }
+.cflow__step:not([data-role="neutral"]) { box-shadow: inset 3px 0 0 var(--c); }
+.cflow__title { font: 500 14px/1.3 var(--sans); color: var(--ink); }
+.cflow__note { font: 400 12.5px/1.35 var(--sans); color: var(--muted); }
+.cflow__bar {
+  position: absolute; left: 12px; right: 12px; bottom: 4px; height: 2px; border-radius: 1px;
+  background: var(--c); transform: scaleX(0); transform-origin: left; opacity: 0;
+}
+/* connectors: a short line and arrowhead above each step that follows another */
+.cflow > .cflow__step + .cflow__step, .cflow__col > .cflow__step + .cflow__step { margin-top: var(--gap); }
+.cflow > .cflow__step + .cflow__step::before, .cflow__col > .cflow__step + .cflow__step::before {
+  content: ""; position: absolute; left: 50%; top: calc(-1 * var(--gap) - 1px); height: var(--gap);
+  border-left: 1.5px solid var(--sand-2); transform: translateX(-.75px);
+}
+.cflow__step::after { content: none; }
+.cflow > .cflow__step + .cflow__step::after, .cflow__col > .cflow__step::after {
+  content: ""; position: absolute; left: 50%; top: -6px; margin-left: -4px;
+  border: 4px solid transparent; border-top: 5px solid var(--sand-2); border-bottom: 0;
+}
+/* the fork after "Rollout trials": success (1fr) | failure chain (2fr) */
+.cflow__branch { position: relative; display: grid; grid-template-columns: 1fr 2fr; margin: 0 -6px; padding-top: 22px; }
+.cflow__fork { position: absolute; top: -1px; left: 0; width: 100%; height: 25px; overflow: visible; }
+.cflow__fork line { stroke: var(--sand-2); stroke-width: 1.5; transition: stroke .35s var(--ease); }
+.cflow .cflow__col { padding: 0 6px; }
+.cflow__col--success { display: flex; flex-direction: column; }
+.cflow__col--success > .cflow__step { flex: 1; }
+/* states */
+.cflow__step.is-path { border-color: color-mix(in srgb, var(--c) 55%, var(--sand-2)); }
+.cflow__step.is-active {
+  border-color: var(--c);
+  background: color-mix(in srgb, var(--c) 9%, var(--card));
+  box-shadow: inset 3px 0 0 var(--c), 0 0 0 3px color-mix(in srgb, var(--c) 16%, transparent);
+}
+.cflow__step.is-active .cflow__bar { opacity: 1; }
+.cflow__step.is-path::before, .cflow__step.is-active::before { border-left-color: var(--c); }
+.cflow__step.is-path::after, .cflow__step.is-active::after { border-top-color: var(--c); }
+.cflow.is-fail .cflow__fork-stem, .cflow.is-fail .cflow__fork-f { stroke: var(--rust); }
+@media (prefers-reduced-motion: no-preference) {
+  .cflow__step.is-active::before {
+    border-left: 0; width: 1.5px;
+    background: linear-gradient(to bottom, var(--c) 55%, transparent 55%) 0 0 / 1.5px 6px repeat-y;
+    animation: cflow-flow .6s linear infinite;
+  }
+}
+@keyframes cflow-flow { to { background-position: 0 6px; } }
+
 /* ----------------------------------------------------------------- code -- */
 
 .code { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }

@@ -56,14 +56,15 @@
   }
 
   // "π_θ0 (initial SFT)" -> π<sub>θ0</sub> (initial SFT)
+  // "π_θ0" and "π_0.5" render as π with a subscript.
   function label(text) {
     var frag = doc.createDocumentFragment();
-    String(text).split("π_θ0").forEach(function (part, i) {
-      if (i > 0) {
+    var parts = String(text).split(/π_(θ0|\d+(?:\.\d+)?)/);
+    parts.forEach(function (part, i) {
+      if (i % 2) {
         frag.appendChild(doc.createTextNode("π"));
-        frag.appendChild(h("sub", { text: "θ0" }));
-      }
-      if (part) frag.appendChild(doc.createTextNode(part));
+        frag.appendChild(h("sub", { text: part }));
+      } else if (part) frag.appendChild(doc.createTextNode(part));
     });
     return frag;
   }
@@ -334,6 +335,91 @@
     return fig;
   }
 
+  /* The author's data-collection flowchart (slide 4), drawn beside the collection clip.
+     While the clip plays, the step of its current phase is lit (with a progress bar) and the
+     steps already passed in this loop keep their colour; idle until the clip has loaded. */
+  function fillNumbers(text) {
+    return String(text).replace(/\{(\w+)\}/g, function (m, k) {
+      return D.tldr && D.tldr[k] !== undefined ? String(D.tldr[k]) : m;
+    });
+  }
+
+  function renderFlow(flow) {
+    var SVG = "http://www.w3.org/2000/svg";
+    function step(st) {
+      return h("li", { class: "cflow__step", "data-step": st.id, "data-role": st.role }, [
+        h("span", { class: "cflow__title" }, [label(st.title)]),
+        st.note ? h("span", { class: "cflow__note", text: fillNumbers(st.note) }) : null,
+        h("span", { class: "cflow__bar", "aria-hidden": "true" })
+      ]);
+    }
+    var list = h("ol", { class: "cflow", "aria-label": "Data-collection process" });
+    var main = flow.steps.filter(function (st) { return !st.branch; });
+    main.forEach(function (st) { list.appendChild(step(st)); });
+    var success = flow.steps.filter(function (st) { return st.branch === "success"; });
+    var failure = flow.steps.filter(function (st) { return st.branch === "failure"; });
+    if (success.length || failure.length) {
+      var fork = doc.createElementNS(SVG, "svg");
+      fork.setAttribute("class", "cflow__fork");
+      fork.setAttribute("aria-hidden", "true");
+      // stem from the last main step, then one drop per column (1fr | 2fr: centres at 1/6 and 2/3)
+      [["stem", "50%", 0, "50%", 10], ["s", "50%", 10, "16.667%", 10], ["s", "16.667%", 10, "16.667%", 17],
+       ["f", "50%", 10, "66.667%", 10], ["f", "66.667%", 10, "66.667%", 17]].forEach(function (l) {
+        var ln = doc.createElementNS(SVG, "line");
+        ln.setAttribute("class", "cflow__fork-" + l[0]);
+        ln.setAttribute("x1", l[1]); ln.setAttribute("y1", l[2]);
+        ln.setAttribute("x2", l[3]); ln.setAttribute("y2", l[4]);
+        fork.appendChild(ln);
+      });
+      list.appendChild(h("li", { class: "cflow__branch" }, [
+        fork,
+        h("ol", { class: "cflow__col cflow__col--success" }, success.map(step)),
+        h("ol", { class: "cflow__col cflow__col--failure" }, failure.map(step))
+      ]));
+    }
+    return list;
+  }
+
+  function syncFlow(list, video, phases) {
+    var steps = {};
+    $$("[data-step]", list).forEach(function (el) { steps[el.getAttribute("data-step")] = el; });
+    var current = null, raf = 0;
+    function phaseAt(t) {
+      var k = 0;
+      for (var i = 0; i < phases.length; i++) if (t >= phases[i].from) k = i;
+      return k;
+    }
+    function bar(el, p) { var b = $(".cflow__bar", el); if (b) b.style.transform = "scaleX(" + p + ")"; }
+    function apply() {
+      if (video.readyState < 1) return;
+      var t = video.currentTime, k = phaseAt(t);
+      if (k !== current) {
+        Object.keys(steps).forEach(function (id) {
+          steps[id].classList.remove("is-active", "is-path");
+          steps[id].removeAttribute("aria-current");
+          bar(steps[id], 0);
+        });
+        var passed = [];
+        for (var i = 0; i <= k; i++) {
+          (phases[i].via || []).forEach(function (id) { passed.push(id); });
+          if (i < k) passed.push(phases[i].step);
+        }
+        passed.forEach(function (id) { if (steps[id]) steps[id].classList.add("is-path"); });
+        var act = steps[phases[k].step];
+        if (act) { act.classList.add("is-active"); act.setAttribute("aria-current", "step"); }
+        list.classList.toggle("is-fail", passed.indexOf("failure") >= 0);
+        list.setAttribute("data-phase", phases[k].step);
+        current = k;
+      }
+      var end = k + 1 < phases.length ? phases[k + 1].from : (video.duration || t);
+      var span = Math.max(0.001, end - phases[k].from);
+      if (steps[phases[k].step]) bar(steps[phases[k].step], Math.max(0, Math.min(1, (t - phases[k].from) / span)));
+    }
+    function loop() { apply(); raf = video.paused ? 0 : requestAnimationFrame(loop); }
+    ["loadedmetadata", "seeked", "timeupdate"].forEach(function (ev) { video.addEventListener(ev, apply); });
+    video.addEventListener("playing", function () { if (!raf) raf = requestAnimationFrame(loop); });
+  }
+
   function renderDemos(container, demos) {
     container.textContent = "";
     demos.forEach(function (g) {
@@ -360,11 +446,13 @@
       (n > 1 && allPortrait ? " demo-group--portraits" : "") +
       (n > 6 ? " demo-group--wide" : "");
     var group = h("section", { class: cls + " reveal", "data-group": g.group, "aria-labelledby": "demo-" + g.group });
+    var flow = g.flow && Array.isArray(g.flow.steps) && g.flow.steps.length ? renderFlow(g.flow) : null;
     group.appendChild(h("div", { class: "demo-group__head" }, [
       h("p", { class: "demo-group__kicker", text: n + (n === 1 ? " clip" : " clips") }),
       h("div", { class: "demo-group__text" }, [
         h("h3", { class: "demo-group__title", id: "demo-" + g.group, text: g.title }),
-        h("p", { class: "demo-group__note", text: g.note })
+        h("p", { class: "demo-group__note", text: g.note }),
+        flow
       ])
     ]));
     // Comparison clips that name a set (their component) are grouped under a small eyebrow,
@@ -384,6 +472,12 @@
       inner.appendChild(renderSlot(s));
     });
     group.appendChild(grid);
+    if (flow) {
+      var timed = filled.filter(function (s) { return Array.isArray(s.phases) && s.phases.length; })[0];
+      var slotEl = timed && $$(".slot", grid)[filled.indexOf(timed)];
+      var vid = slotEl && $("video", slotEl);
+      if (vid) syncFlow(flow, vid, timed.phases);
+    }
     container.appendChild(group);
   }
 
