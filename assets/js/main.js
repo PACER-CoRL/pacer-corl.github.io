@@ -188,7 +188,7 @@
     var video = h("video", {
       class: "hero__video", poster: v.poster, preload: reduceMotion ? "metadata" : "auto",
       autoplay: !reduceMotion, muted: true, loop: true, playsinline: true,
-      "aria-label": "Muted loop: the UR5e robot at work on a desktop motherboard"
+      "aria-label": v.label || "Muted loop: the UR5e robot at work on a desktop motherboard"
     });
     video.muted = true;
     video.defaultMuted = true;
@@ -307,13 +307,16 @@
   /* ------------------------------------------------------- demo gallery */
 
   // A filled slot: a muted loop (lazy, plays while visible) with its speed chip.
+  var OUTCOME_KIND = { Success: "success", Close: "close", Failed: "failed" };
+
   function renderSlot(s) {
     var portrait = s.aspect === "9:16";
     var fig = h("figure", { class: "slot" + (portrait ? " slot--portrait" : ""), "data-label": s.label });
     var media = h("div", { class: "slot__media" });
     var v = h("video", {
       muted: true, loop: true, playsinline: true, preload: "none",
-      "data-src": s.src, "data-autoplay": true, poster: s.poster, "aria-label": s.label
+      "data-src": s.src, "data-autoplay": true, poster: s.poster,
+      "aria-label": s.set ? s.set + " \u00b7 " + s.label : s.label
     });
     v.muted = true;
     v.defaultMuted = true;
@@ -323,6 +326,10 @@
     var cap = h("figcaption", { class: "slot__label" });
     cap.appendChild(label(s.label));
     fig.appendChild(media);
+    // The outcome tag (as marked on the author's slides) sits right under the clip, above the
+    // label, so the tags line up across a row whatever the label length.
+    var kind = OUTCOME_KIND[s.outcome];
+    if (kind) fig.appendChild(h("p", { class: "slot__outcome slot__outcome--" + kind, text: s.outcome }));
     fig.appendChild(cap);
     return fig;
   }
@@ -345,10 +352,12 @@
     var filled = g.slots.filter(function (s) { return s && s.src; });
     var n = filled.length;
     if (!n) return;
-    var portrait = n === 1 && filled[0].aspect === "9:16";
+    var allPortrait = filled.every(function (s) { return s.aspect === "9:16"; });
+    var portrait = n === 1 && allPortrait;
     var cls = "demo-group" +
       (n === 1 ? " demo-group--feature" : "") +
       (portrait ? " has-portrait" : "") +
+      (n > 1 && allPortrait ? " demo-group--portraits" : "") +
       (n > 6 ? " demo-group--wide" : "");
     var group = h("section", { class: cls + " reveal", "data-group": g.group, "aria-labelledby": "demo-" + g.group });
     group.appendChild(h("div", { class: "demo-group__head" }, [
@@ -358,8 +367,22 @@
         h("p", { class: "demo-group__note", text: g.note })
       ])
     ]));
-    var grid = h("div", { class: "demo-grid" });
-    filled.forEach(function (s) { grid.appendChild(renderSlot(s)); });
+    // Comparison clips that name a set (their component) are grouped under a small eyebrow,
+    // one set of consecutive slots per component.
+    var bySet = filled.every(function (s) { return typeof s.set === "string" && s.set; });
+    var grid = h("div", { class: "demo-grid" + (bySet ? " demo-grid--sets" : "") });
+    var current = null, inner = null;
+    filled.forEach(function (s) {
+      if (!bySet) { grid.appendChild(renderSlot(s)); return; }
+      if (s.set !== current) {
+        current = s.set;
+        inner = h("div", { class: "demo-set__grid" });
+        grid.appendChild(h("div", { class: "demo-set", "data-set": s.set }, [
+          h("p", { class: "demo-set__label", text: s.set }), inner
+        ]));
+      }
+      inner.appendChild(renderSlot(s));
+    });
     group.appendChild(grid);
     container.appendChild(group);
   }

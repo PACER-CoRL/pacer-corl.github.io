@@ -1180,6 +1180,31 @@ h2 {
 .slot--portrait .slot__media { aspect-ratio: 9 / 16; }
 .slot__label { margin-top: 10px; font: 500 14.5px/1.35 var(--sans); color: var(--ink); }
 .demo-group--wide .slot__label { font-size: 13.5px; }
+/* several portrait clips: one row of six on desktop (e.g. the CPU fan triplet, then RAM),
+   rows of three on narrower screens */
+.demo-group--portraits .demo-grid { --cols: 6; gap: 20px 12px; }
+.demo-group--portraits .slot--portrait { width: auto; }
+.demo-group--portraits .slot__media .chip { top: 8px; right: 8px; height: 22px; padding: 0 8px; font-size: 11.5px; }
+.demo-group--portraits .slot__label { font-size: 13.5px; }
+/* comparison clips grouped by component: two sets side by side, a wider gap between them */
+.demo-grid.demo-grid--sets { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 36px; }
+.demo-set { min-width: 0; }
+.demo-set__label {
+  margin: 0 0 12px; padding-top: 8px; border-top: 1px solid var(--sand-2);
+  font: 500 12.5px/1.5 var(--mono); color: var(--brass);
+}
+.demo-set__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 12px; }
+/* outcome tag under a comparison clip: success teal, close amber, failed rust (text-safe shades) */
+.slot__outcome {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin: 10px 0 0; height: 22px; padding: 0 9px; border-radius: 999px;
+  font: 600 12px/1 var(--sans); letter-spacing: .01em; color: #fff;
+}
+.slot__outcome::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .85; }
+.slot__outcome--success { background: var(--teal-ink); }
+.slot__outcome--close { background: var(--amber); color: var(--ink); }
+.slot__outcome--failed { background: var(--rust-ink); }
+.slot__outcome + .slot__label { margin-top: 6px; }
 
 /* ----------------------------------------------------------------- code -- */
 
@@ -1331,6 +1356,8 @@ h2 {
   .stat--wide { grid-column: 1 / -1; padding-left: 0; border-left: 0; border-top: 1px solid var(--sand); }
   .code { grid-template-columns: 1fr; }
   .demo-group--wide .demo-grid { --cols: 3; }
+  .demo-group--portraits .demo-grid { --cols: 3; }
+  .demo-grid.demo-grid--sets { grid-template-columns: minmax(0, 1fr); }
   .footer__inner { grid-template-columns: 1fr; }
 }
 
@@ -1355,6 +1382,12 @@ h2 {
   .step::before { margin: 4px 0 0; }
   .step__text { grid-column: 2; }
   .demo-grid, .demo-group--wide .demo-grid { --cols: 2; }
+  .demo-group--portraits .demo-grid { --cols: 3; gap: 16px 8px; }
+  .demo-grid.demo-grid--sets { gap: 22px 0; }
+  .demo-set__grid { gap: 16px 8px; }
+  .demo-group--portraits .slot__label { font-size: 12.5px; }
+  .demo-group--portraits .slot__media .chip { top: 6px; right: 6px; height: 20px; padding: 0 6px; font-size: 11px; }
+  .slot__outcome { height: 20px; padding: 0 7px; font-size: 11.5px; }
   .hero__chips { top: 14px; left: 14px; right: 14px; }
   .hero__toggle { right: 14px; bottom: 14px; }
   .hero__frame { padding: 6px; border-radius: 16px; }

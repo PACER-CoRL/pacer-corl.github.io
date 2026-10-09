@@ -1139,9 +1139,10 @@ window.PACER = {
     "hero": {
       "src": "assets/video/hero_loop.mp4",
       "poster": "assets/img/hero_poster.jpg",
-      "speed": "4\u00d7",
+      "speed": "3\u00d7",
       "chip": "Real robot",
-      "placeholder": true
+      "label": "Muted loop: the PACER policy on the UR5e removing, left to right, the CPU fan, the RAM and the GPU",
+      "placeholder": false
     },
     "motivation": {
       "src": "assets/video/motivation_v2_1080.mp4",
@@ -1171,153 +1172,171 @@ window.PACER = {
     {
       "group": "demo1",
       "title": "PACER vs. direct post-training",
-      "note": "CPU fan and RAM, for the initial SFT policy, vanilla post-SFT, and PACER.",
+      "note": "CPU fan and RAM, for the initial SFT policy, vanilla post-SFT, and PACER. One representative trial per method; success rates over all held-out trials are in Results.",
       "slots": [
         {
-          "label": "CPU fan \u00b7 \u03c0_\u03b80 (initial SFT)",
-          "src": null,
-          "poster": null,
-          "speed": null
+          "set": "CPU fan",
+          "label": "\u03c0_\u03b80 (initial SFT)",
+          "src": "assets/video/demo_cpufan_initial.mp4",
+          "poster": "assets/img/demo_cpufan_initial_poster.jpg",
+          "speed": "3\u00d7",
+          "aspect": "9:16",
+          "outcome": "Failed"
         },
         {
-          "label": "CPU fan \u00b7 Vanilla post-SFT",
-          "src": null,
-          "poster": null,
-          "speed": null
+          "set": "CPU fan",
+          "label": "Vanilla post-SFT",
+          "src": "assets/video/demo_cpufan_vanilla.mp4",
+          "poster": "assets/img/demo_cpufan_vanilla_poster.jpg",
+          "speed": "3\u00d7",
+          "aspect": "9:16",
+          "outcome": "Success"
         },
         {
-          "label": "CPU fan \u00b7 PACER",
-          "src": null,
-          "poster": null,
-          "speed": null
+          "set": "CPU fan",
+          "label": "PACER",
+          "src": "assets/video/demo_cpufan_pacer.mp4",
+          "poster": "assets/img/demo_cpufan_pacer_poster.jpg",
+          "speed": "3\u00d7",
+          "aspect": "9:16",
+          "outcome": "Success"
         },
         {
-          "label": "RAM \u00b7 \u03c0_\u03b80 (initial SFT)",
-          "src": null,
-          "poster": null,
-          "speed": null
+          "set": "RAM",
+          "label": "\u03c0_\u03b80 (initial SFT)",
+          "src": "assets/video/demo_ram_initial.mp4",
+          "poster": "assets/img/demo_ram_initial_poster.jpg",
+          "speed": "3\u00d7",
+          "aspect": "9:16",
+          "outcome": "Failed"
         },
         {
-          "label": "RAM \u00b7 Vanilla post-SFT",
-          "src": null,
-          "poster": null,
-          "speed": null
+          "set": "RAM",
+          "label": "Vanilla post-SFT",
+          "src": "assets/video/demo_ram_vanilla.mp4",
+          "poster": "assets/img/demo_ram_vanilla_poster.jpg",
+          "speed": "3\u00d7",
+          "aspect": "9:16",
+          "outcome": "Close"
         },
         {
-          "label": "RAM \u00b7 PACER",
-          "src": null,
-          "poster": null,
-          "speed": null
+          "set": "RAM",
+          "label": "PACER",
+          "src": "assets/video/demo_ram_pacer.mp4",
+          "poster": "assets/img/demo_ram_pacer_poster.jpg",
+          "speed": "3\u00d7",
+          "aspect": "9:16",
+          "outcome": "Success"
         }
       ]
     },
     {
       "group": "demo2",
       "title": "PACER vs. outcome-only and fixed geometry",
-      "note": "CPU fan and RAM, for outcome-only, fixed-geometry, and PACER post-training.",
+      "note": "CPU fan and RAM, for outcome-only, fixed-geometry, and PACER post-training. One representative trial per method; success rates over all held-out trials are in Results.",
       "slots": [
         {
-          "label": "CPU fan \u00b7 Outcome only",
-          "src": null,
-          "poster": null,
-          "speed": null
+          "set": "CPU fan",
+          "label": "Outcome only",
+          "src": "assets/video/demo_cpufan_outcome.mp4",
+          "poster": "assets/img/demo_cpufan_outcome_poster.jpg",
+          "speed": "3\u00d7",
+          "aspect": "9:16",
+          "outcome": "Failed"
         },
         {
-          "label": "CPU fan \u00b7 Fixed geometry",
-          "src": null,
-          "poster": null,
-          "speed": null
+          "set": "CPU fan",
+          "label": "Fixed geometry",
+          "src": "assets/video/demo_cpufan_fixedgeo.mp4",
+          "poster": "assets/img/demo_cpufan_fixedgeo_poster.jpg",
+          "speed": "3\u00d7",
+          "aspect": "9:16",
+          "outcome": "Success"
         },
         {
-          "label": "CPU fan \u00b7 PACER",
-          "src": null,
-          "poster": null,
-          "speed": null
+          "set": "CPU fan",
+          "label": "PACER",
+          "src": "assets/video/demo_cpufan_pacer.mp4",
+          "poster": "assets/img/demo_cpufan_pacer_poster.jpg",
+          "speed": "3\u00d7",
+          "aspect": "9:16",
+          "outcome": "Success"
         },
         {
-          "label": "RAM \u00b7 Outcome only",
-          "src": null,
-          "poster": null,
-          "speed": null
+          "set": "RAM",
+          "label": "Outcome only",
+          "src": "assets/video/demo_ram_outcome.mp4",
+          "poster": "assets/img/demo_ram_outcome_poster.jpg",
+          "speed": "3\u00d7",
+          "aspect": "9:16",
+          "outcome": "Failed"
         },
         {
-          "label": "RAM \u00b7 Fixed geometry",
-          "src": null,
-          "poster": null,
-          "speed": null
+          "set": "RAM",
+          "label": "Fixed geometry",
+          "src": "assets/video/demo_ram_fixedgeo.mp4",
+          "poster": "assets/img/demo_ram_fixedgeo_poster.jpg",
+          "speed": "3\u00d7",
+          "aspect": "9:16",
+          "outcome": "Close"
         },
         {
-          "label": "RAM \u00b7 PACER",
-          "src": null,
-          "poster": null,
-          "speed": null
+          "set": "RAM",
+          "label": "PACER",
+          "src": "assets/video/demo_ram_pacer.mp4",
+          "poster": "assets/img/demo_ram_pacer_poster.jpg",
+          "speed": "3\u00d7",
+          "aspect": "9:16",
+          "outcome": "Success"
         }
       ]
     },
     {
       "group": "all_components",
       "title": "PACER on all five components",
-      "note": "Two held-out configurations for each of RAM, Connector, CPU, GPU and CPU fan.",
+      "note": "The selected PACER policy on each of the five components, plus the CPU in an unseen configuration.",
       "slots": [
         {
-          "label": "RAM \u00b7 Config 1",
-          "src": null,
-          "poster": null,
-          "speed": null
+          "label": "CPU fan",
+          "src": "assets/video/demo_comp_cpufan.mp4",
+          "poster": "assets/img/demo_comp_cpufan_poster.jpg",
+          "speed": "3\u00d7",
+          "aspect": "9:16"
         },
         {
-          "label": "RAM \u00b7 Config 2",
-          "src": null,
-          "poster": null,
-          "speed": null
+          "label": "RAM",
+          "src": "assets/video/demo_comp_ram.mp4",
+          "poster": "assets/img/demo_comp_ram_poster.jpg",
+          "speed": "3\u00d7",
+          "aspect": "9:16"
         },
         {
-          "label": "Connector \u00b7 Config 1",
-          "src": null,
-          "poster": null,
-          "speed": null
+          "label": "Connector",
+          "src": "assets/video/demo_comp_connector.mp4",
+          "poster": "assets/img/demo_comp_connector_poster.jpg",
+          "speed": "3\u00d7",
+          "aspect": "9:16"
         },
         {
-          "label": "Connector \u00b7 Config 2",
-          "src": null,
-          "poster": null,
-          "speed": null
+          "label": "GPU",
+          "src": "assets/video/demo_comp_gpu.mp4",
+          "poster": "assets/img/demo_comp_gpu_poster.jpg",
+          "speed": "3\u00d7",
+          "aspect": "9:16"
         },
         {
-          "label": "CPU \u00b7 Config 1",
-          "src": null,
-          "poster": null,
-          "speed": null
+          "label": "CPU",
+          "src": "assets/video/demo_comp_cpu.mp4",
+          "poster": "assets/img/demo_comp_cpu_poster.jpg",
+          "speed": "3\u00d7",
+          "aspect": "9:16"
         },
         {
-          "label": "CPU \u00b7 Config 2",
-          "src": null,
-          "poster": null,
-          "speed": null
-        },
-        {
-          "label": "GPU \u00b7 Config 1",
-          "src": null,
-          "poster": null,
-          "speed": null
-        },
-        {
-          "label": "GPU \u00b7 Config 2",
-          "src": null,
-          "poster": null,
-          "speed": null
-        },
-        {
-          "label": "CPU fan \u00b7 Config 1",
-          "src": null,
-          "poster": null,
-          "speed": null
-        },
-        {
-          "label": "CPU fan \u00b7 Config 2",
-          "src": null,
-          "poster": null,
-          "speed": null
+          "label": "CPU \u00b7 unseen configuration",
+          "src": "assets/video/demo_comp_cpu_unseen.mp4",
+          "poster": "assets/img/demo_comp_cpu_unseen_poster.jpg",
+          "speed": "3\u00d7",
+          "aspect": "9:16"
         }
       ]
     }
