@@ -76,6 +76,11 @@
   function computeDerived() {
     var s = D.tldr.success;
     derived.delta_points = s.pacer - s.vanilla_post_sft;
+    if (D.ood) {
+      derived.ood_policies = D.ood.policies.length;
+      derived.ood_trials_per_policy = D.ood.trials_per_config * D.ood.configs.length;
+      derived.ood_total_trials = derived.ood_policies * derived.ood_trials_per_policy;
+    }
   }
 
   // "results.methods.clean_only.overall": a segment that is not an array property picks the
@@ -146,8 +151,15 @@
     var authors = $("[data-render='authors']");
     site.authors.forEach(function (a) {
       var name = a.url ? h("a", { href: a.url, rel: "noopener", text: a.name }) : doc.createTextNode(a.name);
-      authors.appendChild(h("span", { class: "author" }, [name, h("sup", { text: a.affil.join(",") })]));
+      var marks = a.affil.join(",") + (a.corresponding ? ",*" : "");
+      authors.appendChild(h("span", { class: "author" }, [name, h("sup", { text: marks })]));
     });
+    var corr = $("[data-render='corresponding']");
+    if (corr && site.corresponding_email) {
+      corr.appendChild(h("sup", { text: "*" }));
+      corr.appendChild(doc.createTextNode("Corresponding author: "));
+      corr.appendChild(h("a", { href: "mailto:" + site.corresponding_email, text: site.corresponding_email }));
+    }
 
     // Full names; phones show the short forms on one line (CSS swaps them).
     var affils = $("[data-render='affiliations']");
@@ -308,7 +320,7 @@
   /* ------------------------------------------------------- demo gallery */
 
   // A filled slot: a muted loop (lazy, plays while visible) with its speed chip.
-  var OUTCOME_KIND = { Success: "success", Close: "close", Failed: "failed" };
+  var OUTCOME_KIND = { Success: "success", "Near miss": "close", Failed: "failed" };
 
   function renderSlot(s) {
     var portrait = s.aspect === "9:16";

@@ -269,12 +269,12 @@ var PACERExplainer = (function () {
         ]),
         h("span", { class: "cand__meta" }, [
           h("span", { class: "cand__j" }, [sym("J", "val"), " " + c.jval.toFixed(6)]),
-          c.selected ? h("span", { class: "cand__pick", title: "Highest validation score: the configuration PACER uses", text: "selected" }) : null
+          c.selected ? h("span", { class: "cand__pick", title: "Highest validation score: the weighting setting PACER selects", text: "selected" }) : null
         ])
       ]));
     });
     var cands_ = h("fieldset", { class: "cands" }, [
-      h("legend", { class: "xp__label", text: "Predeclared configuration" }),
+      h("legend", { class: "xp__label", text: "Predeclared weighting setting" }),
       grid,
       h("p", { class: "cands__note" }, [
         "PACER uses the highest ", sym("J", "val"), "; all " + cands.length + " lie within " +
@@ -319,8 +319,8 @@ var PACERExplainer = (function () {
     var foot = h("p", { class: "xp__foot" }, [
       "Illustrative traces, centered per role over their " + traces[0].chunks.length + " chunks. " +
       "Real weights are computed over " +
-      Number(ex.training_rows).toLocaleString("en-US") + " training rows with stratum-wise centering. The " +
-      cands.length + " candidates span < " + ex.jval_span_bound + " in ", sym("J", "val"),
+      Number(ex.training_rows).toLocaleString("en-US") + " training rows with centering within component-phase-role groups. The " +
+      cands.length + " weighting settings span < " + ex.jval_span_bound + " in ", sym("J", "val"),
       ", so selection is a fixed protocol choice."
     ]);
 
@@ -630,7 +630,7 @@ var PACERExplainer = (function () {
 
       var terms = h("dl", { class: "terms" }, [
         term(["score ", sym("s")], "s", fmt(d.s, 3)),
-        term(["stratum ", sym("b"), ", ", sym("σ")], "bs", d.gated ? "not needed" : fmt(d.b, 3) + ", " + fmt(d.sigma, 3)),
+        term(["group ", sym("b"), ", ", sym("σ")], "bs", d.gated ? "not needed" : fmt(d.b, 3) + ", " + fmt(d.sigma, 3)),
         term(["role ", sym("γ")], "gamma", d.whatIf
           ? [trimNum(d.gamma), h("span", { class: "terms__aside", text: " (what-if; paper: " + trimNum(d.paperGamma) + ")" })]
           : trimNum(d.gamma)),
@@ -639,7 +639,7 @@ var PACERExplainer = (function () {
       ]);
 
       var note = d.gated ? ["gated: audit only, never imitated"]
-        : d.whatIf ? ["would be imitated: centered within the failure stratum, its relatively best chunks get ",
+        : d.whatIf ? ["would be imitated: centered within the failure group, its relatively best chunks get ",
                       sym("w"), " > 1"]
         : d.clipped ? ["clipped from " + d.raw.toFixed(2) + " to ", sym("w", "max")]
         : d.floored ? ["held at the role floor ", sym("f")]

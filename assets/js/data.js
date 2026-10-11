@@ -51,7 +51,8 @@ window.PACER = {
         "affil": [
           1
         ],
-        "url": null
+        "url": null,
+        "corresponding": true
       }
     ],
     "affiliations": [
@@ -59,6 +60,7 @@ window.PACER = {
       "University of California, Riverside",
       "Georgia Institute of Technology"
     ],
+    "corresponding_email": "mhzheng@tamu.edu",
     "affiliations_short": [
       "Texas A&M",
       "UC Riverside",
@@ -98,7 +100,7 @@ window.PACER = {
     "methods": [
       {
         "id": "theta0",
-        "label": "\u03c0_\u03b80 (no post-train)",
+        "label": "Initial SFT \u03c0_\u03b80",
         "overall": 12,
         "per_component": [
           7,
@@ -199,7 +201,7 @@ window.PACER = {
         ],
         "jval": 0.7699,
         "rows_used": "eligible, rank weight",
-        "desc": "gate-eligible rows, frozen geometry-only rank weight, no validation selection"
+        "desc": "gate-eligible rows, fixed rank weight from progress, proximity and target-region membership with fixed role multipliers, no validation selection"
       },
       {
         "id": "pacer",
@@ -214,14 +216,180 @@ window.PACER = {
         ],
         "jval": 0.7707,
         "rows_used": "eligible, positive w",
-        "desc": "gate-eligible rows, process-evidence weights, validation-selected configuration"
+        "desc": "gate-eligible rows, process-aware chunk weights, validation-selected weighting setting"
+      }
+    ]
+  },
+  "ood": {
+    "_": "Paper Table 'Controlled OOD comparison' (tab:controlled_rebuttal): each policy has 50 trials on a mild and 50 on a strong OOD configuration, distinct from the held-out benchmark; ci = Wilson 95% (%) of the overall rate; gap = PACER minus the row (points) with its paired bootstrap 95% CI.",
+    "trials_per_config": 50,
+    "ci_level": 95,
+    "configs": [
+      "Mild shift",
+      "Strong shift"
+    ],
+    "groups": [
+      {
+        "id": "reference",
+        "label": null
+      },
+      {
+        "id": "fixed_rules",
+        "label": "Fixed weighting rules"
+      },
+      {
+        "id": "removals",
+        "label": "Data-source removals (selected setting fixed)"
+      }
+    ],
+    "policies": [
+      {
+        "id": "pacer",
+        "label": "PACER selected",
+        "group": "reference",
+        "desc": "selected weighting setting (terminal_stop_heavy), all three data sources",
+        "mild": 43,
+        "strong": 29,
+        "overall": 72,
+        "ci": [
+          62.5,
+          79.9
+        ],
+        "gap": null,
+        "gap_ci": null
+      },
+      {
+        "id": "fixed_geometry",
+        "label": "Fixed geometry",
+        "group": "fixed_rules",
+        "desc": "progress, proximity and target-region membership with fixed role multipliers",
+        "mild": 35,
+        "strong": 16,
+        "overall": 51,
+        "ci": [
+          41.3,
+          60.6
+        ],
+        "gap": 21,
+        "gap_ci": [
+          13,
+          29
+        ]
+      },
+      {
+        "id": "rw_like",
+        "label": "RW-like",
+        "group": "fixed_rules",
+        "desc": "PACER's weighting formula with the predeclared rw_like setting",
+        "mild": 33,
+        "strong": 18,
+        "overall": 51,
+        "ci": [
+          41.3,
+          60.6
+        ],
+        "gap": 21,
+        "gap_ci": [
+          12,
+          30
+        ]
+      },
+      {
+        "id": "uniform",
+        "label": "Uniform",
+        "group": "fixed_rules",
+        "desc": "equal weights on usable rows",
+        "mild": 37,
+        "strong": 11,
+        "overall": 48,
+        "ci": [
+          38.5,
+          57.7
+        ],
+        "gap": 24,
+        "gap_ci": [
+          16,
+          32
+        ]
+      },
+      {
+        "id": "role_only",
+        "label": "Role only",
+        "group": "fixed_rules",
+        "desc": "weights from each row's process role alone",
+        "mild": 30,
+        "strong": 9,
+        "overall": 39,
+        "ci": [
+          30.0,
+          48.8
+        ],
+        "gap": 33,
+        "gap_ci": [
+          24,
+          42
+        ]
+      },
+      {
+        "id": "no_clean",
+        "label": "No clean",
+        "group": "removals",
+        "desc": "selected setting, without supplementary clean demonstrations",
+        "mild": 34,
+        "strong": 1,
+        "overall": 35,
+        "ci": [
+          26.4,
+          44.7
+        ],
+        "gap": 37,
+        "gap_ci": [
+          30,
+          44
+        ]
+      },
+      {
+        "id": "no_correction",
+        "label": "No correction",
+        "group": "removals",
+        "desc": "selected setting, without human corrections",
+        "mild": 13,
+        "strong": 0,
+        "overall": 13,
+        "ci": [
+          7.8,
+          21.0
+        ],
+        "gap": 59,
+        "gap_ci": [
+          52,
+          66
+        ]
+      },
+      {
+        "id": "no_outcome",
+        "label": "No outcome",
+        "group": "removals",
+        "desc": "selected setting, without autonomous rollouts (clean demonstrations and corrections kept)",
+        "mild": 36,
+        "strong": 14,
+        "overall": 50,
+        "ci": [
+          40.4,
+          59.6
+        ],
+        "gap": 22,
+        "gap_ci": [
+          14,
+          30
+        ]
       }
     ]
   },
   "candidates": [
     {
       "id": "rw_like",
-      "label": "reweighting-like",
+      "label": "RW-like",
       "beta_prog": 0.3,
       "beta_prox": 0.45,
       "beta_term": 0.15,
@@ -1141,7 +1309,7 @@ window.PACER = {
       "poster": "assets/img/hero_poster.jpg",
       "speed": "3\u00d7",
       "chip": "Real robot",
-      "label": "Muted loop: the PACER policy on the UR5e removing, left to right, the CPU fan, the RAM and the GPU",
+      "label": "Muted loop on the UR5e, left to right: the PACER policy approaches the CPU fan, the RAM and the GPU, and the fixed downstream skill completes each removal",
       "placeholder": false
     },
     "motivation": {
@@ -1188,15 +1356,15 @@ window.PACER = {
           },
           {
             "id": "failure",
-            "title": "Failure",
-            "note": "near, wrong or off",
+            "title": "Non-success",
+            "note": "near miss, wrong location or region",
             "role": "failure",
             "branch": "failure"
           },
           {
             "id": "correction",
             "title": "Human correction",
-            "note": "\u2264 {max_corrections_per_component} per component, {collection_positions} positions",
+            "note": "\u2264 {max_corrections_per_component} per component, {collection_positions} collection configurations",
             "role": "correction",
             "branch": "failure"
           },
@@ -1209,7 +1377,7 @@ window.PACER = {
           {
             "id": "clean",
             "title": "Clean demonstration",
-            "note": "by the operator",
+            "note": "supplementary, only where the initial policy did not succeed",
             "role": "clean",
             "branch": "failure"
           }
@@ -1248,12 +1416,12 @@ window.PACER = {
     },
     {
       "group": "demo1",
-      "title": "PACER vs. direct post-training",
+      "title": "PACER vs. initial SFT and vanilla post-SFT",
       "note": "CPU fan and RAM, for the initial SFT policy, vanilla post-SFT, and PACER. One representative trial per method; success rates over all held-out trials are in Results.",
       "slots": [
         {
           "set": "CPU fan",
-          "label": "\u03c0_\u03b80 (initial SFT)",
+          "label": "Initial SFT \u03c0_\u03b80",
           "src": "assets/video/demo_cpufan_initial.mp4",
           "poster": "assets/img/demo_cpufan_initial_poster.jpg",
           "speed": "3\u00d7",
@@ -1280,7 +1448,7 @@ window.PACER = {
         },
         {
           "set": "RAM",
-          "label": "\u03c0_\u03b80 (initial SFT)",
+          "label": "Initial SFT \u03c0_\u03b80",
           "src": "assets/video/demo_ram_initial.mp4",
           "poster": "assets/img/demo_ram_initial_poster.jpg",
           "speed": "3\u00d7",
@@ -1294,7 +1462,7 @@ window.PACER = {
           "poster": "assets/img/demo_ram_vanilla_poster.jpg",
           "speed": "3\u00d7",
           "aspect": "9:16",
-          "outcome": "Close"
+          "outcome": "Near miss"
         },
         {
           "set": "RAM",
@@ -1355,7 +1523,7 @@ window.PACER = {
           "poster": "assets/img/demo_ram_fixedgeo_poster.jpg",
           "speed": "3\u00d7",
           "aspect": "9:16",
-          "outcome": "Close"
+          "outcome": "Near miss"
         },
         {
           "set": "RAM",
@@ -1371,7 +1539,7 @@ window.PACER = {
     {
       "group": "all_components",
       "title": "PACER on all five components",
-      "note": "The selected PACER policy on each of the five components, plus the CPU in an unseen configuration.",
+      "note": "The selected PACER policy on each of the five components, plus the CPU in an unseen configuration. Each clip continues past the scored handoff state into the fixed downstream skill, which completes the removal.",
       "slots": [
         {
           "label": "CPU fan",

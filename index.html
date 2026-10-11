@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>PACER: Process-Aware VLA Policy Learning from Human Corrections for Robotic Disassembly</title>
-  <meta name="description" content="PACER post-trains a vision-language-action policy offline on its own rollouts, human corrections and supplementary clean demonstrations, weighting each action chunk by process evidence instead of the outcome alone. CoRL 2026.">
+  <meta name="description" content="PACER post-trains a vision-language-action policy through SFT on its own rollouts, human corrections and supplementary clean demonstrations, weighting each valid action chunk by process evidence and trace role instead of the outcome alone. CoRL 2026.">
   <meta name="theme-color" content="#1E4236">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 
@@ -79,6 +79,7 @@
       <div class="hero__byline">
         <p class="hero__authors" data-render="authors"></p>
         <p class="hero__affils" data-render="affiliations"></p>
+        <p class="hero__corr" data-render="corresponding"></p>
       </div>
       <div class="hero__actions" data-render="links"></div>
 
@@ -89,7 +90,7 @@
             <svg class="icon icon--play"><use href="#i-play"/></svg>
           </button>
         </div>
-        <figcaption class="hero__caption">The PACER policy on the real UR5e, left to right: CPU fan, RAM and GPU removal. Muted loop, sped up as marked.</figcaption>
+        <figcaption class="hero__caption">Real UR5e runs, left to right: CPU fan, RAM and GPU. The PACER policy approaches each part to a handoff state; the fixed downstream skill completes the removal. Muted loop, sped up as marked.</figcaption>
       </figure>
     </div>
   </header>
@@ -102,7 +103,7 @@
           <h2 class="tldr__label" id="tldr-h">In short</h2>
           <div class="tldr__text">
             <p class="tldr__claim">SFT can do more than expected in robotics.</p>
-            <p class="tldr__lede">PACER post-trains a VLA policy offline on its own rollouts, human corrections and supplementary clean demonstrations, weighting every action chunk by how the attempt unfolded&nbsp;&mdash; not only by whether it succeeded.</p>
+            <p class="tldr__lede">PACER post-trains a VLA policy through SFT on its own rollouts, human corrections and supplementary clean demonstrations, weighting each valid action chunk in the native supervised action loss by how the attempt unfolded&nbsp;&mdash; not only by whether it succeeded.</p>
           </div>
         </div>
         <div class="tldr__stats reveal">
@@ -113,7 +114,7 @@
           <div class="stat">
             <p class="stat__num" data-bind="tldr.autonomous_rollouts"></p>
             <p class="stat__label">autonomous rollouts</p>
-            <p class="stat__note">plus &le;&nbsp;<span data-bind="tldr.max_corrections_per_component"></span> human corrections per component, <span data-bind="tldr.collection_positions"></span> positions</p>
+            <p class="stat__note">plus &le;&nbsp;<span data-bind="tldr.max_corrections_per_component"></span> human corrections per component, across <span data-bind="tldr.collection_positions"></span> collection configurations</p>
           </div>
           <div class="stat">
             <p class="stat__num" data-bind="tldr.components"></p>
@@ -124,7 +125,7 @@
             <p class="stat__num stat__num--seq">
               <span class="seq seq--base" data-bind="tldr.success.theta0"></span><span class="seq__arrow" aria-hidden="true">&rarr;</span><span class="seq seq--base" data-bind="tldr.success.vanilla_post_sft"></span><span class="seq__arrow" aria-hidden="true">&rarr;</span><span class="seq seq--pacer" data-bind="tldr.success.pacer"></span><span class="seq__of">/<span data-bind="tldr.heldout_trials"></span></span>
             </p>
-            <p class="stat__label">held-out success: <span class="pi">&pi;<sub>&theta;0</sub></span> &rarr; vanilla post-SFT &rarr; PACER</p>
+            <p class="stat__label">held-out approach-and-handoff success: <span class="pi">&pi;<sub>&theta;0</sub></span> &rarr; vanilla post-SFT &rarr; PACER</p>
             <p class="stat__badge">+<span data-bind="derived.delta_points"></span> points over vanilla post-SFT</p>
           </div>
         </div>
@@ -157,8 +158,8 @@
           <p class="eyebrow">Abstract</p>
           <div class="section__intro">
             <h2 id="abstract-h" class="visually-hidden">Abstract</h2>
-            <div class="abstract" data-source="submission">
-              <p>Robotic disassembly presents a key challenge in end-of-life (EoL) product remanufacturing automation, where a robot must perceive and interpret product states with uncertainty, satisfy prerequisite sequences, execute precise, contact-rich manipulation, and recover from failed attempts. Recent vision-language-action (VLA) models offer greater flexibility; however, they are largely applied to tabletop and daily-life manipulation rather than industrial settings. Supervised fine-tuning provides a practical path for adaptation, but limited and costly disassembly data cannot capture the distribution shifts arising from changing environments and product uncertainties. Human corrections expose the policy&rsquo;s own failure states, but the key challenge is how to turn a limited set of recovery trajectories into useful policy-improvement signals rather than treating them as ordinary demonstrations or coarse trial outcomes. Motivated by this, we introduce PACER, a Process-Aware Correction and Evidence Reweighting framework that preserves the native VLA training objective by converting correction trajectories and in-process robot evidence into weights or advantages. Using 70 human correction trajectories collected across seven positions, we evaluate PACER on real UR5e motherboard disassembly across five component classes and multiple configurations, achieving a <span data-bind="derived.delta_points"></span>-percentage-point success-rate improvement (<span data-bind="tldr.success.vanilla_post_sft"></span> &rarr; <span data-bind="tldr.success.pacer"></span> / <span data-bind="tldr.heldout_trials"></span> held-out trials) on robotic disassembly tasks compared with direct SFT.</p>
+            <div class="abstract" data-source="paper">
+              <p>Robotic disassembly of end-of-life (EoL) products requires robots to accommodate product variation, follow prerequisite sequences, and approach components precisely for contact-rich manipulation. Supervised fine-tuning provides a practical path for adaptation, but limited and costly disassembly data cannot capture the distribution shifts arising from changing environments and product uncertainties. The policy&rsquo;s own rollouts record its approach attempts, and human corrections demonstrate recovery from its errors, but turning these experiences into better policy performance remains challenging. We introduce PACER, a Process-Aware Correction and Evidence Reweighting framework that learns from these experiences through SFT, using progress toward the target and each trace&rsquo;s source and outcome to weight valid action chunks in the native supervised action loss. PACER trains one policy per weighting setting and selects one of the resulting policies through held-out validation. We evaluate PACER on UR5e motherboard disassembly across five component classes, where it achieves <span data-bind="tldr.success.pacer"></span>/<span data-bind="tldr.heldout_trials"></span> successful approach-and-handoff trials on the held-out benchmark, compared with <span data-bind="tldr.success.vanilla_post_sft"></span>/<span data-bind="tldr.heldout_trials"></span> for vanilla post-SFT.</p>
             </div>
           </div>
         </header>
@@ -182,51 +183,51 @@
             <li><button class="fig1-panel" type="button" data-trace="A" aria-pressed="false" aria-controls="fig1-role" aria-labelledby="fig1-t-A" aria-describedby="fig1-p-A1 fig1-p-A2 fig1-chip-A">
               <span class="fig1-panel__title" id="fig1-t-A">A. Success Trace</span>
               <span class="fig1-panel__frame">
-                <span class="fig1-photo"><img id="fig1-p-A1" src="assets/img/fig1_A1.webp" width="299" height="299" loading="lazy" decoding="async" alt="A. Success trace, CPU fan: the gripper reaches the grasp point (green box).">
-                  <svg class="fig1-ov" viewBox="14.772 35.277 71.994 71.995" aria-hidden="true" focusable="false"><path class="fig1-mark fig1-pulse" data-pulse="A1" d="M43.93 50.036H58.329V65.875H43.93Z" fill="none" stroke="#00FF00" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="A1" d="M43.93 50.036H58.329V65.875H43.93Z" pathLength="1" fill="none" stroke="#00FF00" stroke-width="1.1"/></svg></span>
-                <span class="fig1-photo"><img id="fig1-p-A2" src="assets/img/fig1_A2.webp" width="299" height="299" loading="lazy" decoding="async" alt="A. Success trace, GPU bracket: the gripper reaches the grasp point (green box).">
-                  <svg class="fig1-ov" viewBox="14.772 114.471 71.994 71.995" aria-hidden="true" focusable="false"><path class="fig1-mark fig1-pulse" data-pulse="A2" d="M36.73 122.03H51.129V137.869H36.73Z" fill="none" stroke="#00FF00" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="A2" d="M36.73 122.03H51.129V137.869H36.73Z" pathLength="1" fill="none" stroke="#00FF00" stroke-width="1.1"/></svg></span>
+                <span class="fig1-photo"><img id="fig1-p-A1" src="assets/img/fig1_A1.webp" width="298" height="298" loading="lazy" decoding="async" alt="A. Success trace, CPU fan: the gripper reaches the target region (green box).">
+                  <svg class="fig1-ov" viewBox="158.368 44.408 71.627 71.627" aria-hidden="true" focusable="false"><path class="fig1-mark fig1-pulse" data-pulse="A1" d="M187.377 59.092H201.702V74.85H187.377Z" fill="none" stroke="#00FF00" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="A1" d="M187.377 59.092H201.702V74.85H187.377Z" pathLength="1" fill="none" stroke="#00FF00" stroke-width="1.1"/></svg></span>
+                <span class="fig1-photo"><img id="fig1-p-A2" src="assets/img/fig1_A2.webp" width="298" height="298" loading="lazy" decoding="async" alt="A. Success trace, GPU bracket: the gripper reaches the target region (green box).">
+                  <svg class="fig1-ov" viewBox="158.368 123.198 71.627 71.627" aria-hidden="true" focusable="false"><path class="fig1-mark fig1-pulse" data-pulse="A2" d="M180.214 130.719H194.539V146.477H180.214Z" fill="none" stroke="#00FF00" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="A2" d="M180.214 130.719H194.539V146.477H180.214Z" pathLength="1" fill="none" stroke="#00FF00" stroke-width="1.1"/></svg></span>
                 <span class="fig1-chiprow"><span class="fig1-mark fig1-chip fig1-chip--ok" id="fig1-chip-A" data-draw="A-chip" title="Autonomous success, weighted by process evidence.">weighted</span></span>
               </span>
             </button></li>
             <li><button class="fig1-panel" type="button" data-trace="B" aria-pressed="false" aria-controls="fig1-role" aria-labelledby="fig1-t-B" aria-describedby="fig1-p-B1 fig1-p-B2 fig1-chip-B">
-              <span class="fig1-panel__title" id="fig1-t-B">B. Near Grasp Trace</span>
+              <span class="fig1-panel__title" id="fig1-t-B">B. Near Miss Trace</span>
               <span class="fig1-panel__frame">
-                <span class="fig1-photo"><img id="fig1-p-B1" src="assets/img/fig1_B1.webp" width="299" height="299" loading="lazy" decoding="async" alt="B. Near-grasp trace, CPU fan: the gripper stops just short of the target (orange arrow).">
-                  <svg class="fig1-ov" viewBox="115.564 35.277 71.995 71.995" aria-hidden="true" focusable="false"><circle class="fig1-mark fig1-pulse" data-pulse="B1" cx="152.728" cy="60.835" r="2.6" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="B1" d="M166.32 60.835L156.507 60.835" pathLength="1" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-pop" data-draw="B1-head" d="M152.728 60.835L157.767 58.315L156.507 60.835L157.767 63.355Z" fill="#D79B00" stroke="#D79B00" stroke-width="1.1"/></svg></span>
-                <span class="fig1-photo"><img id="fig1-p-B2" src="assets/img/fig1_B2.webp" width="299" height="299" loading="lazy" decoding="async" alt="B. Near-grasp trace, GPU bracket: the gripper stops just short of the target (orange arrow).">
-                  <svg class="fig1-ov" viewBox="115.564 114.471 71.995 71.995" aria-hidden="true" focusable="false"><circle class="fig1-mark fig1-pulse" data-pulse="B2" cx="144.002" cy="136.79" r="2.6" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="B2" d="M130.323 143.629L140.618 138.481" pathLength="1" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-pop" data-draw="B2-head" d="M144.002 136.79L140.618 141.296L140.618 138.481L138.365 136.79Z" fill="#D79B00" stroke="#D79B00" stroke-width="1.1"/></svg></span>
+                <span class="fig1-photo"><img id="fig1-p-B1" src="assets/img/fig1_B1.webp" width="298" height="298" loading="lazy" decoding="async" alt="B. Near-miss trace, CPU fan: the gripper stops just short of the target (orange arrow).">
+                  <svg class="fig1-ov" viewBox="258.646 44.408 71.627 71.627" aria-hidden="true" focusable="false"><circle class="fig1-mark fig1-pulse" data-pulse="B1" cx="295.62" cy="69.836" r="2.6" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="B1" d="M309.143 69.836L299.38 69.836" pathLength="1" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-pop" data-draw="B1-head" d="M295.62 69.836L300.634 67.329L299.38 69.836L300.634 72.343Z" fill="#D79B00" stroke="#D79B00" stroke-width="1.1"/></svg></span>
+                <span class="fig1-photo"><img id="fig1-p-B2" src="assets/img/fig1_B2.webp" width="298" height="298" loading="lazy" decoding="async" alt="B. Near-miss trace, GPU bracket: the gripper stops just short of the target (orange arrow).">
+                  <svg class="fig1-ov" viewBox="258.646 123.198 71.627 71.627" aria-hidden="true" focusable="false"><circle class="fig1-mark fig1-pulse" data-pulse="B2" cx="286.938" cy="145.402" r="2.6" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="B2" d="M273.329 152.207L283.572 147.086" pathLength="1" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-pop" data-draw="B2-head" d="M286.938 145.402L283.572 149.886L283.572 147.086L281.33 145.402Z" fill="#D79B00" stroke="#D79B00" stroke-width="1.1"/></svg></span>
                 <span class="fig1-chiprow"><span class="fig1-mark fig1-chip fig1-chip--near" id="fig1-chip-B" data-draw="B-chip" title="Near miss (partial): weighted by process evidence; partial progress still counts.">partial credit</span></span>
               </span>
             </button></li>
             <li><button class="fig1-panel" type="button" data-trace="C" aria-pressed="false" aria-controls="fig1-role" aria-labelledby="fig1-t-C" aria-describedby="fig1-p-C1 fig1-p-C2 fig1-chip-C">
               <span class="fig1-panel__title" id="fig1-t-C">C. Wrong Location Trace</span>
               <span class="fig1-panel__frame">
-                <span class="fig1-photo"><img id="fig1-p-C1" src="assets/img/fig1_C1.webp" width="299" height="299" loading="lazy" decoding="async" alt="C. Wrong-location trace, CPU fan: the gripper settles beside the target (orange arrow).">
-                  <svg class="fig1-ov" viewBox="216.356 35.277 71.994 71.995" aria-hidden="true" focusable="false"><circle class="fig1-mark fig1-pulse" data-pulse="C1" cx="253.52" cy="60.835" r="2.6" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="C1" d="M267.113 60.835L257.3 60.835" pathLength="1" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-pop" data-draw="C1-head" d="M253.52 60.835L258.559 58.315L257.3 60.835L258.559 63.355Z" fill="#D79B00" stroke="#D79B00" stroke-width="1.1"/></svg></span>
-                <span class="fig1-photo"><img id="fig1-p-C2" src="assets/img/fig1_C2.webp" width="299" height="299" loading="lazy" decoding="async" alt="C. Wrong-location trace, GPU bracket: the gripper settles beside the target (orange arrow).">
-                  <svg class="fig1-ov" viewBox="216.356 114.471 71.994 71.995" aria-hidden="true" focusable="false"><circle class="fig1-mark fig1-pulse" data-pulse="C2" cx="246.234" cy="136.79" r="2.6" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="C2" d="M259.913 143.629L249.618 138.481" pathLength="1" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-pop" data-draw="C2-head" d="M246.234 136.79L251.871 136.79L249.618 138.481L249.618 141.296Z" fill="#D79B00" stroke="#D79B00" stroke-width="1.1"/></svg></span>
+                <span class="fig1-photo"><img id="fig1-p-C1" src="assets/img/fig1_C1.webp" width="298" height="298" loading="lazy" decoding="async" alt="C. Wrong-location trace, CPU fan: the gripper settles beside the target (orange arrow).">
+                  <svg class="fig1-ov" viewBox="358.923 44.408 71.627 71.627" aria-hidden="true" focusable="false"><circle class="fig1-mark fig1-pulse" data-pulse="C1" cx="395.897" cy="69.836" r="2.6" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="C1" d="M409.42 69.836L399.657 69.836" pathLength="1" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-pop" data-draw="C1-head" d="M395.897 69.836L400.911 67.329L399.657 69.836L400.911 72.343Z" fill="#D79B00" stroke="#D79B00" stroke-width="1.1"/></svg></span>
+                <span class="fig1-photo"><img id="fig1-p-C2" src="assets/img/fig1_C2.webp" width="298" height="298" loading="lazy" decoding="async" alt="C. Wrong-location trace, GPU bracket: the gripper settles beside the target (orange arrow).">
+                  <svg class="fig1-ov" viewBox="358.923 123.198 71.627 71.627" aria-hidden="true" focusable="false"><circle class="fig1-mark fig1-pulse" data-pulse="C2" cx="399.393" cy="152.565" r="2.6" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="C2" d="M413.002 159.37L402.759 154.248" pathLength="1" fill="none" stroke="#D79B00" stroke-width="1.1"/><path class="fig1-mark fig1-pop" data-draw="C2-head" d="M399.393 152.565L405.001 152.565L402.759 154.248L402.759 157.049Z" fill="#D79B00" stroke="#D79B00" stroke-width="1.1"/></svg></span>
                 <span class="fig1-chiprow"><span class="fig1-mark fig1-chip fig1-chip--fail" id="fig1-chip-C" data-draw="C-chip" title="Wrong location: a failure label; gated, kept for audit with zero weight.">gated · audit</span></span>
               </span>
             </button></li>
             <li><button class="fig1-panel" type="button" data-trace="D" aria-pressed="false" aria-controls="fig1-role" aria-labelledby="fig1-t-D" aria-describedby="fig1-p-D1 fig1-p-D2 fig1-chip-D">
               <span class="fig1-panel__title" id="fig1-t-D">D. Failure Trace</span>
               <span class="fig1-panel__frame">
-                <span class="fig1-photo"><img id="fig1-p-D1" src="assets/img/fig1_D1.webp" width="299" height="299" loading="lazy" decoding="async" alt="D. Failure trace, CPU fan: the gripper ends far from the target region (red circle).">
-                  <svg class="fig1-ov" viewBox="317.149 35.277 71.995 71.995" aria-hidden="true" focusable="false"><path class="fig1-mark fig1-pulse" data-pulse="D1" d="M396.701 71.634A14.398 14.398 0 1 1 367.905 71.634A14.398 14.398 0 1 1 396.701 71.634Z" fill="none" stroke="#FF0000" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="D1" d="M396.701 71.634A14.398 14.398 0 1 1 367.905 71.634A14.398 14.398 0 1 1 396.701 71.634Z" pathLength="1" fill="none" stroke="#FF0000" stroke-width="1.1"/></svg></span>
-                <span class="fig1-photo"><img id="fig1-p-D2" src="assets/img/fig1_D2.webp" width="299" height="299" loading="lazy" decoding="async" alt="D. Failure trace, GPU bracket: the gripper ends far from the target region (red circle).">
-                  <svg class="fig1-ov" viewBox="317.149 114.471 71.995 71.995" aria-hidden="true" focusable="false"><path class="fig1-mark fig1-pulse" data-pulse="D2" d="M346.306 158.028A14.398 14.398 0 1 1 317.51 158.028A14.398 14.398 0 1 1 346.306 158.028Z" fill="none" stroke="#FF0000" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="D2" d="M346.306 158.028A14.398 14.398 0 1 1 317.51 158.028A14.398 14.398 0 1 1 346.306 158.028Z" pathLength="1" fill="none" stroke="#FF0000" stroke-width="1.1"/></svg></span>
+                <span class="fig1-photo"><img id="fig1-p-D1" src="assets/img/fig1_D1.webp" width="298" height="298" loading="lazy" decoding="async" alt="D. Failure trace, CPU fan: the gripper ends far from the target region (red circle).">
+                  <svg class="fig1-ov" viewBox="459.201 44.408 71.627 71.627" aria-hidden="true" focusable="false"><path class="fig1-mark fig1-pulse" data-pulse="D1" d="M538.348 80.581A14.325 14.325 0 1 1 509.698 80.581A14.325 14.325 0 1 1 538.348 80.581Z" fill="none" stroke="#FF0000" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="D1" d="M538.348 80.581A14.325 14.325 0 1 1 509.698 80.581A14.325 14.325 0 1 1 538.348 80.581Z" pathLength="1" fill="none" stroke="#FF0000" stroke-width="1.1"/></svg></span>
+                <span class="fig1-photo"><img id="fig1-p-D2" src="assets/img/fig1_D2.webp" width="298" height="298" loading="lazy" decoding="async" alt="D. Failure trace, GPU bracket: the gripper ends far from the target region (red circle).">
+                  <svg class="fig1-ov" viewBox="459.201 123.198 71.627 71.627" aria-hidden="true" focusable="false"><path class="fig1-mark fig1-pulse" data-pulse="D2" d="M488.211 166.532A14.326 14.326 0 1 1 459.559 166.532A14.326 14.326 0 1 1 488.211 166.532Z" fill="none" stroke="#FF0000" stroke-width="1.1"/><path class="fig1-mark fig1-stroke" data-draw="D2" d="M488.211 166.532A14.326 14.326 0 1 1 459.559 166.532A14.326 14.326 0 1 1 488.211 166.532Z" pathLength="1" fill="none" stroke="#FF0000" stroke-width="1.1"/></svg></span>
                 <span class="fig1-chiprow"><span class="fig1-mark fig1-chip fig1-chip--fail" id="fig1-chip-D" data-draw="D-chip" title="Failure: gated, kept for audit with zero weight.">gated · audit</span></span>
               </span>
             </button></li>
           </ol>
           <button class="fig1-e" type="button" data-trace="E" aria-pressed="false" aria-controls="fig1-role" aria-label="E. Human Corrections">
-            <span class="traces__corr"><svg class="fig1-bracket" viewBox="7.932 194.025 388.77 22.319" aria-hidden="true" focusable="false"><defs><radialGradient id="fig1-dot-halo-b"><stop offset="0" stop-color="#5B9BE6" stop-opacity=".85"/><stop offset=".45" stop-color="#7DB4F2" stop-opacity=".4"/><stop offset="1" stop-color="#2F6DB5" stop-opacity="0"/></radialGradient><radialGradient id="fig1-dot-core-b" cx=".38" cy=".35" r=".7"><stop offset="0" stop-color="#EAF3FF"/><stop offset=".5" stop-color="#4A8EDC"/><stop offset="1" stop-color="#2F6DB5"/></radialGradient></defs><path class="fig1-mark fig1-glow" data-glow="D" data-at="353.506" d="M353.506 194.025L353.506 215.624" fill="none"/><path class="fig1-mark fig1-glow" data-glow="C" data-at="252.714" d="M252.498 194.025L252.714 215.624" fill="none"/><path class="fig1-mark fig1-glow" data-glow="B" data-at="151.921" d="M151.705 194.025L151.921 215.624" fill="none"/><path class="fig1-line" data-part="E-down" d="M353.506 194.025L353.506 215.624" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-line" data-part="E-along" d="M353.506 215.624L44.736 215.624" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-line" data-part="E-up" d="M44.736 215.624L44.736 198.532" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-line" data-part="E-drop" data-from="B" d="M151.705 194.025L151.921 215.624" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-line" data-part="E-drop" data-from="C" d="M252.498 194.025L252.714 215.624" fill="none" stroke="#000000" stroke-width="0.72" stroke-linecap="square"/><path class="fig1-arrowhead" data-part="E-head" d="M44.736 193.672L47.976 200.152L44.736 198.532L41.496 200.152Z" fill="#000000" stroke="#000000" stroke-width="0.72"/><circle class="fig1-mark fig1-pulse" data-pulse="E-head" cx="44.736" cy="196.102" r="2.6" fill="none" stroke="#2F6DB5" stroke-width="0.72"/><image class="fig1-operator" data-nod="bracket" data-at="151.921" href="assets/img/fig1_operator.webp" x="151.561" y="193.665" width="21.598" height="21.598"/><text class="fig1-bracket__label" x="172.204" y="207.344">E. Human Corrections</text><path class="fig1-mark fig1-trail" data-trail="bracket" data-lag="2" d="M353.506 194.025" fill="none" stroke="#5B9BE6" stroke-opacity="0.16" stroke-width="1.444" stroke-linecap="round" stroke-linejoin="round"/><path class="fig1-mark fig1-trail" data-trail="bracket" data-lag="1" d="M353.506 194.025" fill="none" stroke="#5B9BE6" stroke-opacity="0.2" stroke-width="2.28" stroke-linecap="round" stroke-linejoin="round"/><path class="fig1-mark fig1-trail" data-trail="bracket" data-lag="0" d="M353.506 194.025" fill="none" stroke="#5B9BE6" stroke-opacity="0.28" stroke-width="3.116" stroke-linecap="round" stroke-linejoin="round"/><g class="fig1-mark fig1-dot" data-dot="bracket" data-path="353.506,194.025 353.506,215.624 44.736,215.624 44.736,196.102" transform="translate(353.506 194.025)"><circle class="fig1-dot__halo" r="5.2" fill="url(#fig1-dot-halo-b)"/><circle class="fig1-dot__core" r="1.9" fill="url(#fig1-dot-core-b)"/></g></svg><span class="fig1-mark fig1-chip fig1-chip--corr fig1-chip--e" data-draw="E-chip" title="Human correction from the failure state; weighted, with a protocol floor.">correction · floor</span></span>
+            <span class="traces__corr"><svg class="fig1-bracket" viewBox="151.564 202.346 386.784 22.204" aria-hidden="true" focusable="false"><defs><radialGradient id="fig1-dot-halo-b"><stop offset="0" stop-color="#5B9BE6" stop-opacity=".85"/><stop offset=".45" stop-color="#7DB4F2" stop-opacity=".4"/><stop offset="1" stop-color="#2F6DB5" stop-opacity="0"/></radialGradient><radialGradient id="fig1-dot-core-b" cx=".38" cy=".35" r=".7"><stop offset="0" stop-color="#EAF3FF"/><stop offset=".5" stop-color="#4A8EDC"/><stop offset="1" stop-color="#2F6DB5"/></radialGradient></defs><path class="fig1-mark fig1-glow" data-glow="D" data-at="495.372" d="M495.372 202.346L495.372 223.834" fill="none"/><path class="fig1-mark fig1-glow" data-glow="C" data-at="395.095" d="M394.88 202.346L395.095 223.834" fill="none"/><path class="fig1-mark fig1-glow" data-glow="B" data-at="294.818" d="M294.603 202.346L294.818 223.834" fill="none"/><path class="fig1-line" data-part="E-down" d="M495.372 202.346L495.372 223.834" fill="none" stroke="#000000" stroke-width="0.716" stroke-linecap="square"/><path class="fig1-line" data-part="E-along" d="M495.372 223.834L188.179 223.834" fill="none" stroke="#000000" stroke-width="0.716" stroke-linecap="square"/><path class="fig1-line" data-part="E-up" d="M188.179 223.834L188.179 206.829" fill="none" stroke="#000000" stroke-width="0.716" stroke-linecap="square"/><path class="fig1-line" data-part="E-drop" data-from="B" d="M294.603 202.346L294.818 223.834" fill="none" stroke="#000000" stroke-width="0.716" stroke-linecap="square"/><path class="fig1-line" data-part="E-drop" data-from="C" d="M394.88 202.346L395.095 223.834" fill="none" stroke="#000000" stroke-width="0.716" stroke-linecap="square"/><path class="fig1-arrowhead" data-part="E-head" d="M188.179 201.995L191.403 208.441L188.179 206.829L184.956 208.441Z" fill="#000000" stroke="#000000" stroke-width="0.716"/><circle class="fig1-mark fig1-pulse" data-pulse="E-head" cx="188.179" cy="204.412" r="2.6" fill="none" stroke="#2F6DB5" stroke-width="0.716"/><image class="fig1-operator" data-nod="bracket" data-at="294.818" href="assets/img/fig1_operator.webp" x="294.459" y="201.988" width="21.488" height="21.488"/><text class="fig1-bracket__label" x="314.996" y="215.597">E. Human Corrections</text><path class="fig1-mark fig1-trail" data-trail="bracket" data-lag="2" d="M495.372 202.346" fill="none" stroke="#5B9BE6" stroke-opacity="0.16" stroke-width="1.444" stroke-linecap="round" stroke-linejoin="round"/><path class="fig1-mark fig1-trail" data-trail="bracket" data-lag="1" d="M495.372 202.346" fill="none" stroke="#5B9BE6" stroke-opacity="0.2" stroke-width="2.28" stroke-linecap="round" stroke-linejoin="round"/><path class="fig1-mark fig1-trail" data-trail="bracket" data-lag="0" d="M495.372 202.346" fill="none" stroke="#5B9BE6" stroke-opacity="0.28" stroke-width="3.116" stroke-linecap="round" stroke-linejoin="round"/><g class="fig1-mark fig1-dot" data-dot="bracket" data-path="495.372,202.346 495.372,223.834 188.179,223.834 188.179,204.412" transform="translate(495.372 202.346)"><circle class="fig1-dot__halo" r="5.2" fill="url(#fig1-dot-halo-b)"/><circle class="fig1-dot__core" r="1.9" fill="url(#fig1-dot-core-b)"/></g></svg><span class="fig1-mark fig1-chip fig1-chip--corr fig1-chip--e" data-draw="E-chip" title="Human correction from the state the rollout reached; weighted, with a protocol floor.">correction · floor</span></span>
             <span class="fig1-legend">
               <svg class="fig1-legend__mark" viewBox="0 0 64 32" aria-hidden="true" focusable="false"><defs><radialGradient id="fig1-dot-halo-l"><stop offset="0" stop-color="#5B9BE6" stop-opacity=".85"/><stop offset=".45" stop-color="#7DB4F2" stop-opacity=".4"/><stop offset="1" stop-color="#2F6DB5" stop-opacity="0"/></radialGradient><radialGradient id="fig1-dot-core-l" cx=".38" cy=".35" r=".7"><stop offset="0" stop-color="#EAF3FF"/><stop offset=".5" stop-color="#4A8EDC"/><stop offset="1" stop-color="#2F6DB5"/></radialGradient></defs><text x="5" y="8">A</text><text x="23" y="8">B</text><text x="41" y="8">C</text><text x="59" y="8">D</text><path class="fig1-mark fig1-glow" data-glow="D" data-at="59" d="M59 12V29"/><path class="fig1-mark fig1-glow" data-glow="C" data-at="41" d="M41 12V29"/><path class="fig1-mark fig1-glow" data-glow="B" data-at="23" d="M23 12V29"/><path class="fig1-line" d="M59 12V29H5V17M23 12V29M41 12V29"/><path class="fig1-arrowhead" d="M5 11L8.2 17.4L5 15.8L1.8 17.4Z"/><circle class="fig1-mark fig1-pulse" data-pulse="E-head" cx="5" cy="14" r="3"/><path class="fig1-mark fig1-trail" data-trail="legend" data-lag="2" d="M59 12" fill="none" stroke="#5B9BE6" stroke-opacity="0.16" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/><path class="fig1-mark fig1-trail" data-trail="legend" data-lag="1" d="M59 12" fill="none" stroke="#5B9BE6" stroke-opacity="0.2" stroke-width="4.3" stroke-linecap="round" stroke-linejoin="round"/><path class="fig1-mark fig1-trail" data-trail="legend" data-lag="0" d="M59 12" fill="none" stroke="#5B9BE6" stroke-opacity="0.28" stroke-width="5.9" stroke-linecap="round" stroke-linejoin="round"/><g class="fig1-mark fig1-dot" data-dot="legend" data-path="59,12 59,29 5,29 5,14" transform="translate(59 12)"><circle class="fig1-dot__halo" r="6.5" fill="url(#fig1-dot-halo-l)"/><circle class="fig1-dot__core" r="3.6" fill="url(#fig1-dot-core-l)"/></g></svg>
               <img class="fig1-operator" data-nod="legend" data-at="23" src="assets/img/fig1_operator.webp" width="89" height="89" alt="" loading="lazy" decoding="async">
               <span class="fig1-legend__label">E. Human Corrections</span>
-              <span class="fig1-mark fig1-chip fig1-chip--corr" data-draw="E-chip" title="Human correction from the failure state; weighted, with a protocol floor.">correction · floor</span>
+              <span class="fig1-mark fig1-chip fig1-chip--corr" data-draw="E-chip" title="Human correction from the state the rollout reached; weighted, with a protocol floor.">correction · floor</span>
             </span>
           </button>
           <div class="fig1-bar">
@@ -236,7 +237,7 @@
               <span class="fig1-role__line" data-for="B" hidden><span class="token token--near">B</span><span class="fig1-role__text">Near miss (partial): weighted by process evidence; partial progress still counts.</span></span>
               <span class="fig1-role__line" data-for="C" hidden><span class="token token--fail">C</span><span class="fig1-role__text">Wrong location: a failure label; gated, kept for audit with zero weight.</span></span>
               <span class="fig1-role__line" data-for="D" hidden><span class="token token--fail">D</span><span class="fig1-role__text">Failure: gated, kept for audit with zero weight.</span></span>
-              <span class="fig1-role__line" data-for="E" hidden><span class="token token--corr">E</span><span class="fig1-role__text">Human correction from the failure state; weighted, with a protocol floor.</span></span>
+              <span class="fig1-role__line" data-for="E" hidden><span class="token token--corr">E</span><span class="fig1-role__text">Human correction from the state the rollout reached; weighted, with a protocol floor.</span></span>
             </p>
             <span class="fig1-controls" hidden>
               <button class="fig1-btn fig1-toggle" type="button" aria-pressed="false" aria-label="Pause the Fig. 1 animation"><svg class="icon" aria-hidden="true"><use href="#i-pause"/></svg><span>Pause</span></button>
@@ -248,7 +249,7 @@
 
         <div class="compare">
           <article class="compare__card reveal">
-            <h3 class="compare__kicker">Outcome-only filtering</h3>
+            <h3 class="compare__kicker">Outcome-centric fine-tuning</h3>
             <div class="flow" aria-hidden="true">
               <div class="flow__group flow__group--out">
                 <span class="token token--off">B</span><span class="token token--off">C</span><span class="token token--off">D</span>
@@ -278,7 +279,7 @@
           </article>
 
           <article class="compare__card compare__card--pacer reveal">
-            <h3 class="compare__kicker">PACER</h3>
+            <h3 class="compare__kicker">PACER (ours)</h3>
             <div class="flow" aria-hidden="true">
               <div class="flow__group">
                 <span class="token token--ok">A</span><span class="token token--near">B</span><span class="token token--corr">E</span>
@@ -289,9 +290,11 @@
                 <span class="flow__tag">gated: audit only, zero weight</span>
               </div>
               <svg class="flow__arrow flow--c1"><use href="#i-down"/></svg>
-              <span class="flow__box flow__box--pacer flow--c1">Native VLA loss</span>
+              <span class="flow__box flow__box--soft flow--c1">Process-aware chunk weights</span>
+              <svg class="flow__arrow flow--c1"><use href="#i-down"/></svg>
+              <span class="flow__box flow__box--pacer flow--c1">Native loss update</span>
             </div>
-            <p>Keeps every trace. Outcome and safety labels only decide what may be imitated (wrong-location endpoints count as failure labels); process evidence sets how much each action chunk counts in the unchanged VLA loss.</p>
+            <p>Keeps every trace. Outcome and safety labels decide what may be imitated (wrong-location endpoints count as failure labels); process evidence and trace roles then set a bounded weight for each valid action chunk in the native supervised action loss.</p>
           </article>
         </div>
       </div>
@@ -769,11 +772,11 @@
         <ol class="steps reveal">
           <li><button class="step" type="button" aria-pressed="false" data-step="collect">
             <span class="step__title">Collect &amp; label</span>
-            <span class="step__text">Roll out the supervised policy. Operators label each outcome from a closed vocabulary and record a correction when a rollout goes wrong. Where the policy does not yet succeed, the same cycle also records a complete clean demonstration.</span>
+            <span class="step__text">Roll out the supervised reference policy. After each rollout the operator assigns one of five outcome labels, and each eligible unsuccessful attempt is followed by a teleoperated correction from the reached state. Supplementary clean demonstrations are recorded only where the reference policy did not succeed, under a coverage rule fixed in advance.</span>
           </button></li>
           <li><button class="step" type="button" aria-pressed="false" data-step="gate">
             <span class="step__title">Gate</span>
-            <span class="step__text">Outcome and safety labels decide eligibility only. Failure and excluded rows stay for audit but never receive imitation weight.</span>
+            <span class="step__text">An eligibility gate admits only training-split rows with valid masks, trusted provenance, safe execution and an imitable role. Failure and excluded rows stay for audit but never receive imitation weight.</span>
           </button></li>
           <li><button class="step" type="button" aria-pressed="false" data-step="evidence">
             <span class="step__title">Process evidence</span>
@@ -781,11 +784,11 @@
           </button></li>
           <li><button class="step" type="button" aria-pressed="false" data-step="weight">
             <span class="step__title">Bounded weight</span>
-            <span class="step__text">Evidence becomes a score, is centered within its stratum and mapped to a weight between zero and <var>w</var><sub>max</sub>.</span>
+            <span class="step__text">Evidence becomes a score, centered within its component-phase-role group, scaled by the role multiplier, held at a floor for clean and correction rows, and clipped to a weight between zero and <var>w</var><sub>max</sub>.</span>
           </button></li>
           <li><button class="step" type="button" aria-pressed="false" data-step="train">
             <span class="step__title">Train &amp; select</span>
-            <span class="step__text">Each of <span data-bind="candidates.length"></span> predeclared configurations trains a fresh adapter on the weighted native loss; the best validation score <var>J</var><sub>val</sub> picks one.</span>
+            <span class="step__text">For each of <span data-bind="candidates.length"></span> predeclared weighting settings, a fresh LoRA adapter is trained from the same reference checkpoint on the weighted native loss; among settings that pass both audits, the highest validation score <var>J</var><sub>val</sub> selects one.</span>
           </button></li>
         </ol>
 
@@ -798,16 +801,16 @@
             <li class="source" data-kind="rollouts">
               <h4 class="source__name"><span class="source__dots" aria-hidden="true"><i class="source__dot source__dot--success"></i><i class="source__dot source__dot--near"></i></span>Autonomous rollouts</h4>
               <p class="source__teach">The policy&rsquo;s own attempts. Successes and near misses show which of its action chunks carried it towards the target.</p>
-              <p class="source__weight"><span class="source__key">Weight</span> By process evidence. Wrong-location and wrong-region rollouts are gated to zero weight and kept for audit.</p>
+              <p class="source__weight"><span class="source__key">Weight</span> By process evidence, scaled by the role multiplier (lower for near misses than for successes). Wrong-location and wrong-region rollouts are gated to zero weight and kept for audit.</p>
             </li>
             <li class="source" data-kind="corrections">
               <h4 class="source__name"><span class="source__dots" aria-hidden="true"><i class="source__dot source__dot--corr"></i></span>Human corrections</h4>
               <p class="source__teach">Recoveries an operator records from the state where a rollout went wrong. They teach what demonstrations cannot: how to get back from the policy&rsquo;s own mistakes.</p>
-              <p class="source__weight"><span class="source__key">Weight</span> By process evidence, with the floor <var>f</var><sub>corr</sub>&nbsp;=&nbsp;<span data-bind="fixed.f_corr" data-format="dp2"></span>.</p>
+              <p class="source__weight"><span class="source__key">Weight</span> By process evidence, scaled by the correction multiplier, with the floor <var>f</var><sub>corr</sub>&nbsp;=&nbsp;<span data-bind="fixed.f_corr" data-format="dp2"></span>.</p>
             </li>
             <li class="source" data-kind="clean">
               <h4 class="source__name"><span class="source__dots" aria-hidden="true"><i class="source__dot source__dot--clean"></i></span>Supplementary clean demonstrations</h4>
-              <p class="source__teach">Complete demonstrations, recorded only for task phases the supervised policy does not yet succeed in, under a coverage rule fixed before collection. They supply the nominal start-to-target path it has not learned there. They are separate from the initial supervised demonstrations, which are not replayed.</p>
+              <p class="source__teach">Complete demonstrations, recorded only for component-phase cells where the reference policy did not succeed in the initial rollout diagnostic, under a coverage rule fixed before the rollout campaign. They supply the nominal start-to-target path it has not learned there. They are separate from the initial supervised demonstrations, which are not replayed.</p>
               <p class="source__weight"><span class="source__key">Weight</span> By process evidence, with the higher floor <var>f</var><sub>clean</sub>&nbsp;=&nbsp;<span data-bind="fixed.f_clean" data-format="dp2"></span>, which anchors that path so reweighting cannot wash it out.</p>
             </li>
           </ul>
@@ -820,17 +823,17 @@
             <div class="math__item">
               <p class="math__name">Row weight</p>
               <div class="eq" data-tex="w_i(\eta) \;=\; g_i \,\mathrm{clip}\!\Bigl(\max\!\bigl(f_{\rho_i},\;\alpha_\eta(\rho_i)\,\exp\!\bigl(\tfrac{s_\eta(i)-b_{\mathrm{str}(i)}(\eta)}{\tau\,\sigma_{\mathrm{str}(i)}(\eta)+\epsilon}\bigr)\bigr),\,0,\,w_{\max}\Bigr)"></div>
-              <p class="math__gloss"><var>g</var><sub>i</sub> is the eligibility gate, <var>s</var><sub>&eta;</sub> the process score, centered by the stratum median <var>b</var> and scale <var>&sigma;</var>; <var>f</var> is the role floor and <var>&alpha;</var> the role multiplier. The clip keeps every weight between zero and <var>w</var><sub>max</sub>.</p>
+              <p class="math__gloss"><var>g</var><sub>i</sub> is the eligibility gate and <var>s</var><sub>&eta;</sub> the process score, centered by the median <var>b</var> and robust scale <var>&sigma;</var> of its component-phase-role group; <var>f</var> is the protocol floor (<var>f</var><sub>clean</sub> for clean rows, <var>f</var><sub>corr</sub> for correction rows, zero otherwise) and <var>&alpha;</var> the role multiplier. The final clip keeps every weight between zero and <var>w</var><sub>max</sub>.</p>
             </div>
             <div class="math__item">
               <p class="math__name">Weighted native loss</p>
-              <div class="eq" data-tex="\mathcal{L}_{\mathrm{PACER}}(\theta;\eta)\;=\;\frac{\sum_{i\in\mathcal{D}_{\mathrm{tr}}}\sum_{h=1}^{H} w_i(\eta)\,m_{i,h}\,\ell_{\mathrm{act}}(\theta;i,h)}{\max\!\left(\sum_{i\in\mathcal{D}_{\mathrm{tr}}}\sum_{h=1}^{H} w_i(\eta)\,m_{i,h},\, \epsilon\right)}"></div>
-              <p class="math__gloss">The policy&rsquo;s own per-horizon action loss <var>&ell;</var><sub>act</sub>, reweighted and normalized; the mask <var>m</var> suppresses horizons after an unsafe transition or an invalid chunk.</p>
+              <div class="eq" data-tex="\mathcal{L}_{\mathrm{PACER}}(\theta;\eta)\;=\;\frac{\sum_{i\in\mathcal{B}}\sum_{h=1}^{H} w_i(\eta)\,m_{i,h}\,\ell_{\mathrm{act}}(\theta;i,h)}{\max\!\left(\sum_{i\in\mathcal{B}}\sum_{h=1}^{H} w_i(\eta)\,m_{i,h},\, \epsilon\right)}"></div>
+              <p class="math__gloss">The policy&rsquo;s native per-horizon action loss <var>&ell;</var><sub>act</sub>, reweighted and normalized over each minibatch <var>&#x212C;</var>&nbsp;&sub;&nbsp;<var>&#x1D49F;</var><sub>tr</sub>; the binary mask <var>m</var> keeps only valid horizons, dropping those without a finite in-bound target or after an unsafe event or manual stop.</p>
             </div>
             <div class="math__item">
               <p class="math__name">Validation score</p>
               <div class="eq" data-tex="J_{\mathrm{val}}(\eta)\;=\;\frac{1}{|\mathcal{G}_{\mathrm{val}}|}\sum_{c\in\mathcal{G}_{\mathrm{val}}}\frac{1}{|\mathcal{D}_{\mathrm{val}}^{\mathrm{score},c}|}\sum_{j\in\mathcal{D}_{\mathrm{val}}^{\mathrm{score},c}} v_j(\eta)"></div>
-              <p class="math__gloss">A component-balanced mean of row-level validation scores <var>v</var><sub>j</sub>. It ranks the candidate configurations after training; the policy is never optimized against it.</p>
+              <p class="math__gloss">A component-balanced mean of row-level validation scores <var>v</var><sub>j</sub>, computed from each fitted policy&rsquo;s predicted chunks on logged validation observations. It ranks the weighting settings that pass both audits after training; no policy is trained against it.</p>
             </div>
           </div>
         </details>
@@ -844,7 +847,7 @@
           <p class="eyebrow">Explainer</p>
           <div class="section__intro">
             <h2 id="explainer-h">How PACER weights a trace.</h2>
-            <p class="dek">Illustrative traces, split into action chunks. Choose one of the <span data-bind="candidates.length"></span> predeclared configurations and switch the gate to see each chunk&rsquo;s evidence turn into a weight.</p>
+            <p class="dek">Illustrative traces, split into action chunks. Choose one of the <span data-bind="candidates.length"></span> predeclared weighting settings and switch the gate to see each chunk&rsquo;s evidence turn into a weight.</p>
           </div>
         </header>
         <div id="explainer-app" class="mount" data-pending="Interactive explainer"></div>
@@ -858,16 +861,16 @@
           <p class="eyebrow">Results</p>
           <div class="section__intro">
             <h2 id="results-h">Held-out success on the real robot.</h2>
-            <p class="dek"><span data-bind="tldr.heldout_trials"></span> held-out trials per method: <span data-bind="tldr.heldout_configs_per_component"></span> configurations &times; <span data-bind="tldr.trials_per_config"></span> trials for each of the <span data-bind="tldr.components"></span> components, none of them seen during post-training.</p>
+            <p class="dek"><span data-bind="tldr.heldout_trials"></span> held-out trials per method: <span data-bind="tldr.heldout_configs_per_component"></span> scene configurations &times; <span data-bind="tldr.trials_per_config"></span> trials for each of the <span data-bind="tldr.components"></span> components, one close to the training distribution and one out of distribution, neither present in the initial demonstrations or the post-training data. A trial succeeds when the policy reaches a handoff state from which the fixed downstream skill can execute reliably.</p>
           </div>
         </header>
         <div class="results">
           <div class="panel reveal">
             <div class="panel__head">
-              <h3>Ablation ladder</h3>
-              <p>Overall success per method. Baselines in neutral tones, PACER in teal.</p>
+              <h3>Held-out benchmark</h3>
+              <p>Overall held-out successes per method. Baselines in neutral tones, PACER in teal.</p>
             </div>
-            <div id="ladder" class="mount" data-pending="Ablation ladder"></div>
+            <div id="ladder" class="mount" data-pending="Held-out benchmark"></div>
           </div>
           <div class="panel reveal">
             <div class="panel__head">
@@ -879,6 +882,17 @@
           <details class="panel panel--details reveal">
             <summary><span class="panel__summary">Full results table</span><span class="math__hint">incl. validation score <var>J</var><sub>val</sub></span></summary>
             <div id="results-table" class="mount" data-pending="Results table"></div>
+          </details>
+          <div class="panel reveal" id="ood-panel">
+            <div class="panel__head">
+              <h3>Controlled OOD comparison</h3>
+              <p>Policies trained from the same reference, each with <span data-bind="ood.trials_per_config"></span> trials on a mild and <span data-bind="ood.trials_per_config"></span> on a strong out-of-distribution configuration, distinct from the held-out benchmark. Gap: selected PACER minus each policy, with paired bootstrap <span data-bind="ood.ci_level"></span>% intervals.</p>
+            </div>
+            <div id="ood" class="mount" data-pending="OOD comparison"></div>
+          </div>
+          <details class="panel panel--details reveal">
+            <summary><span class="panel__summary">Full OOD comparison table</span><span class="math__hint"><span data-bind="derived.ood_total_trials"></span> paired trials</span></summary>
+            <div id="ood-table" class="mount" data-pending="OOD table"></div>
           </details>
         </div>
       </div>

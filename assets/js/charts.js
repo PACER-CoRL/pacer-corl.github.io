@@ -6,6 +6,7 @@
      #per-component   grouped bars per component with Wilson 95% intervals
                       (z = 1.96, n = trials per component), as in the paper's figure
      #results-table   the full table incl. the validation score J_val
+     #ood, #ood-table the paper's controlled OOD comparison (window.PACER.ood)
 
    Colour: PACER is the only teal mark; baselines take a neutral sand -> ink ramp
    ordered by overall success, so a method keeps its tone across charts.
@@ -465,7 +466,8 @@ var PACERCharts = (function () {
       .concat(comps.map(function (c) { return h("th", { scope: "col", text: c }); }))
       .concat([
         h("th", { scope: "col", text: "Overall" }),
-        h("th", { scope: "col" }, [h("var", { text: "J" }), h("sub", { text: "val" })])
+        h("th", { scope: "col", text: "95% CI (%)" }),
+        h("th", { scope: "col" }, ["Offline ", h("var", { text: "J" }), h("sub", { text: "val" })])
       ]));
     var body = h("tbody");
     results.methods.forEach(function (m) {
@@ -480,6 +482,7 @@ var PACERCharts = (function () {
       ].concat(m.per_component.map(function (k) { return h("td", { text: String(k) }); }))
         .concat([
           h("td", { class: "rt__overall", text: String(m.overall) }),
+          h("td", { class: "rt__ci", text: ciText(m.overall, total) }),
           h("td", { text: m.jval.toFixed(4) })
         ])));
     });
@@ -491,10 +494,148 @@ var PACERCharts = (function () {
     // The note sits outside the scroll box so it never scrolls or clips on a phone.
     el.appendChild(h("div", { class: "table-scroll", role: "region", "aria-label": "Full results table", tabindex: "0" }, [table]));
     el.appendChild(h("p", { class: "chart__caption" }, [
-      "Held-out successes out of " + n + " per component and out of " + total + " overall. ",
+      "Held-out successes out of " + n + " per component and out of " + total + " overall; brackets give the marginal Wilson 95% interval of the overall success rate, in percent. Offline ",
       h("var", { text: "J" }), h("sub", { text: "val" }),
-      " is the validation score defined in the Method section."
+      " (defined in the Method section) selects among PACER\u2019s weighting settings and is reported for the baselines as a diagnostic."
     ]));
+    return table;
+  }
+
+  // "[79.0, 92.2]": the marginal Wilson 95% interval of k / n, in percent, as the paper prints it.
+  function ciText(k, n) {
+    var w = wilson(k, n);
+    return "[" + (w.lo * 100).toFixed(1) + ", " + (w.hi * 100).toFixed(1) + "]";
+  }
+
+  /* ------------------------------------- (d) controlled OOD comparison */
+
+  /* The paper's controlled OOD table: per policy, a bar for each shift (out of
+     trials_per_config), the overall count, and PACER's gap with its paired
+     bootstrap interval. Rows keep the table's order and groups. */
+  var OOD_H = 22, OOD_BAR = 12;
+
+  function oodBar(v, n, fill, col, aria) {
+    var share = v / n;
+    var y = (OOD_H - OOD_BAR) / 2;
+    var svg = s("svg", { class: "ood__svg", role: "img", width: "100%", height: OOD_H, "aria-label": aria });
+    svg.appendChild(s("rect", { class: "ood__track", x: 0, y: y, width: "100%", height: OOD_BAR, rx: 3 }));
+    svg.appendChild(s("rect", {
+      class: "bar", "data-value": v, "data-col": col, fill: fill,
+      x: 0, y: y, width: (share * 100) + "%", height: OOD_BAR, rx: 4
+    }));
+    if (v === 0) svg.appendChild(s("rect", { class: "ladder__zero", x: 0, y: y - 3, width: 2, height: OOD_BAR + 6 }));
+    svg.appendChild(s("svg", { class: "ood__at", x: (share * 100) + "%", y: 0, width: 1, height: OOD_H, overflow: "visible" }, [
+      s("text", { class: "ood__value", x: 7, y: OOD_H / 2, text: String(v) })
+    ]));
+    return svg;
+  }
+
+  function gapText(p) {
+    return p.gap === null || p.gap === undefined ? null : "+" + p.gap;
+  }
+
+  function renderOOD(el, ood) {
+    var n = ood.trials_per_config;
+    var total = n * ood.configs.length;
+    var tone = tones(ood.policies.map(function (p) { return { id: p.id, overall: p.overall }; }));
+    var groupLabel = {};
+    ood.groups.forEach(function (g) { groupLabel[g.id] = g.label; });
+
+    el.textContent = "";
+    var chart = h("div", { class: "chart ood", "data-chart": "ood" });
+    chart.appendChild(h("div", { class: "ood__head", "aria-hidden": "true" }, [
+      h("span", { text: "Policy" }),
+      h("span", { text: ood.configs[0] + " / " + n }),
+      h("span", { text: ood.configs[1] + " / " + n }),
+      h("span", { class: "ood__num", text: "Overall / " + total }),
+      h("span", { class: "ood__num", text: "PACER gap (points)" })
+    ]));
+    var list = h("ol", { class: "ood__rows" });
+    var lastGroup = null;
+    ood.policies.forEach(function (p, i) {
+      if (p.group !== lastGroup && groupLabel[p.group]) {
+        list.appendChild(h("li", { class: "ood__group", role: "presentation", text: groupLabel[p.group] }));
+      }
+      lastGroup = p.group;
+      var isPacer = p.id === "pacer";
+      var gap = gapText(p);
+      list.appendChild(h("li", {
+        class: "ood__row" + (isPacer ? " is-pacer" : ""), "data-row": p.id,
+        "data-context": isPacer ? null : "baseline", style: "--i:" + i
+      }, [
+        h("div", { class: "ood__text" }, [
+          h("p", { class: "ood__label", text: p.label }),
+          h("p", { class: "ood__desc", text: p.desc })
+        ]),
+        h("div", { class: "ood__plot ood__plot--mild" }, [
+          h("span", { class: "ood__col", "aria-hidden": "true", text: ood.configs[0] }),
+          oodBar(p.mild, n, tone[p.id], "mild", p.label + ": " + p.mild + " of " + n + " trials succeeded, " + ood.configs[0].toLowerCase())
+        ]),
+        h("div", { class: "ood__plot ood__plot--strong" }, [
+          h("span", { class: "ood__col", "aria-hidden": "true", text: ood.configs[1] }),
+          oodBar(p.strong, n, tone[p.id], "strong", p.label + ": " + p.strong + " of " + n + " trials succeeded, " + ood.configs[1].toLowerCase())
+        ]),
+        h("p", { class: "ood__overall ood__num" }, [
+          h("span", { class: "ood__k", text: String(p.overall) }),
+          h("span", { class: "ood__ci", text: "[" + p.ci[0].toFixed(1) + ", " + p.ci[1].toFixed(1) + "]" })
+        ]),
+        h("p", { class: "ood__gap ood__num" }, gap ? [
+          h("span", { class: "ood__k", text: gap }),
+          h("span", { class: "ood__ci", text: "[" + p.gap_ci[0] + ", " + p.gap_ci[1] + "]" })
+        ] : [h("span", { class: "ood__ref", text: "reference" })])
+      ]));
+    });
+    chart.appendChild(list);
+    el.appendChild(chart);
+    animateOnce(chart);
+    return chart;
+  }
+
+  function renderOODTable(el, ood) {
+    var n = ood.trials_per_config;
+    var groupLabel = {};
+    ood.groups.forEach(function (g) { groupLabel[g.id] = g.label; });
+    el.textContent = "";
+    var head = h("tr", null, [
+      h("th", { scope: "col", class: "rt__method", text: "Policy" }),
+      h("th", { scope: "col", text: ood.configs[0] + " (n=" + n + ")" }),
+      h("th", { scope: "col", text: ood.configs[1] + " (n=" + n + ")" }),
+      h("th", { scope: "col", text: "Overall (n=" + (n * ood.configs.length) + ")" }),
+      h("th", { scope: "col", text: "95% CI (%)" }),
+      h("th", { scope: "col", text: "Gap (pp)" }),
+      h("th", { scope: "col", text: "Gap 95% CI" })
+    ]);
+    var body = h("tbody");
+    var lastGroup = null;
+    ood.policies.forEach(function (p) {
+      if (p.group !== lastGroup && groupLabel[p.group]) {
+        body.appendChild(h("tr", { class: "ood-table__group" }, [
+          h("th", { scope: "colgroup", colspan: 7, class: "rt__method", text: groupLabel[p.group] })
+        ]));
+      }
+      lastGroup = p.group;
+      var isPacer = p.id === "pacer";
+      body.appendChild(h("tr", { class: isPacer ? "is-pacer" : null, "data-policy": p.id, "data-context": isPacer ? null : "baseline" }, [
+        h("th", { scope: "row", class: "rt__method", text: p.label }),
+        h("td", { text: String(p.mild) }),
+        h("td", { text: String(p.strong) }),
+        h("td", { class: "rt__overall", text: String(p.overall) }),
+        h("td", { text: "[" + p.ci[0].toFixed(1) + ", " + p.ci[1].toFixed(1) + "]" }),
+        h("td", { text: gapText(p) || "Reference" }),
+        h("td", { text: p.gap_ci ? "[" + p.gap_ci[0] + ", " + p.gap_ci[1] + "]" : "\u2014" })
+      ]));
+    });
+    var table = h("table", { class: "rt rt--ood" }, [
+      h("caption", { class: "visually-hidden", text: "Controlled OOD comparison: success counts per policy and PACER's gap" }),
+      h("thead", null, [head]),
+      body
+    ]);
+    el.appendChild(h("div", { class: "table-scroll", role: "region", "aria-label": "Full OOD comparison table", tabindex: "0" }, [table]));
+    el.appendChild(h("p", { class: "chart__caption", text:
+      "Success counts out of " + n + " per configuration and " + (n * ood.configs.length) + " overall; 95% CI is the Wilson interval of the overall rate. " +
+      "Gap is selected PACER minus each row, in percentage points, with its paired bootstrap 95% interval. " +
+      "Trials are paired across policies by component and trial index under a common reset procedure."
+    }));
     return table;
   }
 
@@ -518,6 +659,8 @@ var PACERCharts = (function () {
       });
     }
     if (mount("results-table")) safely("renderTable", function () { renderTable(mount("results-table"), R); });
+    if (D.ood && mount("ood")) safely("renderOOD", function () { renderOOD(mount("ood"), D.ood); });
+    if (D.ood && mount("ood-table")) safely("renderOODTable", function () { renderOODTable(mount("ood-table"), D.ood); });
   }
 
   if (doc) {
@@ -532,6 +675,8 @@ var PACERCharts = (function () {
     renderLadder: renderLadder,
     renderPerComponent: renderPerComponent,
     renderTable: renderTable,
+    renderOOD: renderOOD,
+    renderOODTable: renderOODTable,
     DEFAULT_PER_COMPONENT: DEFAULT_PER_COMPONENT
   };
 })();
