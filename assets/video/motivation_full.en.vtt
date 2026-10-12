@@ -1,0 +1,202 @@
+WEBVTT
+
+00:00:01.000 --> 00:00:02.920
+Imagine how you learn in school.
+
+00:00:02.960 --> 00:00:05.800
+One teacher gives the same
+demonstration to everyone.
+
+00:00:05.900 --> 00:00:09.740
+During the lesson, different students
+may all look like they fully understand.
+
+00:00:10.000 --> 00:00:14.100
+However, the actual performance can
+only be tested beyond the lecture.
+
+00:00:14.100 --> 00:00:18.540
+Let's pick student A, give a real exam
+on the same task and watch the rollouts.
+
+00:00:20.800 --> 00:00:23.320
+How can we improve
+student A's performance?
+
+00:00:23.400 --> 00:00:24.920
+Give more demonstrations?
+
+00:00:24.940 --> 00:00:26.360
+Tell only yes or no.
+
+00:00:26.360 --> 00:00:28.540
+Or give an overall reward score.
+
+00:00:28.700 --> 00:00:32.460
+But a score without step info
+might confuse the student.
+
+00:00:32.800 --> 00:00:36.160
+The reward may work after
+tuning between A and teacher.
+
+00:00:36.200 --> 00:00:39.700
+But when using the same method
+for B or C, it may not work.
+
+00:00:39.900 --> 00:00:43.380
+In school, teachers do not set
+rewards differently for everyone.
+
+00:00:43.420 --> 00:00:45.400
+They set a standard trial evaluation.
+
+00:00:46.000 --> 00:00:48.660
+Now consider the same idea in robotics.
+
+00:00:48.660 --> 00:00:53.020
+Each VLA model is a different student to
+learn from the teacher's demonstrations.
+
+00:00:53.160 --> 00:00:56.520
+We should also evaluate its
+performance through multiple trials.
+
+00:00:56.900 --> 00:01:01.400
+Inspired by human education, we are
+considering the same for robotic learning.
+
+00:01:01.520 --> 00:01:04.900
+Learn from useful rollouts and
+corrections and avoid bad behaviors
+
+00:01:04.900 --> 00:01:08.080
+while preserving each model's
+learning and behavior.
+
+00:01:11.100 --> 00:01:13.540
+Motivated by this, we introduce PACER,
+
+00:01:13.540 --> 00:01:16.780
+a process-aware VLA policy
+learning from human corrections,
+
+00:01:16.780 --> 00:01:19.140
+and apply it to robotic disassembly.
+
+00:01:19.280 --> 00:01:23.400
+As shown here, after deployment,
+the VLA rollout can be successful,
+
+00:01:23.400 --> 00:01:27.480
+near the target, moving toward a
+wrong location, or completely failed.
+
+00:01:27.480 --> 00:01:30.300
+So the key question is not simply
+how to filter success and failure,
+
+00:01:30.300 --> 00:01:34.020
+and not how to learn a private
+reward model to tune one VLA.
+
+00:01:34.020 --> 00:01:37.260
+Instead, we want the model to
+learn from its own rollout process,
+
+00:01:37.260 --> 00:01:39.380
+just like the student learns from an exam.
+
+00:01:39.500 --> 00:01:42.500
+What went well, what went wrong,
+and what can be corrected.
+
+00:01:43.700 --> 00:01:46.100
+The PACER pipeline starts
+from the rollout traces
+
+00:01:46.100 --> 00:01:50.260
+and human corrections collected
+by deploying the initial policy.
+
+00:01:50.340 --> 00:01:52.220
+Each trace is labeled and gated,
+
+00:01:52.220 --> 00:01:56.020
+so unsafe or clearly wrong attempts
+are never used for imitation.
+
+00:01:56.160 --> 00:01:58.840
+The remaining traces are
+compiled into action chunks,
+
+00:01:58.840 --> 00:02:00.900
+and each chunk receives process evidence,
+
+00:02:00.900 --> 00:02:04.560
+such as progress toward the target
+or entry into the terminal region.
+
+00:02:04.820 --> 00:02:06.740
+This evidence sets how strongly each chunk
+
+00:02:06.740 --> 00:02:09.320
+contributes to the native
+VLA training objective,
+
+00:02:09.320 --> 00:02:12.400
+while the backbone and
+loss remain unchanged.
+
+00:02:14.100 --> 00:02:17.740
+After initial SFT, the
+policy runs rollout trials.
+
+00:02:17.760 --> 00:02:19.720
+Successful trials are kept as traces.
+
+00:02:19.720 --> 00:02:22.120
+For failures, the operator
+records a correction,
+
+00:02:22.120 --> 00:02:25.520
+the arm returns home, and then
+provides a clean demonstration.
+
+00:02:28.500 --> 00:02:32.680
+We first compare the initial
+SFT policy, vanilla post-SFT,
+
+00:02:32.680 --> 00:02:37.760
+and the selected PACER model on two
+representative tasks, CPU fan and RAM.
+
+00:02:43.300 --> 00:02:46.600
+Next, we compare three ways
+to use post-training traces.
+
+00:02:46.620 --> 00:02:50.440
+Outcome-only learning, fixed geometry
+weighting, and PACER selected.
+
+00:02:58.500 --> 00:02:59.240
+Finally,
+
+00:02:59.240 --> 00:03:05.080
+we show the selected PACER policy in a
+demonstrated robotic disassembly workflow.
+
+00:03:05.320 --> 00:03:08.880
+This final demo summarizes
+the main idea of PACER.
+
+00:03:08.960 --> 00:03:13.000
+By learning from its own rollout
+process and human corrections,
+
+00:03:13.000 --> 00:03:15.460
+the VLA policy can improve its behavior
+
+00:03:15.460 --> 00:03:20.800
+while still using the original VLA
+backbone and native training objective.
