@@ -278,7 +278,9 @@ var PACERExplainer = (function () {
       grid,
       h("p", { class: "cands__note" }, [
         "PACER uses the highest ", sym("J", "val"), "; all " + cands.length + " lie within " +
-        (Math.ceil(span * 1e4) / 1e4).toFixed(4) + " of each other."
+        (Math.ceil(span * 1e4) / 1e4).toFixed(4) + " of each other." +
+        (byId.rw_like ? " RW-like, trained alone with no validation-based selection, also appears as a fixed " +
+          "alternative in the OOD comparison under Results." : "")
       ])
     ]);
 

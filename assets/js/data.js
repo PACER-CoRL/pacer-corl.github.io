@@ -280,7 +280,7 @@ window.PACER = {
         "id": "rw_like",
         "label": "RW-like",
         "group": "fixed_rules",
-        "desc": "PACER's weighting formula with the predeclared rw_like setting",
+        "desc": "PACER's weighting formula with the rw_like setting fixed in advance; one policy, no validation-based selection",
         "mild": 33,
         "strong": 18,
         "overall": 51,
