@@ -498,7 +498,19 @@ var PACERCharts = (function () {
       h("var", { text: "J" }), h("sub", { text: "val" }),
       " (defined in the Method section) selects among PACER\u2019s weighting settings and is reported for the baselines as a diagnostic."
     ]));
+    el.appendChild(rowNotes(results.methods, "What each method is", label));
     return table;
+  }
+
+  // R60: what each row is, as a definition list under an expanded full table (one entry per row, in table order).
+  function rowNotes(rows, aria, labelOf) {
+    var dl = h("dl", { class: "rt__notes", "aria-label": aria });
+    rows.forEach(function (r) {
+      if (!r.desc) return;
+      dl.appendChild(h("dt", { "data-row": r.id }, [labelOf ? labelOf(r.label) : r.label]));
+      dl.appendChild(h("dd", { "data-row": r.id, text: r.desc.charAt(0).toUpperCase() + r.desc.slice(1) + "." }));
+    });
+    return dl;
   }
 
   // "[79.0, 92.2]": the marginal Wilson 95% interval of k / n, in percent, as the paper prints it.
@@ -636,6 +648,7 @@ var PACERCharts = (function () {
       "Gap is selected PACER minus each row, in percentage points, with its paired bootstrap 95% interval. " +
       "Trials are paired across policies by component and trial index under a common reset procedure."
     }));
+    el.appendChild(rowNotes(ood.policies, "What each policy is"));
     return table;
   }
 

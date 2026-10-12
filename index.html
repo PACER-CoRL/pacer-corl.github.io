@@ -901,9 +901,6 @@
               <p>Policies trained from the same reference, each with <span data-bind="ood.trials_per_config"></span> trials on a mild and <span data-bind="ood.trials_per_config"></span> on a strong out-of-distribution configuration, distinct from the held-out benchmark. Gap: selected PACER minus each policy, with paired bootstrap <span data-bind="ood.ci_level"></span>% intervals.</p>
             </div>
             <div id="ood" class="mount" data-pending="OOD comparison"></div>
-            <div class="ood-about" id="rw-like-note">
-              <p><strong>Fixed geometry vs. RW-like.</strong> Both are fixed in advance and train a single policy with no validation-based selection. Fixed geometry is a separate, simpler rule: each gate-passing row gets a precomputed rank weight that combines progress, proximity and target-region membership with fixed role multipliers, independent of PACER&rsquo;s coefficients. RW-like uses PACER&rsquo;s full weighting formula with one predeclared setting, <code>rw_like</code>, so its weights still come from each chunk&rsquo;s process evidence, compared within its component&ndash;phase&ndash;role group. Selected PACER trains all <span data-bind="candidates.length"></span> predeclared settings and keeps the one with the best validation score.</p>
-            </div>
           </div>
           <details class="panel panel--details reveal">
             <summary><span class="panel__summary">Full OOD comparison table</span><span class="math__hint"><span data-bind="derived.ood_total_trials"></span> paired trials</span></summary>

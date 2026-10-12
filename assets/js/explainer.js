@@ -273,14 +273,21 @@ var PACERExplainer = (function () {
         ])
       ]));
     });
+    // R60: one line on the chosen setting (data candidates[].about), updated with the chips.
+    var about = h("p", { class: "cands__about", "aria-live": "polite" });
+    function renderAbout(c) {
+      about.textContent = "";
+      if (!c || !c.about) { about.hidden = true; return; }
+      about.hidden = false;
+      append(about, [h("strong", { text: (c.label || c.id) + "." }), " " + c.about]);
+    }
     var cands_ = h("fieldset", { class: "cands" }, [
       h("legend", { class: "xp__label", text: "Predeclared weighting setting" }),
       grid,
+      about,
       h("p", { class: "cands__note" }, [
         "PACER uses the highest ", sym("J", "val"), "; all " + cands.length + " lie within " +
-        (Math.ceil(span * 1e4) / 1e4).toFixed(4) + " of each other." +
-        (byId.rw_like ? " RW-like, trained alone with no validation-based selection, also appears as a fixed " +
-          "alternative in the OOD comparison under Results." : "")
+        (Math.ceil(span * 1e4) / 1e4).toFixed(4) + " of each other."
       ])
     ]);
 
@@ -513,6 +520,7 @@ var PACERExplainer = (function () {
            sym("γ", "failure"), "\u00a0=\u00a0" + trimNum(fixed.gamma_failure) + ")\u00a0— failure chunks would be imitated."]);
       renderParams(eta);
       renderKey(eta);
+      renderAbout(eta);
       if (!geo) { renderInspector(); return; }   // plate not laid out yet (no width)
 
       geo.trayLabel.textContent = "";

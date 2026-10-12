@@ -262,7 +262,7 @@ window.PACER = {
         "id": "fixed_geometry",
         "label": "Fixed geometry",
         "group": "fixed_rules",
-        "desc": "a separate fixed rule: rank weight from progress, proximity and target-region membership with fixed role multipliers",
+        "desc": "fixed rank weight from progress, proximity and target-region membership with fixed role multipliers; one policy, no validation-based selection",
         "mild": 35,
         "strong": 16,
         "overall": 51,
@@ -399,7 +399,8 @@ window.PACER = {
       "tau": 1.0,
       "w_max": 4.5,
       "jval": 0.769558,
-      "selected": false
+      "selected": false,
+      "about": "PACER\u2019s formula with the predeclared rw_like setting, led by proximity and progress. Trained on its own, with no validation-based selection, it is the RW-like policy in Results."
     },
     {
       "id": "progress_heavy",
@@ -413,7 +414,8 @@ window.PACER = {
       "tau": 1.0,
       "w_max": 4.5,
       "jval": 0.76842,
-      "selected": false
+      "selected": false,
+      "about": "Puts the most weight on progress toward the target."
     },
     {
       "id": "hover_proximity_heavy",
@@ -427,7 +429,8 @@ window.PACER = {
       "tau": 1.0,
       "w_max": 4.5,
       "jval": 0.770343,
-      "selected": false
+      "selected": false,
+      "about": "Puts the most weight on how close each chunk ends to the target."
     },
     {
       "id": "terminal_stop_heavy",
@@ -441,7 +444,8 @@ window.PACER = {
       "tau": 1.0,
       "w_max": 4.5,
       "jval": 0.77076,
-      "selected": true
+      "selected": true,
+      "about": "Emphasizes terminal-region entry and the stop or handoff signal. PACER selects it by validation score."
     },
     {
       "id": "correction_heavy",
@@ -455,7 +459,8 @@ window.PACER = {
       "tau": 1.0,
       "w_max": 4.5,
       "jval": 0.769622,
-      "selected": false
+      "selected": false,
+      "about": "RW-like\u2019s evidence weights, with corrections and near misses weighted up."
     },
     {
       "id": "conservative",
@@ -469,7 +474,8 @@ window.PACER = {
       "tau": 1.5,
       "w_max": 2.5,
       "jval": 0.769244,
-      "selected": false
+      "selected": false,
+      "about": "RW-like\u2019s evidence weights, with near misses weighted down, a softer temperature and a lower cap."
     },
     {
       "id": "ram_connector_recovery",
@@ -483,7 +489,8 @@ window.PACER = {
       "tau": 1.0,
       "w_max": 5.0,
       "jval": 0.768812,
-      "selected": false
+      "selected": false,
+      "about": "Defined from pre-rollout demonstration coverage: more weight on progress, stronger correction and near-miss multipliers and a higher cap."
     },
     {
       "id": "balanced_low_clip",
@@ -497,7 +504,8 @@ window.PACER = {
       "tau": 0.85,
       "w_max": 3.5,
       "jval": 0.769395,
-      "selected": false
+      "selected": false,
+      "about": "RW-like\u2019s evidence weights, with a sharper temperature and a lower cap."
     }
   ],
   "fixed": {
