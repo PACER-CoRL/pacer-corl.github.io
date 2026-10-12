@@ -902,7 +902,7 @@
             </div>
             <div id="ood" class="mount" data-pending="OOD comparison"></div>
             <div class="ood-about" id="rw-like-note">
-              <p><strong>What RW-like is.</strong> RW-like uses PACER&rsquo;s full weighting formula with one predeclared setting, <code>rw_like</code>, fixed in advance, and trains a single policy with no validation-based selection. Its weights still come from each chunk&rsquo;s process evidence. Selected PACER instead trains all <span data-bind="candidates.length"></span> predeclared settings and keeps the one with the best validation score.</p>
+              <p><strong>Fixed geometry vs. RW-like.</strong> Both are fixed in advance and train a single policy with no validation-based selection. Fixed geometry is a separate, simpler rule: each gate-passing row gets a precomputed rank weight that combines progress, proximity and target-region membership with fixed role multipliers, independent of PACER&rsquo;s coefficients. RW-like uses PACER&rsquo;s full weighting formula with one predeclared setting, <code>rw_like</code>, so its weights still come from each chunk&rsquo;s process evidence, compared within its component&ndash;phase&ndash;role group. Selected PACER trains all <span data-bind="candidates.length"></span> predeclared settings and keeps the one with the best validation score.</p>
             </div>
           </div>
           <details class="panel panel--details reveal">

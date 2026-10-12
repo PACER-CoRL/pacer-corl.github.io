@@ -262,7 +262,7 @@ window.PACER = {
         "id": "fixed_geometry",
         "label": "Fixed geometry",
         "group": "fixed_rules",
-        "desc": "progress, proximity and target-region membership with fixed role multipliers",
+        "desc": "a separate fixed rule: rank weight from progress, proximity and target-region membership with fixed role multipliers",
         "mild": 35,
         "strong": 16,
         "overall": 51,
