@@ -634,8 +634,9 @@ h2 {
 
 /* ------------------------------------------------------------ Fig. 2 ---- */
 
-/* The figure is inline SVG rebuilt from the paper's PDF (extract_fig2.py); fig2.js loops a token
-   flow over it (never dimming it). The caption shares its row with the Pause toggle and Replay. */
+/* The figure is inline SVG rebuilt from the paper's PDF (extract_fig2.py); fig2.js plays its
+   token flow once over it (never dimming it) and rests on the complete figure. The caption shares
+   its row with the Pause toggle and Replay. */
 .fig2 {
   margin: 0;
   display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 24px;
@@ -672,11 +673,17 @@ h2 {
 .fig2__hint .icon { width: 13px; height: 13px; }
 .fig2.is-scrollable:not(.is-end) .fig2__fade,
 .fig2.is-scrollable:not(.is-end) .fig2__hint { opacity: 1; visibility: visible; transition: opacity .2s, visibility 0s; }
+/* While the figure plays and the scroller follows it (fig2.js), the hint, which invites the
+   sideways scroll that would stop the following, steps aside; the edge fade stays. */
+.fig2.is-scrollable.is-following:not(.is-end) .fig2__hint { opacity: 0; visibility: hidden; transition: opacity .2s, visibility 0s linear .2s; }
 .fig2__svg { width: 100%; height: auto; overflow: visible; }
 .fig2__svg text { font-family: var(--serif); fill: #000; }
 .fig2__svg .f2-math { font-style: italic; }
 .fig2__svg .f2-math--bold { font-weight: 600; }
 .fig2__svg .f2-up { font-style: normal; }
+/* J in J_val(eta): the paper's maths italic J (KaTeX's maths font, loaded with the page's
+   equations; else a Times italic). Lora's italic J is nearly upright. */
+.fig2__svg .f2-mi { font-family: KaTeX_Math, "Times New Roman", Times, "Liberation Serif", "Nimbus Roman", serif; font-style: italic; }
 .fig2__svg .f2-flow, .fig2__svg .f2-rules { pointer-events: none; }
 .fig2__cap { grid-column: 1; grid-row: 2; margin-top: 14px; max-width: 84ch; font-size: 15px; line-height: 1.5; color: var(--muted); }
 .fig2__controls { grid-column: 2; grid-row: 2; display: flex; gap: 8px; margin-top: 12px; align-self: start; }
@@ -691,7 +698,10 @@ h2 {
 .fig2__btn .icon { width: 14px; height: 14px; }
 .fig2__btn .icon--play, .fig2__btn.is-paused .icon--pause { display: none; }
 .fig2__btn.is-paused .icon--play { display: block; }
-.fig2__btn[aria-pressed="true"] { border-color: var(--brass); color: var(--board); background: #fff; }
+.fig2__btn.is-paused { border-color: var(--brass); color: var(--board); background: #fff; }
+/* At rest (the cycle has played) nothing is playing: Pause is inert until Replay. */
+.fig2__btn[aria-disabled="true"] { opacity: .45; cursor: default; }
+.fig2__btn[aria-disabled="true"]:hover { border-color: var(--sand-2); }
 
 .steps {
   list-style: none; margin: 28px 0 0; padding: 0;

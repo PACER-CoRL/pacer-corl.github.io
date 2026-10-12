@@ -493,6 +493,7 @@
                       <line class="f2-gauge__track" x1="388.14" y1="130.72" x2="426.33" y2="130.72" stroke="#666666" stroke-width="0.5"/>
                       <path class="f2-gauge__ticks" d="M388.14 129.12V132.32M426.33 129.12V132.32" stroke="#666666" stroke-width="0.5" fill="none"/>
                       <rect class="f2-gauge__fill" x="388.14" y="129.62" width="23.68" height="2.2" fill="#5B6370" data-w="23.68"/>
+                      <rect class="f2-gauge__sweep" x="388.14" y="129.62" width="0" height="2.2" fill="#B08A4A" data-w="23.68" opacity="0"/>
                       <text class="f2-gauge__lab" x="386.54" y="132.47" font-size="5.2" text-anchor="end">0</text>
                       <text class="f2-gauge__lab f2-math" x="427.93" y="132.47" font-size="5.6">w<tspan class="f2-up" font-size="4" dy="1.1">max</tspan></text>
                     </g>
@@ -576,8 +577,8 @@
                       </g>
                     </g>
                     <g class="f2-jval">
-                      <rect class="f2-aura" data-for="jval" x="475.65" y="115.22" width="28.4" height="11.2" rx="2.4" fill="#B08A4A" opacity="0"/>
-                      <text class="f2-math" x="477.85" y="122.82" font-size="8.52">J<tspan class="f2-up" font-size="5.96" dy="1.38">val</tspan><tspan class="f2-up" dy="-1.38">(</tspan>η<tspan class="f2-up">)</tspan></text>
+                      <rect class="f2-aura" data-for="jval" x="475.65" y="119.22" width="28.4" height="11.2" rx="2.4" fill="#B08A4A" opacity="0"/>
+                      <text class="f2-math" x="477.85" y="126.82" font-size="8.52"><tspan class="f2-mi" font-size="8.73">J</tspan><tspan class="f2-up" font-size="5.96" dy="1.38">val</tspan><tspan class="f2-up" dy="-1.38">(</tspan>η<tspan class="f2-up">)</tspan></text>
                     </g>
                     <text class="f2-cap" x="489.56" y="145.79" font-size="7.4" text-anchor="middle">VLA</text>
                     <text class="f2-cap" x="489.57" y="156.59" font-size="7.4" text-anchor="middle">Training</text>
@@ -605,6 +606,96 @@
                   </g>
                 </g>
                 <g class="f2-flow" aria-hidden="true">
+                  <rect class="f2-wbar" data-trace="corr" data-bar="0" x="271.79" y="25.56" width="7.2" height="12.96" fill="#96B0D6" stroke="#6C8EBF" stroke-width="0.72" opacity="0"/>
+                  <rect class="f2-wbar" data-trace="corr" data-bar="1" x="278.99" y="32.76" width="7.2" height="5.76" fill="#96B0D6" stroke="#6C8EBF" stroke-width="0.72" opacity="0"/>
+                  <rect class="f2-wbar" data-trace="corr" data-bar="2" x="286.19" y="18.36" width="7.2" height="20.16" fill="#96B0D6" stroke="#6C8EBF" stroke-width="0.72" opacity="0"/>
+                  <rect class="f2-wbar" data-trace="corr" data-bar="3" x="293.39" y="31.32" width="7.2" height="7.2" fill="#96B0D6" stroke="#6C8EBF" stroke-width="0.72" opacity="0"/>
+                  <rect class="f2-wbar" data-trace="corr" data-bar="4" x="300.59" y="32.76" width="7.2" height="5.76" fill="#96B0D6" stroke="#6C8EBF" stroke-width="0.72" opacity="0"/>
+                  <rect class="f2-wbar" data-trace="success" data-bar="0" x="271.79" y="72.35" width="7.2" height="2.16" fill="#A2C790" stroke="#82B366" stroke-width="0.72" opacity="0"/>
+                  <rect class="f2-wbar" data-trace="success" data-bar="1" x="278.99" y="50.76" width="7.2" height="23.76" fill="#A2C790" stroke="#82B366" stroke-width="0.72" opacity="0"/>
+                  <rect class="f2-wbar" data-trace="success" data-bar="2" x="286.19" y="65.15" width="7.2" height="9.36" fill="#A2C790" stroke="#82B366" stroke-width="0.72" opacity="0"/>
+                  <rect class="f2-wbar" data-trace="success" data-bar="3" x="293.39" y="67.31" width="7.2" height="7.2" fill="#A2C790" stroke="#82B366" stroke-width="0.72" opacity="0"/>
+                  <rect class="f2-wbar" data-trace="success" data-bar="4" x="300.59" y="57.95" width="7.2" height="16.56" fill="#A2C790" stroke="#82B366" stroke-width="0.72" opacity="0"/>
+                  <rect class="f2-wbar" data-trace="near" data-bar="0" x="271.79" y="101.15" width="7.2" height="7.92" fill="#E6CD83" stroke="#D6B656" stroke-width="0.72" opacity="0"/>
+                  <rect class="f2-wbar" data-trace="near" data-bar="1" x="278.99" y="103.31" width="7.2" height="5.76" fill="#E6CD83" stroke="#D6B656" stroke-width="0.72" opacity="0"/>
+                  <rect class="f2-wbar" data-trace="near" data-bar="2" x="286.19" y="93.95" width="7.2" height="15.12" fill="#E6CD83" stroke="#D6B656" stroke-width="0.72" opacity="0"/>
+                  <rect class="f2-wbar" data-trace="near" data-bar="3" x="293.39" y="86.75" width="7.2" height="22.32" fill="#E6CD83" stroke="#D6B656" stroke-width="0.72" opacity="0"/>
+                  <rect class="f2-wbar" data-trace="near" data-bar="4" x="300.59" y="103.31" width="7.2" height="5.76" fill="#E6CD83" stroke="#D6B656" stroke-width="0.72" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="0" data-chip="0" x="272.14" y="0" width="6.5" height="0" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="0" data-chip="1" x="272.14" y="0" width="6.5" height="0" fill="#B85450" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="0" data-chip="2" x="272.14" y="0" width="6.5" height="0" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="0" data-chip="3" x="272.14" y="0" width="6.5" height="0" fill="#9673A6" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="0" data-chip="4" x="272.14" y="0" width="6.5" height="0" fill="#D79B00" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="1" data-chip="0" x="279.34" y="0" width="6.5" height="0" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="1" data-chip="1" x="279.34" y="0" width="6.5" height="0" fill="#B85450" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="1" data-chip="2" x="279.34" y="0" width="6.5" height="0" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="1" data-chip="3" x="279.34" y="0" width="6.5" height="0" fill="#9673A6" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="1" data-chip="4" x="279.34" y="0" width="6.5" height="0" fill="#D79B00" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="2" data-chip="0" x="286.54" y="0" width="6.5" height="0" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="2" data-chip="1" x="286.54" y="0" width="6.5" height="0" fill="#B85450" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="2" data-chip="2" x="286.54" y="0" width="6.5" height="0" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="2" data-chip="3" x="286.54" y="0" width="6.5" height="0" fill="#9673A6" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="2" data-chip="4" x="286.54" y="0" width="6.5" height="0" fill="#D79B00" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="3" data-chip="0" x="293.74" y="0" width="6.5" height="0" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="3" data-chip="1" x="293.74" y="0" width="6.5" height="0" fill="#B85450" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="3" data-chip="2" x="293.74" y="0" width="6.5" height="0" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="3" data-chip="3" x="293.74" y="0" width="6.5" height="0" fill="#9673A6" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="3" data-chip="4" x="293.74" y="0" width="6.5" height="0" fill="#D79B00" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="4" data-chip="0" x="300.94" y="0" width="6.5" height="0" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="4" data-chip="1" x="300.94" y="0" width="6.5" height="0" fill="#B85450" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="4" data-chip="2" x="300.94" y="0" width="6.5" height="0" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="4" data-chip="3" x="300.94" y="0" width="6.5" height="0" fill="#9673A6" opacity="0"/>
+                  <rect class="f2-ev" data-trace="corr" data-bar="4" data-chip="4" x="300.94" y="0" width="6.5" height="0" fill="#D79B00" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="0" data-chip="0" x="272.14" y="0" width="6.5" height="0" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="0" data-chip="1" x="272.14" y="0" width="6.5" height="0" fill="#B85450" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="0" data-chip="2" x="272.14" y="0" width="6.5" height="0" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="0" data-chip="3" x="272.14" y="0" width="6.5" height="0" fill="#9673A6" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="0" data-chip="4" x="272.14" y="0" width="6.5" height="0" fill="#D79B00" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="1" data-chip="0" x="279.34" y="0" width="6.5" height="0" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="1" data-chip="1" x="279.34" y="0" width="6.5" height="0" fill="#B85450" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="1" data-chip="2" x="279.34" y="0" width="6.5" height="0" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="1" data-chip="3" x="279.34" y="0" width="6.5" height="0" fill="#9673A6" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="1" data-chip="4" x="279.34" y="0" width="6.5" height="0" fill="#D79B00" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="2" data-chip="0" x="286.54" y="0" width="6.5" height="0" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="2" data-chip="1" x="286.54" y="0" width="6.5" height="0" fill="#B85450" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="2" data-chip="2" x="286.54" y="0" width="6.5" height="0" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="2" data-chip="3" x="286.54" y="0" width="6.5" height="0" fill="#9673A6" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="2" data-chip="4" x="286.54" y="0" width="6.5" height="0" fill="#D79B00" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="3" data-chip="0" x="293.74" y="0" width="6.5" height="0" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="3" data-chip="1" x="293.74" y="0" width="6.5" height="0" fill="#B85450" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="3" data-chip="2" x="293.74" y="0" width="6.5" height="0" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="3" data-chip="3" x="293.74" y="0" width="6.5" height="0" fill="#9673A6" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="3" data-chip="4" x="293.74" y="0" width="6.5" height="0" fill="#D79B00" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="4" data-chip="0" x="300.94" y="0" width="6.5" height="0" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="4" data-chip="1" x="300.94" y="0" width="6.5" height="0" fill="#B85450" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="4" data-chip="2" x="300.94" y="0" width="6.5" height="0" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="4" data-chip="3" x="300.94" y="0" width="6.5" height="0" fill="#9673A6" opacity="0"/>
+                  <rect class="f2-ev" data-trace="success" data-bar="4" data-chip="4" x="300.94" y="0" width="6.5" height="0" fill="#D79B00" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="0" data-chip="0" x="272.14" y="0" width="6.5" height="0" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="0" data-chip="1" x="272.14" y="0" width="6.5" height="0" fill="#B85450" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="0" data-chip="2" x="272.14" y="0" width="6.5" height="0" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="0" data-chip="3" x="272.14" y="0" width="6.5" height="0" fill="#9673A6" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="0" data-chip="4" x="272.14" y="0" width="6.5" height="0" fill="#D79B00" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="1" data-chip="0" x="279.34" y="0" width="6.5" height="0" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="1" data-chip="1" x="279.34" y="0" width="6.5" height="0" fill="#B85450" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="1" data-chip="2" x="279.34" y="0" width="6.5" height="0" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="1" data-chip="3" x="279.34" y="0" width="6.5" height="0" fill="#9673A6" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="1" data-chip="4" x="279.34" y="0" width="6.5" height="0" fill="#D79B00" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="2" data-chip="0" x="286.54" y="0" width="6.5" height="0" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="2" data-chip="1" x="286.54" y="0" width="6.5" height="0" fill="#B85450" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="2" data-chip="2" x="286.54" y="0" width="6.5" height="0" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="2" data-chip="3" x="286.54" y="0" width="6.5" height="0" fill="#9673A6" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="2" data-chip="4" x="286.54" y="0" width="6.5" height="0" fill="#D79B00" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="3" data-chip="0" x="293.74" y="0" width="6.5" height="0" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="3" data-chip="1" x="293.74" y="0" width="6.5" height="0" fill="#B85450" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="3" data-chip="2" x="293.74" y="0" width="6.5" height="0" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="3" data-chip="3" x="293.74" y="0" width="6.5" height="0" fill="#9673A6" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="3" data-chip="4" x="293.74" y="0" width="6.5" height="0" fill="#D79B00" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="4" data-chip="0" x="300.94" y="0" width="6.5" height="0" fill="#6C8EBF" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="4" data-chip="1" x="300.94" y="0" width="6.5" height="0" fill="#B85450" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="4" data-chip="2" x="300.94" y="0" width="6.5" height="0" fill="#D6B656" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="4" data-chip="3" x="300.94" y="0" width="6.5" height="0" fill="#9673A6" opacity="0"/>
+                  <rect class="f2-ev" data-trace="near" data-bar="4" data-chip="4" x="300.94" y="0" width="6.5" height="0" fill="#D79B00" opacity="0"/>
                   <rect class="f2-chunk" data-trace="corr" data-k="0" data-bar="0" x="0" y="0" width="3" height="3" rx="0.5" fill="#6C8EBF" opacity="0"/>
                   <rect class="f2-chunk" data-trace="corr" data-k="0" data-bar="1" x="0" y="0" width="3" height="3" rx="0.5" fill="#6C8EBF" opacity="0"/>
                   <rect class="f2-chunk" data-trace="corr" data-k="0" data-bar="2" x="0" y="0" width="3" height="3" rx="0.5" fill="#6C8EBF" opacity="0"/>
@@ -650,6 +741,42 @@
                   <rect class="f2-chunk" data-trace="near" data-k="2" data-bar="2" x="0" y="0" width="3" height="3" rx="0.5" fill="#D6B656" opacity="0"/>
                   <rect class="f2-chunk" data-trace="near" data-k="2" data-bar="3" x="0" y="0" width="3" height="3" rx="0.5" fill="#D6B656" opacity="0"/>
                   <rect class="f2-chunk" data-trace="near" data-k="2" data-bar="4" x="0" y="0" width="3" height="3" rx="0.5" fill="#D6B656" opacity="0"/>
+                  <circle class="f2-evmark" data-chip="0" data-trace="corr" cx="0" cy="0" r="1.9" fill="#6C8EBF" stroke="#FFFFFF" stroke-width="0.5" opacity="0"/>
+                  <circle class="f2-evmark" data-chip="0" data-trace="success" cx="0" cy="0" r="1.9" fill="#6C8EBF" stroke="#FFFFFF" stroke-width="0.5" opacity="0"/>
+                  <circle class="f2-evmark" data-chip="0" data-trace="near" cx="0" cy="0" r="1.9" fill="#6C8EBF" stroke="#FFFFFF" stroke-width="0.5" opacity="0"/>
+                  <circle class="f2-evmark" data-chip="1" data-trace="corr" cx="0" cy="0" r="1.9" fill="#B85450" stroke="#FFFFFF" stroke-width="0.5" opacity="0"/>
+                  <circle class="f2-evmark" data-chip="1" data-trace="success" cx="0" cy="0" r="1.9" fill="#B85450" stroke="#FFFFFF" stroke-width="0.5" opacity="0"/>
+                  <circle class="f2-evmark" data-chip="1" data-trace="near" cx="0" cy="0" r="1.9" fill="#B85450" stroke="#FFFFFF" stroke-width="0.5" opacity="0"/>
+                  <circle class="f2-evmark" data-chip="2" data-trace="corr" cx="0" cy="0" r="1.9" fill="#D6B656" stroke="#FFFFFF" stroke-width="0.5" opacity="0"/>
+                  <circle class="f2-evmark" data-chip="2" data-trace="success" cx="0" cy="0" r="1.9" fill="#D6B656" stroke="#FFFFFF" stroke-width="0.5" opacity="0"/>
+                  <circle class="f2-evmark" data-chip="2" data-trace="near" cx="0" cy="0" r="1.9" fill="#D6B656" stroke="#FFFFFF" stroke-width="0.5" opacity="0"/>
+                  <circle class="f2-evmark" data-chip="3" data-trace="corr" cx="0" cy="0" r="1.9" fill="#9673A6" stroke="#FFFFFF" stroke-width="0.5" opacity="0"/>
+                  <circle class="f2-evmark" data-chip="3" data-trace="success" cx="0" cy="0" r="1.9" fill="#9673A6" stroke="#FFFFFF" stroke-width="0.5" opacity="0"/>
+                  <circle class="f2-evmark" data-chip="3" data-trace="near" cx="0" cy="0" r="1.9" fill="#9673A6" stroke="#FFFFFF" stroke-width="0.5" opacity="0"/>
+                  <circle class="f2-evmark" data-chip="4" data-trace="corr" cx="0" cy="0" r="1.9" fill="#D79B00" stroke="#FFFFFF" stroke-width="0.5" opacity="0"/>
+                  <circle class="f2-evmark" data-chip="4" data-trace="success" cx="0" cy="0" r="1.9" fill="#D79B00" stroke="#FFFFFF" stroke-width="0.5" opacity="0"/>
+                  <circle class="f2-evmark" data-chip="4" data-trace="near" cx="0" cy="0" r="1.9" fill="#D79B00" stroke="#FFFFFF" stroke-width="0.5" opacity="0"/>
+                  <circle class="f2-evsum" data-trace="corr" cx="0" cy="0" r="2.2" fill="#6C8EBF" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-evsum" data-trace="success" cx="0" cy="0" r="2.2" fill="#82B366" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-evsum" data-trace="near" cx="0" cy="0" r="2.2" fill="#D6B656" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-wret" data-trace="corr" cx="0" cy="0" r="2.2" fill="#B08A4A" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-wret" data-trace="success" cx="0" cy="0" r="2.2" fill="#B08A4A" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-wret" data-trace="near" cx="0" cy="0" r="2.2" fill="#B08A4A" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-wtok" data-trace="corr" data-bar="0" cx="0" cy="0" r="3" fill="#6C8EBF" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-wtok" data-trace="corr" data-bar="1" cx="0" cy="0" r="3" fill="#6C8EBF" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-wtok" data-trace="corr" data-bar="2" cx="0" cy="0" r="3" fill="#6C8EBF" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-wtok" data-trace="corr" data-bar="3" cx="0" cy="0" r="3" fill="#6C8EBF" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-wtok" data-trace="corr" data-bar="4" cx="0" cy="0" r="3" fill="#6C8EBF" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-wtok" data-trace="success" data-bar="0" cx="0" cy="0" r="3" fill="#82B366" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-wtok" data-trace="success" data-bar="1" cx="0" cy="0" r="3" fill="#82B366" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-wtok" data-trace="success" data-bar="2" cx="0" cy="0" r="3" fill="#82B366" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-wtok" data-trace="success" data-bar="3" cx="0" cy="0" r="3" fill="#82B366" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-wtok" data-trace="success" data-bar="4" cx="0" cy="0" r="3" fill="#82B366" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-wtok" data-trace="near" data-bar="0" cx="0" cy="0" r="3" fill="#D6B656" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-wtok" data-trace="near" data-bar="1" cx="0" cy="0" r="3" fill="#D6B656" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-wtok" data-trace="near" data-bar="2" cx="0" cy="0" r="3" fill="#D6B656" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-wtok" data-trace="near" data-bar="3" cx="0" cy="0" r="3" fill="#D6B656" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
+                  <circle class="f2-wtok" data-trace="near" data-bar="4" cx="0" cy="0" r="3" fill="#D6B656" stroke="#FFFFFF" stroke-width="0.6" opacity="0"/>
                   <g class="f2-token" data-trace="corr" data-k="0" data-fate="pass" opacity="0">
                     <circle class="f2-token__trail" cx="151.56" cy="11.35" r="2.4" fill="#6C8EBF" opacity="0" data-o="0.34"/>
                     <circle class="f2-token__trail" cx="151.56" cy="11.35" r="1.98" fill="#6C8EBF" opacity="0" data-o="0.22"/>
@@ -766,7 +893,7 @@
                   <line class="f2-rule" data-col="training" x1="474.84" y1="158.89" x2="504.29" y2="158.89" stroke="#B08A4A" stroke-width="0.9" stroke-linecap="round" opacity="0"/>
                 </g>
               </svg>
-              <script type="application/json" id="fig2-flow">{"R":3.0,"N":3,"SP":7.0,"CH":3.0,"rows":[{"trace":"corr","fate":"pass","y":11.35,"x0":151.56,"tip":179.55,"end":[79.68,93.06],"colour":"#6C8EBF"},{"trace":"success","fate":"pass","y":40.15,"x0":151.56,"tip":179.55,"end":[76.87,87.31],"colour":"#82B366"},{"trace":"near","fate":"pass","y":68.95,"x0":151.56,"tip":179.55,"end":[83.98,90.21],"colour":"#D6B656"},{"trace":"offsets","fate":"audit","y":97.75,"x0":151.56,"tip":179.55,"end":[64.44,92.38],"colour":"#D79B00"},{"trace":"wrong","fate":"audit","y":126.54,"x0":151.56,"tip":179.55,"end":[64.09,128.51],"colour":"#B85450"}],"gate":{"x0":230.75,"x1":259.55,"cx":245.15,"exit":263.87,"park":304.43,"contact":256.19,"rest":[252.9,245.15,237.4],"audit":[230.75,87.11,28.8,50.4]},"hist":{"corr":{"entry":[289.79,11.35],"bars":[[271.79,25.56,7.2,12.96],[278.99,32.76,7.2,5.76],[286.19,18.36,7.2,20.16],[293.39,31.32,7.2,7.2],[300.59,32.76,7.2,5.76]]},"success":{"entry":[289.79,44.64],"bars":[[271.79,72.35,7.2,2.16],[278.99,50.76,7.2,23.76],[286.19,65.15,7.2,9.36],[293.39,67.31,7.2,7.2],[300.59,57.95,7.2,16.56]]},"near":{"entry":[289.79,80.63],"bars":[[271.79,101.15,7.2,7.92],[278.99,103.31,7.2,5.76],[286.19,93.95,7.2,15.12],[293.39,86.75,7.2,22.32],[300.59,103.31,7.2,5.76]]}},"chips":[[342.34,13.32],[342.34,41.76],[342.34,69.11],[342.34,96.11],[342.34,124.91]],"tickX":321.94,"warrows":[[410.74,33.84,53.19],[410.67,79.55,98.18]],"nodes":[[472.4,55.15],[472.4,77.42],[488.56,48.99],[488.73,60.59],[488.56,72.32],[488.56,83.84],[506.74,66.41]],"edges":[{"a":0,"b":2},{"a":0,"b":3},{"a":0,"b":4},{"a":0,"b":1},{"a":1,"b":3},{"a":1,"b":4},{"a":1,"b":5},{"a":2,"b":3},{"a":2,"b":6},{"a":4,"b":6},{"a":5,"b":6},{"a":4,"b":5},{"a":3,"b":6}],"nodeOrder":[0,1,2,4,5,3,6],"edgeOrder":[0,2,5,6,1,4,3,8,12,9,10,11,7]}</script>
+              <script type="application/json" id="fig2-flow">{"R":3.0,"N":3,"SP":7.0,"CH":3.0,"cols":{"setup":[0.01,136.8],"processes":[144.36,223.55],"gate":[230.75,259.55],"chunk":[268.19,311.39],"evidence":[318.95,365.75],"weight":[374.74,446.73],"training":[453.93,525.92]},"rows":[{"trace":"corr","fate":"pass","y":11.35,"x0":151.56,"tip":179.55,"end":[79.68,93.06],"colour":"#6C8EBF"},{"trace":"success","fate":"pass","y":40.15,"x0":151.56,"tip":179.55,"end":[76.87,87.31],"colour":"#82B366"},{"trace":"near","fate":"pass","y":68.95,"x0":151.56,"tip":179.55,"end":[83.98,90.21],"colour":"#D6B656"},{"trace":"offsets","fate":"audit","y":97.75,"x0":151.56,"tip":179.55,"end":[64.44,92.38],"colour":"#D79B00"},{"trace":"wrong","fate":"audit","y":126.54,"x0":151.56,"tip":179.55,"end":[64.09,128.51],"colour":"#B85450"}],"gate":{"x0":230.75,"x1":259.55,"cx":245.15,"exit":263.87,"park":304.43,"contact":256.19,"rest":[252.9,245.15,237.4],"audit":[230.75,87.11,28.8,50.4]},"hist":{"corr":{"entry":[289.79,11.35],"bars":[[271.79,25.56,7.2,12.96],[278.99,32.76,7.2,5.76],[286.19,18.36,7.2,20.16],[293.39,31.32,7.2,7.2],[300.59,32.76,7.2,5.76]]},"success":{"entry":[289.79,44.64],"bars":[[271.79,72.35,7.2,2.16],[278.99,50.76,7.2,23.76],[286.19,65.15,7.2,9.36],[293.39,67.31,7.2,7.2],[300.59,57.95,7.2,16.56]]},"near":{"entry":[289.79,80.63],"bars":[[271.79,101.15,7.2,7.92],[278.99,103.31,7.2,5.76],[286.19,93.95,7.2,15.12],[293.39,86.75,7.2,22.32],[300.59,103.31,7.2,5.76]]}},"chips":[[342.34,13.32],[342.34,41.76],[342.34,69.11],[342.34,96.11],[342.34,124.91]],"chipX0":324.34,"chipColours":["#6C8EBF","#B85450","#D6B656","#9673A6","#D79B00"],"tickX":321.94,"warrows":[[410.74,33.84,53.19],[410.67,79.55,98.18]],"score":[381.94,54.0,57.59,25.56],"transform":[381.94,99.17,57.59,25.56],"loss":[461.13,8.46,57.59,25.56],"nodes":[[472.4,55.15],[472.4,77.42],[488.56,48.99],[488.73,60.59],[488.56,72.32],[488.56,83.84],[506.74,66.41]],"edges":[{"a":0,"b":2},{"a":0,"b":3},{"a":0,"b":4},{"a":0,"b":1},{"a":1,"b":3},{"a":1,"b":4},{"a":1,"b":5},{"a":2,"b":3},{"a":2,"b":6},{"a":4,"b":6},{"a":5,"b":6},{"a":4,"b":5},{"a":3,"b":6}],"nodeOrder":[0,1,2,4,5,3,6],"edgeOrder":[0,2,5,6,1,4,3,8,12,9,10,11,7]}</script>
               <!-- /fig2:svg -->
             </div>
           </div>
