@@ -174,8 +174,8 @@
 
     var L = site.links;
     var buttons = [
+      // Paper and arXiv are one link (R64): the arXiv abstract page, also used by the top bar.
       { key: "paper", text: "Paper", icon: "i-paper", href: L.paper },
-      { key: "arxiv", text: "arXiv", icon: "i-arxiv", href: L.arxiv },
       // One source for the citation: the button is live exactly when site.bibtex is set.
       { key: "bibtex", text: "BibTeX", icon: "i-quote", href: site.bibtex ? "#bibtex" : null },
       { key: "code", text: "Code", icon: "i-github", href: L.code, primary: true },
@@ -185,7 +185,7 @@
     buttons.forEach(function (b) {
       var a = h("a", { class: "btn" + (b.primary ? " btn--primary" : ""), "data-link": b.key },
         [icon(b.icon), h("span", { text: b.text })]);
-      setLink(a, b.href, b.text, "btn__soon");   // no URL yet (Paper, arXiv, BibTeX): the "soon" placeholder
+      setLink(a, b.href, b.text, "btn__soon");   // no URL yet (BibTeX for now): the "soon" placeholder
       row.appendChild(a);
     });
 

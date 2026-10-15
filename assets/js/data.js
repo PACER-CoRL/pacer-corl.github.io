@@ -67,8 +67,7 @@ window.PACER = {
       "Georgia Tech"
     ],
     "links": {
-      "paper": null,
-      "arxiv": null,
+      "paper": "https://arxiv.org/abs/2610.19248",
       "code": "https://github.com/ChangChrisLiu/PACER"
     },
     "bibtex": null

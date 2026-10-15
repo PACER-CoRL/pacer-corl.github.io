@@ -1579,9 +1579,10 @@ h2 {
 }
 
 /* Phones: a compact first screen so the robot card shows early. Authors 15 px, short
-   affiliations on one line, and the five buttons as one sideways-scrolling 44 px row
-   with Code and Video first (the placeholders are not focusable, so focus order is
-   unaffected by the visual reorder). */
+   affiliations on one line, and the buttons as one sideways-scrolling 44 px row with
+   Paper, Code and Video first and BibTeX last (R64). The BibTeX placeholder is not
+   focusable, so the focus order matches what is seen; once BibTeX is live, it should
+   move before Code here as well. */
 @media (max-width: 600px) {
   .hero__sub { font-size: 21px; }
   .hero__authors { gap: 2px 14px; font-size: 15px; line-height: 1.45; }
@@ -1597,6 +1598,7 @@ h2 {
   }
   .hero__actions::-webkit-scrollbar { display: none; }
   .hero__actions .btn { flex: none; height: 44px; }
+  .hero__actions [data-link="paper"] { order: -3; }
   .hero__actions [data-link="code"] { order: -2; }
   .hero__actions [data-link="video"] { order: -1; }
 }
